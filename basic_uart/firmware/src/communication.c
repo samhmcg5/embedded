@@ -3,9 +3,9 @@
 COMMUNICATION_DATA communicationData;
 
 // add a msg to the q
-int sendMsgToQ(unsigned char msg)
+int sendMsgToQFromISR(unsigned char msg)
 {
-    xQueueSend(q, (void*)&msg, portMAX_DELAY);
+    xQueueSendFromISR(q, (void*)&msg, NULL);
     return 0;
 }
 
