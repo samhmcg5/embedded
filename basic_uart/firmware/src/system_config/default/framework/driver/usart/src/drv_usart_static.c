@@ -76,8 +76,17 @@ SYS_MODULE_OBJ DRV_USART0_Initialize(void)
 {
     uint32_t clockSource;
 
+    DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
+    dObj = &gDrvUSART0Obj;
+
     /* Disable the USART module to configure it*/
     PLIB_USART_Disable (USART_ID_1);
+
+    /* Create the hardware instance mutex. */
+    if(OSAL_MUTEX_Create(&(dObj->mutexDriverInstance)) != OSAL_RESULT_TRUE)
+    {
+        return SYS_MODULE_OBJ_INVALID;
+    }
 
     /* Initialize the USART based on configuration settings */
     PLIB_USART_InitializeModeGeneral(USART_ID_1,
@@ -111,6 +120,16 @@ SYS_MODULE_OBJ DRV_USART0_Initialize(void)
 
 void  DRV_USART0_Deinitialize(void)
 {
+    DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
+
+    dObj = &gDrvUSART0Obj;
+
+    /* Deallocate all mutexes */
+    if(OSAL_MUTEX_Delete(&(dObj->mutexDriverInstance)) != OSAL_RESULT_TRUE)
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Mutex Delete Failed");
+        return;
+    }
     /* Disable USART module */
     PLIB_USART_Disable (USART_ID_1);
 
@@ -232,6 +251,18 @@ DRV_USART_BAUD_SET_RESULT DRV_USART0_BaudSet(uint32_t baud)
     bool isEnabled = false;
 #endif
 
+    /* Making this function thread safe */
+    if(OSAL_MUTEX_Lock(&(gDrvUSART0Obj.mutexDriverInstance), OSAL_WAIT_FOREVER) == OSAL_RESULT_TRUE)
+    {
+        /* We were able to take the mutex */
+    }
+    else
+    {
+        /* The mutex timed out */
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Hardware instance mutex time out in DRV_USART_BaudSet() function");
+        return(DRV_USART_BAUD_SET_ERROR);
+    }
+
     /* Get the USART clock source value*/
     clockSource = SYS_CLK_PeripheralFrequencyGet ( CLK_BUS_PERIPHERAL_1 );
 
@@ -272,6 +303,8 @@ DRV_USART_BAUD_SET_RESULT DRV_USART0_BaudSet(uint32_t baud)
         PLIB_USART_Enable (USART_ID_1);
     }
 #endif
+    /* Unlock Mutex */
+    OSAL_MUTEX_Unlock(&(gDrvUSART0Obj.mutexDriverInstance));
 
     return retVal;
 }
@@ -282,6 +315,16 @@ DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART0_LineControlSet(DRV_USART_LINE_CONTR
 #if defined (PLIB_USART_ExistsModuleBusyStatus)
     bool isEnabled = false;
 #endif
+    /* Making this function thread safe */
+    if(OSAL_MUTEX_Lock(&(gDrvUSART0Obj.mutexDriverInstance), OSAL_WAIT_FOREVER) == OSAL_RESULT_TRUE)
+    {
+        /* We were able to take the mutex */
+    }
+    else
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Hardware Instance Mutex time out in DRV_USART_LineControlSet() function");
+        return DRV_USART_LINE_CONTROL_SET_ERROR;
+    }
 #if defined (PLIB_USART_ExistsModuleBusyStatus)
         isEnabled = PLIB_USART_ModuleIsBusy (USART_ID_1);
         if (isEnabled)
@@ -300,6 +343,7 @@ DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART0_LineControlSet(DRV_USART_LINE_CONTR
             PLIB_USART_Enable (USART_ID_1);
         }
 #endif
+    OSAL_MUTEX_Unlock(&(gDrvUSART0Obj.mutexDriverInstance));
 
     /* Return success */
     return(DRV_USART_LINE_CONTROL_SET_SUCCESS);

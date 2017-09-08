@@ -58,6 +58,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "queue.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -84,6 +85,8 @@ extern "C" {
     determine the behavior of the application at various times.
 */
 
+    QueueHandle_t q;
+    
 typedef enum
 {
 	/* Application's state machine's initial state. */

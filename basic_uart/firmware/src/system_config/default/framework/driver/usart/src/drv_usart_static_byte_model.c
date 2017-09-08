@@ -70,18 +70,48 @@ uint8_t DRV_USART0_ReadByte(void)
 {
     uint8_t readValue;
 	
+    /* This function needs to be thread safe */
+    if(OSAL_MUTEX_Lock(&(gDrvUSART0Obj.mutexDriverInstance), OSAL_WAIT_FOREVER) == OSAL_RESULT_TRUE)
+    {
+        /* We were able to take the mutex */
+    }
+    else
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Hardware Instance Mutex Time out in DRV_USART_ReadByte() function");
+        return 0;
+    }
+
     /* Receive one byte */
     readValue = PLIB_USART_ReceiverByteReceive(USART_ID_1);
+
+    OSAL_MUTEX_Unlock(&(gDrvUSART0Obj.mutexDriverInstance));
+
 
     return readValue;
 }
 
 void DRV_USART0_WriteByte(const uint8_t byte)
 {
+    DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
+
+    dObj = &gDrvUSART0Obj;
+
+    /* This function needs to be thread safe */
+    if(OSAL_MUTEX_Lock(&(dObj->mutexDriverInstance), OSAL_WAIT_FOREVER) == OSAL_RESULT_TRUE)
+    {
+        /* We were able to take the mutex */
+    }
+    else
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Hardware Instance Mutex Time out in DRV_USART_WriteByte() function");
+    }
+
     /* Wait till TX buffer is available as blocking operation is selected */
     while(PLIB_USART_TransmitterBufferIsFull(USART_ID_1));
     /* Send one byte */
     PLIB_USART_TransmitterByteSend(USART_ID_1, byte);
+
+    OSAL_MUTEX_Unlock(&(dObj->mutexDriverInstance));
 }
 
 unsigned int DRV_USART0_ReceiverBufferSizeGet(void)

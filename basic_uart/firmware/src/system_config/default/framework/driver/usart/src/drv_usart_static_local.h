@@ -54,6 +54,7 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 #include <stddef.h>
 #include "driver/usart/drv_usart.h"
 #include "driver/usart/src/drv_usart_variant_mapping.h"
+#include "osal/osal.h"
 #include "system/clk/sys_clk.h"
 #include "system/int/sys_int.h"
 #include "system/debug/sys_debug.h"
@@ -95,6 +96,10 @@ typedef struct
 
     /* Client specific error */
     DRV_USART_ERROR error;
+
+
+    /* Hardware instance mutex */
+    OSAL_MUTEX_DECLARE(mutexDriverInstance);
 
 
 } DRV_USART_OBJ;

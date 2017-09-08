@@ -238,7 +238,22 @@ build/default/production/_ext/327000265/drv_usart_static_byte_model.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/dma/processor/../templates/dma_ChannelXCellProgressPointer_Default.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/dma/processor/../templates/dma_ChannelXPatternData_Default.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/driver/usart/src/drv_usart_variant_mapping.h  \
+ ../../../../../../../../microchip/harmony/v2_04/framework/osal/osal.h  \
+ ../../../../../../../../microchip/harmony/v2_04/framework/osal/osal_definitions.h  \
+ ../../../../../../../../microchip/harmony/v2_04/framework/osal/osal_freertos.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h  \
+ ../src/system_config/default/FreeRTOSConfig.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/projdefs.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/portable.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/portmacro.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/queue.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/semphr.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/queue.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/task.h  \
+ ../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/list.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/debug/sys_debug.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h  \
- ../src/app.h 
+ ../src/communication.h 

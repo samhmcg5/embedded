@@ -183,11 +183,8 @@ void SYS_Initialize ( void* data )
 
     /* Initialize Middleware */
 
-    /* Enable Global Interrupts */
-    SYS_INT_Enable();
-
     /* Initialize the Application */
-    APP_Initialize();
+    COMMUNICATION_Initialize();
 }
 
 
