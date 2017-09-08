@@ -86,6 +86,7 @@ extern "C" {
 */
 
     QueueHandle_t q;
+    int sendMsgToQ(char msg);
     
 typedef enum
 {

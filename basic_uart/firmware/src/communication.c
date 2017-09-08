@@ -112,6 +112,11 @@ COMMUNICATION_DATA communicationData;
     See prototype in communication.h.
  */
 
+int sendMsgToQ(char msg)
+{
+    xQueueSend(q, &msg, portMAX_DELAY);
+}
+
 void COMMUNICATION_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
