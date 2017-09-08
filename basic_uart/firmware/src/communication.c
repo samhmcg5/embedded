@@ -112,7 +112,7 @@ COMMUNICATION_DATA communicationData;
     See prototype in communication.h.
  */
 
-int sendMsgToQ(char msg)
+int sendMsgToQ(unsigned char msg)
 {
     xQueueSend(q, &msg, portMAX_DELAY);
 }
@@ -147,7 +147,8 @@ void COMMUNICATION_Tasks ( void )
         case COMMUNICATION_STATE_INIT:
         {
             bool appInitialized = true;
-            q = xQueueCreate(10, sizeof(char) );
+            // create the q
+            q = xQueueCreate(10, sizeof(unsigned char) );
         
             if (appInitialized)
             {
