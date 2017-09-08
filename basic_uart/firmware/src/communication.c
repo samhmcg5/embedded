@@ -2,30 +2,29 @@
 
 COMMUNICATION_DATA communicationData;
 
+// add a msg to the q
 int sendMsgToQ(unsigned char msg)
 {
-    xQueueSend(q, &msg, portMAX_DELAY);
+    xQueueSend(q, (void*)&msg, portMAX_DELAY);
+    return 0;
+}
+
+// recv a message from the q
+unsigned char recvFromQ()
+{
+    unsigned char recv;
+    if (q != 0)
+    {
+       xQueueReceive(q, &recv, portMAX_DELAY);
+    }
+    return recv;
 }
 
 void COMMUNICATION_Initialize ( void )
 {
-    /* Place the App state machine in its initial state. */
     communicationData.state = COMMUNICATION_STATE_INIT;
-
-    
-    /* TODO: Initialize your application's state machine and other
-     * parameters.
-     */
 }
 
-
-/******************************************************************************
-  Function:
-    void COMMUNICATION_Tasks ( void )
-
-  Remarks:
-    See prototype in communication.h.
- */
 
 void COMMUNICATION_Tasks ( void )
 {
@@ -36,6 +35,11 @@ void COMMUNICATION_Tasks ( void )
             bool appInitialized = true;
             // create the q
             q = xQueueCreate(10, sizeof(unsigned char) );
+            if (q == 0)
+            {
+                // failed to create
+                // HALT
+            }
         
             if (appInitialized)
             {
@@ -45,9 +49,11 @@ void COMMUNICATION_Tasks ( void )
         }
         case COMMUNICATION_STATE_RUNNING:
         {
+            unsigned char recv;
             while (1)
             {
-                
+                recv = recvFromQ();
+                // send to debug fxns
             }
             
             break;

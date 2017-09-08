@@ -33,7 +33,6 @@
             <itemPath>../src/system_config/default/system_definitions.h</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../src/app.h</itemPath>
         <itemPath>../src/communication.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
@@ -172,7 +171,6 @@
             <itemPath>../src/system_config/default/rtos_hooks.c</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../src/app.c</itemPath>
         <itemPath>../src/main.c</itemPath>
         <itemPath>../src/communication.c</itemPath>
         <itemPath>../src/debug.c</itemPath>

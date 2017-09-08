@@ -16,10 +16,6 @@ extern "C" {
 
 #endif
     
-    // For the message Queue
-    QueueHandle_t q;
-    int sendMsgToQ(unsigned char msg);
-    
 typedef enum
 {
 	COMMUNICATION_STATE_INIT=0,
@@ -32,6 +28,10 @@ typedef struct
 } COMMUNICATION_DATA;
 
 
+// For the message Queue
+QueueHandle_t q;
+int sendMsgToQ(unsigned char msg);
+unsigned char recvFromQ();
 
 void COMMUNICATION_Initialize ( void );
 
