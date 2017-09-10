@@ -32,19 +32,16 @@ void COMMUNICATION_Tasks ( void )
     {
         case COMMUNICATION_STATE_INIT:
         {
+            tmr_message.msg_state = TMR_MESSAGE_STATE_T;
             bool appInitialized = true;
             // create the q
             q = xQueueCreate(10, sizeof(unsigned char) );
             if (q == 0)
             {
                 // failed to create
-                // HALT
+                // HALT 
             }
-        
-            sendMsgToQFromISR('T');
-            sendMsgToQFromISR('e');
-            sendMsgToQFromISR('a');
-            sendMsgToQFromISR('m');
+            
             if (appInitialized)
             {
                 communicationData.state = COMMUNICATION_STATE_RUNNING;
@@ -53,6 +50,7 @@ void COMMUNICATION_Tasks ( void )
         }
         case COMMUNICATION_STATE_RUNNING:
         {
+            DRV_TMR0_Start();
             unsigned char recv;
             while (1)
             {

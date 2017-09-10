@@ -68,12 +68,55 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: System Interrupt Vector Functions
 // *****************************************************************************
 // *****************************************************************************
- 
- 
+
+
 
 void IntHandlerDrvTmrInstance0(void)
 {
-    DRV_TMR_Tasks(sysObj.drvTmr0);
+    switch(tmr_message.msg_state) {
+        case TMR_MESSAGE_STATE_T:
+        {
+            sendMsgToQFromISR('T');
+            tmr_message.msg_state = TMR_MESSAGE_STATE_E;
+            break;
+        }
+        case TMR_MESSAGE_STATE_E:
+        {
+            sendMsgToQFromISR('E');
+            tmr_message.msg_state = TMR_MESSAGE_STATE_A;
+            break;
+        }
+        case TMR_MESSAGE_STATE_A:
+        {
+            sendMsgToQFromISR('A');
+            tmr_message.msg_state = TMR_MESSAGE_STATE_M;
+            break;
+        }
+        case TMR_MESSAGE_STATE_M:
+        {
+            sendMsgToQFromISR('M');
+            tmr_message.msg_state = TMR_MESSAGE_STATE_1;
+            break;
+        }
+        case TMR_MESSAGE_STATE_1:
+        {
+            sendMsgToQFromISR('1');
+            tmr_message.msg_state = TMR_MESSAGE_STATE_4;
+            break;
+        }
+        case TMR_MESSAGE_STATE_4:
+        {
+            sendMsgToQFromISR('4');
+            tmr_message.msg_state = TMR_MESSAGE_STATE_T;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
 }
  /*******************************************************************************
  End of File

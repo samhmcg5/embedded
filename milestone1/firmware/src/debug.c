@@ -1,6 +1,13 @@
 #include "debug.h"
 
 
+void halt(unsigned char outVal)
+{
+    while(1){
+        // dbgOutputLoc(outVal);
+    }
+}
+
 int writeToUART(char byte)
 {
     if(!(DRV_USART_TRANSFER_STATUS_TRANSMIT_FULL & DRV_USART0_TransferStatus()) )

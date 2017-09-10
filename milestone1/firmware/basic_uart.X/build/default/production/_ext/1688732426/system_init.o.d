@@ -117,6 +117,7 @@ build/default/production/_ext/1688732426/system_init.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/int/processor/../templates/int_VariableOffset_Unsupported.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/int/processor/../templates/int_SoftwareNMI_Unsupported.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/int/sys_int_mapping.h  \
+ ../src/system_config/default/framework/driver/tmr/drv_tmr_static.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/driver/driver_common.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/tmr/plib_tmr.h  \
