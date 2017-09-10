@@ -15,3 +15,12 @@ int dbgUARTVal(unsigned char outVal)
     writeToUART(outVal);
     return 0;
 }
+
+void dbgOutputLoc(unsigned char outVal){
+
+        TRISECLR = 0x00FF;
+        ODCECLR  = 0x00FF;
+        
+        LATECLR = 0x00FF;
+        LATESET = outVal;
+}

@@ -18,11 +18,15 @@ extern "C" {
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#define DBG_LOCATION_1 1
+#define DBG_LOCATION_2 2
+    
     
 int writeToUART(char byte);
 
 int dbgUARTVal(unsigned char outVal);
 
+void dbgOutputLoc(unsigned char outVal);
 
 #ifdef	__cplusplus
 }

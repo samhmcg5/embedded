@@ -54,11 +54,18 @@ void COMMUNICATION_Tasks ( void )
         case COMMUNICATION_STATE_RUNNING:
         {
             unsigned char recv;
+            unsigned char toggle = 0;
             while (1)
             {
                 recv = recvFromQ();
                 // send to debug fxns
                 dbgUARTVal(recv);
+                dbgOutputLoc(128);
+                dbgOutputLoc(64);
+                
+//                dbgOutputLoc(0x34);
+//                dbgOutputLoc(0x44);
+
             }
             
             break;
