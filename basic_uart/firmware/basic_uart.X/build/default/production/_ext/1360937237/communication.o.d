@@ -257,4 +257,5 @@ build/default/production/_ext/1360937237/communication.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/debug/sys_debug.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h  \
- ../src/communication.h 
+ ../src/communication.h  \
+../src/debug.h 

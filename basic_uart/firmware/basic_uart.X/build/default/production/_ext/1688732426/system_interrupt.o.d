@@ -257,4 +257,5 @@ build/default/production/_ext/1688732426/system_interrupt.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/debug/sys_debug.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h  \
- ../src/system_config/default/system_definitions.h 
+ ../src/debug.h  \
+../src/system_config/default/system_definitions.h 

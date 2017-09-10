@@ -258,4 +258,5 @@ build/default/production/_ext/1609739432/drv_tmr.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h  \
  ../src/communication.h  \
+../src/debug.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/src/drv_tmr_variant_mapping.h 

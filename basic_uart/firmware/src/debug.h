@@ -11,8 +11,17 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+    
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include "system_config.h"
+#include "system_definitions.h"
+    
+int writeToUART(char byte);
 
-
+int dbgUARTVal(unsigned char outVal);
 
 
 #ifdef	__cplusplus

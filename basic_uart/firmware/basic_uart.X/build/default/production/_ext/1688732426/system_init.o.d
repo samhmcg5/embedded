@@ -258,4 +258,5 @@ build/default/production/_ext/1688732426/system_init.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h  \
  ../src/communication.h  \
-../src/system_config/default/system_definitions.h 
+../src/system_config/default/system_definitions.h  \
+ ../src/debug.h 

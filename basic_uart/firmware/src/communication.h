@@ -8,6 +8,7 @@
 #include "system_config.h"
 #include "system_definitions.h"
 #include "queue.h"
+#include "debug.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
