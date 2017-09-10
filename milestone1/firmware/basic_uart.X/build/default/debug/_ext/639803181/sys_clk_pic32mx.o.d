@@ -1,6 +1,5 @@
-build/default/production/_ext/1609739432/drv_tmr.o:  \
- ../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/src/dynamic/drv_tmr.c  \
- ../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/src/drv_tmr_local.h  \
+build/default/debug/_ext/639803181/sys_clk_pic32mx.o:  \
+ ../src/system_config/default/framework/system/clk/src/sys_clk_pic32mx.c  \
  ../src/system_config/default/system_config.h  \
  ../src/system_config/default/bsp/bsp.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/ports/plib_ports.h  \
@@ -117,6 +116,7 @@ build/default/production/_ext/1609739432/drv_tmr.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/int/processor/../templates/int_VariableOffset_Unsupported.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/int/processor/../templates/int_SoftwareNMI_Unsupported.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/int/sys_int_mapping.h  \
+ ../src/system_config/default/framework/driver/tmr/drv_tmr_static.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/driver/driver_common.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/peripheral/tmr/plib_tmr.h  \
@@ -258,5 +258,4 @@ build/default/production/_ext/1609739432/drv_tmr.o:  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h  \
  ../../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h  \
  ../src/communication.h  \
-../src/debug.h  \
- ../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/src/drv_tmr_variant_mapping.h 
+../src/debug.h 

@@ -16,7 +16,26 @@
 extern "C" {
 
 #endif
+
+// state machine call inside timer interrupt 
+typedef enum 
+{
+    TMR_MESSAGE_STATE_T=0,
+    TMR_MESSAGE_STATE_E,
+    TMR_MESSAGE_STATE_A,
+    TMR_MESSAGE_STATE_M,
+    TMR_MESSAGE_STATE_1,
+    TMR_MESSAGE_STATE_4,
+    TMR_MESSAGE_STATE_DEFAULT
+} TMR_MESSAGE_STATES;
     
+typedef struct 
+{
+    TMR_MESSAGE_STATES msg_state;
+}MESSAGE_DATA;
+
+MESSAGE_DATA tmr_message;
+
 typedef enum
 {
 	COMMUNICATION_STATE_INIT=0,
