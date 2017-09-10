@@ -53,15 +53,18 @@ void COMMUNICATION_Tasks ( void )
         }
         case COMMUNICATION_STATE_RUNNING:
         {
+            dbgOutputLoc(DBG_LOCATION_COMMTASK_START);
             unsigned char recv;
             unsigned char toggle = 0;
+            dbgOutputLoc(DBG_LOCATION_COMMTASK_WHILE_LOOP);
             while (1)
             {
+                dbgOutputLoc(DBG_LOCATION_COMMTASK_BEFORE_RECV);
                 recv = recvFromQ();
+                dbgOutputLoc(DBG_LOCATION_COMMTASK_AFTER_RECV);
                 // send to debug fxns
                 dbgUARTVal(recv);
-                dbgOutputLoc(128);
-                dbgOutputLoc(64);
+
                 
 //                dbgOutputLoc(0x34);
 //                dbgOutputLoc(0x44);
