@@ -41,6 +41,10 @@ void COMMUNICATION_Tasks ( void )
                 // HALT
             }
         
+            sendMsgToQFromISR('T');
+            sendMsgToQFromISR('e');
+            sendMsgToQFromISR('a');
+            sendMsgToQFromISR('m');
             if (appInitialized)
             {
                 communicationData.state = COMMUNICATION_STATE_RUNNING;
@@ -54,6 +58,7 @@ void COMMUNICATION_Tasks ( void )
             {
                 recv = recvFromQ();
                 // send to debug fxns
+                dbgUARTVal(recv);
             }
             
             break;
