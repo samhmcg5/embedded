@@ -39,13 +39,9 @@ void COMMUNICATION_Tasks ( void )
             if (q == 0)
             {
                 // failed to create
-                // HALT
+                halt(DBG_ERROR_QUEUE_FAILED_TO_CREATE);
             }
-        
-            sendMsgToQFromISR('T');
-            sendMsgToQFromISR('e');
-            sendMsgToQFromISR('a');
-            sendMsgToQFromISR('m');
+      
             if (appInitialized)
             {
                 communicationData.state = COMMUNICATION_STATE_RUNNING;
@@ -54,6 +50,7 @@ void COMMUNICATION_Tasks ( void )
         }
         case COMMUNICATION_STATE_RUNNING:
         {
+            DRV_TMR0_Start();
             dbgOutputLoc(DBG_LOCATION_COMMTASK_START);
             unsigned char recv;
             unsigned char toggle = 0;

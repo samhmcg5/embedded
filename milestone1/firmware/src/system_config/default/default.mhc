@@ -6,7 +6,7 @@
 #     Harmony version: 2.04
 #
 #
-# from C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\basic_uart.hconfig
+# from C:\Users\Eric\OneDrive\2017\FALL2017\ECE4534\Project\embedded\milestone1\firmware\basic_uart.hconfig
 #
 CONFIG_APP_INSTANCES=1
 #
@@ -19,7 +19,7 @@ CONFIG_APP_TASK_SIZE_IDX0=1024
 CONFIG_APP_TASK_PRIORITY_IDX0=1
 CONFIG_APP_TASK_USE_DELAY_IDX0=n
 #
-# from C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\basic_uart.hconfig
+# from C:\Users\Eric\OneDrive\2017\FALL2017\ECE4534\Project\embedded\milestone1\firmware\basic_uart.hconfig
 #
 CONFIG_USE_EXCEPTION_HANDLER=y
 CONFIG_EXCEPTION_USE_SYS_DEBUG=y

@@ -1,10 +1,9 @@
 #include "debug.h"
 
-
 void halt(unsigned char outVal)
 {
     while(1){
-        // dbgOutputLoc(outVal);
+        dbgOutputLoc(outVal);
     }
 }
 
