@@ -52,9 +52,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /* TMR Instance 0 Interrupt */
    .extern  IntHandlerDrvTmrInstance0
 
-   .section	.vector_4,code, keep
-   .equ     __vector_dispatch_4, IntVectorDrvTmrInstance0
-   .global  __vector_dispatch_4
+   .section	.vector_8,code, keep
+   .equ     __vector_dispatch_8, IntVectorDrvTmrInstance0
+   .global  __vector_dispatch_8
    .set     nomicromips
    .set     noreorder
    .set     nomips16
