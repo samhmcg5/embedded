@@ -65,10 +65,7 @@ void COMMUNICATION_Tasks ( void )
                 dbgOutputLoc(DBG_LOCATION_COMMTASK_AFTER_RECV);
                 // send to debug fxns
                 dbgUARTVal(recv);
-
-                
-//                dbgOutputLoc(0x34);
-//                dbgOutputLoc(0x44);
+                dbgOutputVal('~');
 
             }
             

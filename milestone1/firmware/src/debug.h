@@ -28,6 +28,8 @@ int writeToUART(char byte);
 
 int dbgUARTVal(unsigned char outVal);
 
+void dbgOutputVal(unsigned char outVal);
+
 void dbgOutputLoc(unsigned char outVal);
 
 #ifdef	__cplusplus
