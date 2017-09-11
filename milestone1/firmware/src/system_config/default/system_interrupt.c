@@ -75,7 +75,7 @@ void IntHandlerDrvAdc(void)
 {
     //voltage = PLIB_ADC_ResultGetByIndex(ADC_ID_1, 0);
     /* Clear ADC Interrupt Flag */
-    //PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
     PLIB_ADC_SampleAutoStartEnable(ADC_ID_1); 
 }
 
@@ -83,7 +83,8 @@ void IntHandlerDrvAdc(void)
 void IntHandlerDrvTmrInstance0(void)
 {
     dbgOutputLoc(DBG_LOCATION_TMRTASK_START);
-    voltage = PLIB_ADC_ResultGetByIndex(DRV_ADC_ID_1, 0);
+    voltage = PLIB_ADC_ResultGetByIndex(ADC_ID_1, 2);
+    PLIB_ADC_SampleAutoStartEnable(ADC_ID_1);
     sendMsgToQFromISR(voltage);
     
 //    switch(tmr_message.msg_state) {

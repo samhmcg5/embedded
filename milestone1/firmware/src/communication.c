@@ -51,6 +51,7 @@ void COMMUNICATION_Tasks ( void )
         case COMMUNICATION_STATE_RUNNING:
         {
             DRV_TMR0_Start();
+            DRV_ADC_Open();
             DRV_ADC_Start();
             
             dbgOutputLoc(DBG_LOCATION_COMMTASK_START);
@@ -69,12 +70,8 @@ void COMMUNICATION_Tasks ( void )
                 //dbgOutputVal(recv);
                 
                 char buff[16];
-                sprintf(buff, "READ: %f\n", recv);
-                int i;
-                for (i=0; i<16; i++)
-                {
-                    dbgOutputVal(buff[i]);
-                }
+                sprintf(buff, "READ: %f \n", recv);
+                writeUARTString(buff, 16);
 
             }
             
