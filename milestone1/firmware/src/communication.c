@@ -41,7 +41,7 @@ void COMMUNICATION_Tasks ( void )
                 // failed to create
                 halt(DBG_ERROR_QUEUE_FAILED_TO_CREATE);
             }
-      
+            
             if (appInitialized)
             {
                 communicationData.state = COMMUNICATION_STATE_RUNNING;
@@ -51,9 +51,13 @@ void COMMUNICATION_Tasks ( void )
         case COMMUNICATION_STATE_RUNNING:
         {
             DRV_TMR0_Start();
+            DRV_ADC_Start();
+            
             dbgOutputLoc(DBG_LOCATION_COMMTASK_START);
-            unsigned char recv;
+            unsigned int recv;
             unsigned char toggle = 0;
+            
+            writeUARTString("TEAM14", 6);
             dbgOutputLoc(DBG_LOCATION_COMMTASK_WHILE_LOOP);
             while (1)
             {
@@ -61,8 +65,16 @@ void COMMUNICATION_Tasks ( void )
                 recv = recvFromQ();
                 dbgOutputLoc(DBG_LOCATION_COMMTASK_AFTER_RECV);
                 // send to debug fxns
-                dbgUARTVal(recv);
-                dbgOutputVal(recv);
+                //dbgUARTVal(recv);
+                //dbgOutputVal(recv);
+                
+                char buff[16];
+                sprintf(buff, "READ: %f\n", recv);
+                int i;
+                for (i=0; i<16; i++)
+                {
+                    dbgOutputVal(buff[i]);
+                }
 
             }
             

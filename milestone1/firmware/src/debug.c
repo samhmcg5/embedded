@@ -60,3 +60,12 @@ void dbgOutputLoc(unsigned char outVal)
         LATECLR = 0x00FF;
         LATESET = outVal;
 }
+
+void writeUARTString(char * str, int len)
+{
+    int i;
+    for (i=0; i<len; i++)
+    {
+        dbgUARTVal(str[i]);
+    }
+}
