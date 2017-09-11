@@ -59,6 +59,7 @@ void COMMUNICATION_Tasks ( void )
                 recv = recvFromQ();
                 // send to debug fxns
                 dbgUARTVal(recv);
+                dbgOutputVal('~');
             }
             
             break;
