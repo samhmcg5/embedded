@@ -306,7 +306,10 @@
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">CAAD0BF72ADDDDDFC479386E0D2841D4</Checksum>
+<<<<<<< HEAD:milestone1/firmware/src/system_config/default/configuration.xml
         <ProjectFileChecksum dnOrder="3">610E7EE116680F892298956104F9C4CB</ProjectFileChecksum>
+=======
+>>>>>>> dbgOutputVal:basic_uart/firmware/src/system_config/default/configuration.xml
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">drv_usart_static.c</Name>
@@ -360,7 +363,11 @@
       <Template dnOrder="23">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
+<<<<<<< HEAD:milestone1/firmware/src/system_config/default/configuration.xml
+        <Checksum dnOrder="2">54C0D49F0803F6E64BC2B9FE93A42099</Checksum>
+=======
         <Checksum dnOrder="2">C99D9769883F57158919DE250D98C2BC</Checksum>
+>>>>>>> dbgOutputVal:basic_uart/firmware/src/system_config/default/configuration.xml
       </Template>
       <Template dnOrder="24">
         <Name dnOrder="0">rtos_hooks.c</Name>
@@ -389,11 +396,19 @@
         <Include dnOrder="2" value="../src/system_config/default"/>
       </C32-AS>
       <C32 dnOrder="1">
-        <Include dnOrder="0" value="C:\cygwin64\home\sam\embedded\embedded\basic_uart\firmware\src"/>
-        <Include dnOrder="1" value="C:\cygwin64\home\sam\embedded\embedded\basic_uart\firmware\src\system_config\default"/>
-        <Include dnOrder="2" value="C:\cygwin64\home\sam\embedded\embedded\basic_uart\firmware\src\default"/>
+<<<<<<< HEAD:milestone1/firmware/src/system_config/default/configuration.xml
+        <Include dnOrder="0" value="C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\src"/>
+        <Include dnOrder="1" value="C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\src\system_config\default"/>
+        <Include dnOrder="2" value="C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\src\default"/>
         <Include dnOrder="3" value="C:\microchip\harmony\v2_04\framework"/>
-        <Include dnOrder="4" value="C:\cygwin64\home\sam\embedded\embedded\basic_uart\firmware\src\system_config\default\framework"/>
+        <Include dnOrder="4" value="C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\src\system_config\default\framework"/>
+=======
+        <Include dnOrder="0" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\MS1\embedded\basic_uart\firmware\src"/>
+        <Include dnOrder="1" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\MS1\embedded\basic_uart\firmware\src\system_config\default"/>
+        <Include dnOrder="2" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\MS1\embedded\basic_uart\firmware\src\default"/>
+        <Include dnOrder="3" value="C:\microchip\harmony\v2_04\framework"/>
+        <Include dnOrder="4" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\MS1\embedded\basic_uart\firmware\src\system_config\default\framework"/>
+>>>>>>> dbgOutputVal:basic_uart/firmware/src/system_config/default/configuration.xml
         <Include dnOrder="5" value="../src/system_config/default/bsp"/>
         <Include dnOrder="6" value="../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include"/>
         <Include dnOrder="7" value="../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>

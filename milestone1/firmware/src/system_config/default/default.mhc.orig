@@ -6,7 +6,11 @@
 #     Harmony version: 2.04
 #
 #
-# from C:\cygwin64\home\sam\embedded\embedded\basic_uart\firmware\basic_uart.hconfig
+<<<<<<< HEAD:milestone1/firmware/src/system_config/default/default.mhc
+# from C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\basic_uart.hconfig
+=======
+# from C:\Users\Karthik Admin\Documents\Fall2017\Embedded\MS1\embedded\basic_uart\firmware\basic_uart.hconfig
+>>>>>>> dbgOutputVal:basic_uart/firmware/src/system_config/default/default.mhc
 #
 CONFIG_APP_INSTANCES=1
 #
@@ -19,7 +23,11 @@ CONFIG_APP_TASK_SIZE_IDX0=1024
 CONFIG_APP_TASK_PRIORITY_IDX0=1
 CONFIG_APP_TASK_USE_DELAY_IDX0=n
 #
-# from C:\cygwin64\home\sam\embedded\embedded\basic_uart\firmware\basic_uart.hconfig
+<<<<<<< HEAD:milestone1/firmware/src/system_config/default/default.mhc
+# from C:\Users\Eric\MPLABXProjects\embedded\embedded\milestone1\firmware\basic_uart.hconfig
+=======
+# from C:\Users\Karthik Admin\Documents\Fall2017\Embedded\MS1\embedded\basic_uart\firmware\basic_uart.hconfig
+>>>>>>> dbgOutputVal:basic_uart/firmware/src/system_config/default/default.mhc
 #
 CONFIG_USE_EXCEPTION_HANDLER=y
 CONFIG_EXCEPTION_USE_SYS_DEBUG=y
@@ -154,22 +162,25 @@ CONFIG_USE_DRV_SRAM=n
 # from $HARMONY_VERSION_PATH\framework\driver\tmr\config\tmr_pic32m.hconfig
 #
 CONFIG_USE_DRV_TMR=y
-CONFIG_DRV_TMR_DRIVER_MODE="DYNAMIC"
-CONFIG_DRV_TMR_CLIENTS_NUMBER=1
+CONFIG_DRV_TMR_DRIVER_MODE="STATIC"
 CONFIG_DRV_TMR_INTERRUPT_MODE=y
 CONFIG_DRV_TMR_INSTANCES_NUMBER=1
 #
 # from $HARMONY_VERSION_PATH\framework\driver\tmr\config\drv_tmr_idx_pic32m.ftl
 #
 CONFIG_DRV_TMR_INST_0=y
-CONFIG_DRV_TMR_PERIPHERAL_ID_IDX0="TMR_ID_1"
-CONFIG_DRV_TMR_RTOS_IDX0="Combined with System Tasks"
+CONFIG_DRV_TMR_PERIPHERAL_ID_IDX0="TMR_ID_2"
 CONFIG_DRV_TMR_INTERRUPT_PRIORITY_IDX0="INT_PRIORITY_LEVEL1"
 CONFIG_DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0="INT_SUBPRIORITY_LEVEL0"
-CONFIG_DRV_TMR_CLOCK_SOURCE_2_IDX0="DRV_TMR_CLKSOURCE_INTERNAL"
+CONFIG_DRV_TMR_CLOCK_SOURCE_3_IDX0="DRV_TMR_CLKSOURCE_INTERNAL"
+CONFIG_DRV_TMR_ALARM_FUNCS_IDX0=n
 CONFIG_DRV_TMR_PRESCALE_IDX0="TMR_PRESCALE_VALUE_256"
-CONFIG_DRV_TMR_ASYNC_WRITE_ENABLE_IDX0=n
-CONFIG_DRV_TMR_POWER_STATE_IDX0="SYS_MODULE_POWER_RUN_FULL"
+CONFIG_DRV_TMR_OPERATION_MODE_IDX0="DRV_TMR_OPERATION_MODE_16_BIT"
+<<<<<<< HEAD:milestone1/firmware/src/system_config/default/default.mhc
+CONFIG_DRV_TMR_PERIOD_IDX0=78125
+=======
+CONFIG_DRV_TMR_PERIOD_IDX0=0
+>>>>>>> dbgOutputVal:basic_uart/firmware/src/system_config/default/default.mhc
 #
 # from $HARMONY_VERSION_PATH\framework\driver\touch\touch_adc\config\drv_touch_adc.hconfig
 #

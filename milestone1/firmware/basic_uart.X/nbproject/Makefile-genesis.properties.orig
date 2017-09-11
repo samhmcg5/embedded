@@ -1,0 +1,16 @@
+#
+<<<<<<< HEAD:milestone1/firmware/basic_uart.X/nbproject/Makefile-genesis.properties
+#Sun Sep 10 20:30:13 EDT 2017
+default.com-microchip-mplab-nbide-toolchainXC32-XC32LanguageToolchain.md5=f2639e8ffe4e3a80ef2cdaeba61da340
+default.languagetoolchain.dir=C\:\\Program Files (x86)\\Microchip\\xc32\\v1.44\\bin
+configurations-xml=123f2c7ca5810b5186bdaacb70f65004
+=======
+#Sun Sep 10 14:39:53 EDT 2017
+default.com-microchip-mplab-nbide-toolchainXC32-XC32LanguageToolchain.md5=f2639e8ffe4e3a80ef2cdaeba61da340
+default.languagetoolchain.dir=C\:\\Program Files (x86)\\Microchip\\xc32\\v1.42\\bin
+configurations-xml=b2fbbd853e5787d7a0290cbe8b734ba3
+>>>>>>> dbgOutputVal:basic_uart/firmware/basic_uart.X/nbproject/Makefile-genesis.properties
+com-microchip-mplab-nbide-embedded-makeproject-MakeProject.md5=52742b11d992fb0dd234edfb95066b34
+default.languagetoolchain.version=1.42
+host.platform=windows
+conf.ids=default
