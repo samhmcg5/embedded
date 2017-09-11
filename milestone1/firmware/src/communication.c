@@ -3,16 +3,16 @@
 COMMUNICATION_DATA communicationData;
 
 // add a msg to the q
-int sendMsgToQFromISR(unsigned char msg)
+int sendMsgToQFromISR(unsigned int msg)
 {
     xQueueSendFromISR(q, (void*)&msg, NULL);
     return 0;
 }
 
 // recv a message from the q
-unsigned char recvFromQ()
+unsigned int recvFromQ()
 {
-    unsigned char recv;
+    unsigned int recv;
     if (q != 0)
     {
        xQueueReceive(q, &recv, portMAX_DELAY);
@@ -35,7 +35,7 @@ void COMMUNICATION_Tasks ( void )
             tmr_message.msg_state = TMR_MESSAGE_STATE_T;
             bool appInitialized = true;
             // create the q
-            q = xQueueCreate(10, sizeof(unsigned char) );
+            q = xQueueCreate(16, sizeof(unsigned int) );
             if (q == 0)
             {
                 // failed to create
@@ -62,7 +62,7 @@ void COMMUNICATION_Tasks ( void )
                 dbgOutputLoc(DBG_LOCATION_COMMTASK_AFTER_RECV);
                 // send to debug fxns
                 dbgUARTVal(recv);
-                dbgOutputVal('~');
+                dbgOutputVal(recv);
 
             }
             
@@ -74,9 +74,3 @@ void COMMUNICATION_Tasks ( void )
         }
     }
 }
-
- 
-
-/*******************************************************************************
- End of File
- */

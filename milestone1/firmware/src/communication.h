@@ -10,12 +10,6 @@
 #include "queue.h"
 #include "debug.h"
 
-// DOM-IGNORE-BEGIN
-#ifdef __cplusplus  // Provide C++ Compatibility
-
-extern "C" {
-
-#endif
 
 // state machine call inside timer interrupt 
 typedef enum 
@@ -50,8 +44,8 @@ typedef struct
 
 // For the message Queue
 QueueHandle_t q;
-int sendMsgToQ(unsigned char msg);
-unsigned char recvFromQ();
+int sendMsgToQ(unsigned int msg);
+unsigned int recvFromQ();
 
 void COMMUNICATION_Initialize ( void );
 
@@ -59,8 +53,3 @@ void COMMUNICATION_Tasks( void );
 
 
 #endif /* _COMMUNICATION_H */
-
-//DOM-IGNORE-BEGIN
-#ifdef __cplusplus
-}
-#endif
