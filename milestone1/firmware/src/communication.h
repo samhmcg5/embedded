@@ -51,5 +51,6 @@ void COMMUNICATION_Initialize ( void );
 
 void COMMUNICATION_Tasks( void );
 
+int voltsToCm(double volt);
 
 #endif /* _COMMUNICATION_H */

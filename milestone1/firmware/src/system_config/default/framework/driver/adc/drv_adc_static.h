@@ -53,7 +53,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdbool.h>
 #include "system_config.h"
 #include "peripheral/adc/plib_adc.h"
-#include "peripheral/int/plib_int.h"
 
 typedef enum {
 

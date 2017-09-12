@@ -155,6 +155,10 @@ void SYS_Initialize ( void* data )
     BSP_Initialize();        
 
     /* Initialize Drivers */
+
+    /* Initialize ADC */
+    DRV_ADC_Initialize();
+
     /*Initialize TMR0 */
     DRV_TMR0_Initialize();
  

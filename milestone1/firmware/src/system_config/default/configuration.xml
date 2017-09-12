@@ -251,7 +251,8 @@
       <Template dnOrder="1">
         <Name dnOrder="0">system_interrupt_a.S</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">FFEB9DA54502EB24BD3FD0B7AF43942F</Checksum>
+        <Checksum dnOrder="2">956C5097F1A252C19CAC8249F3A2B4C6</Checksum>
+        <ProjectFileChecksum dnOrder="3">E40F5AB01B0E5A644111B242DF8838E7</ProjectFileChecksum>
       </Template>
       <Template dnOrder="2">
         <Name dnOrder="0">drv_tmr_static.h</Name>
@@ -266,17 +267,17 @@
       <Template dnOrder="4">
         <Name dnOrder="0">drv_adc_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/adc</Path>
-        <Checksum dnOrder="2">EB83B77B6F50631DF29C48BC407262EE</Checksum>
+        <Checksum dnOrder="2">2078F4F8C62A2637051E72C3BEB6FEDB</Checksum>
       </Template>
       <Template dnOrder="5">
         <Name dnOrder="0">drv_adc_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/adc/src</Path>
-        <Checksum dnOrder="2">1399E7C40FF555EA22AA4955DA0797BB</Checksum>
+        <Checksum dnOrder="2">618F359F32B303489D83356D9537DA11</Checksum>
       </Template>
       <Template dnOrder="6">
         <Name dnOrder="0">bsp.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/bsp</Path>
-        <Checksum dnOrder="2">8B47CF905B347CA696FDE39F0320241C</Checksum>
+        <Checksum dnOrder="2">9BC36E52C83C8371D7F55693ACDFA51C</Checksum>
       </Template>
       <Template dnOrder="7">
         <Name dnOrder="0">drv_usart_mapping.c</Name>
@@ -300,7 +301,7 @@
       <Template dnOrder="11">
         <Name dnOrder="0">bsp.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/bsp</Path>
-        <Checksum dnOrder="2">7567B3DF8AD82B4BA40BB70A80E7AC51</Checksum>
+        <Checksum dnOrder="2">4823D802073D564FCFA9FBDD4C67681C</Checksum>
       </Template>
       <Template dnOrder="12">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
@@ -315,7 +316,7 @@
       <Template dnOrder="14">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">BF1F8645B46E5B79907D9008972E5781</Checksum>
+        <Checksum dnOrder="2">306B4668B439D523A78E7D78F6D57120</Checksum>
         <ProjectFileChecksum dnOrder="3">F9E8206EA4C8BE486D1FE14B7682D1DA</ProjectFileChecksum>
       </Template>
       <Template dnOrder="15">
@@ -335,7 +336,7 @@
       <Template dnOrder="18">
         <Name dnOrder="0">system_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">12519C5AA6B222F6D495479529EB73F7</Checksum>
+        <Checksum dnOrder="2">8AB9768AAC746D0FAA35D292CAE0878A</Checksum>
       </Template>
       <Template dnOrder="19">
         <Name dnOrder="0">system_exceptions.c</Name>
@@ -365,12 +366,13 @@
       <Template dnOrder="24">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">6B396590E1690A5379E3C2C7999AB062</Checksum>
+        <Checksum dnOrder="2">2574260319EE728B6A0F89CF804B4F97</Checksum>
       </Template>
       <Template dnOrder="25">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
         <Checksum dnOrder="2">C8413B5681F910C2482D4F42790ADE8C</Checksum>
+        <ProjectFileChecksum dnOrder="3">4B90AD78F6421C0785DA9C70BBF0D392</ProjectFileChecksum>
       </Template>
       <Template dnOrder="26">
         <Name dnOrder="0">rtos_hooks.c</Name>
