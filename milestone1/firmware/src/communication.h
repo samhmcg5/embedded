@@ -53,6 +53,4 @@ void COMMUNICATION_Tasks( void );
 
 int voltsToCm(double volt);
 
-unsigned char charToASCII(unsigned char ch);
-
 #endif /* _COMMUNICATION_H */
