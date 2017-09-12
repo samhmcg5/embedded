@@ -83,7 +83,7 @@ void IntHandlerDrvAdc(void)
 void IntHandlerDrvTmrInstance0(void)
 {
     dbgOutputLoc(DBG_LOCATION_TMRTASK_START);
-    voltage = PLIB_ADC_ResultGetByIndex(ADC_ID_1, 2);
+    voltage = PLIB_ADC_ResultGetByIndex(ADC_ID_1, 0);
     PLIB_ADC_SampleAutoStartEnable(ADC_ID_1);
     sendMsgToQFromISR(voltage);
     

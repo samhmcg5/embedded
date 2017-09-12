@@ -69,3 +69,8 @@ void writeUARTString(char * str, int len)
         dbgUARTVal(str[i]);
     }
 }
+
+unsigned char charToASCII(unsigned char val)
+{
+    
+}

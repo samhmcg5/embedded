@@ -41,6 +41,8 @@ void dbgOutputLoc(unsigned char outVal);
 
 void writeUARTString(char * str, int len);
 
+unsigned char charToASCII(unsigned char val);
+
 #ifdef	__cplusplus
 }
 #endif

@@ -9,6 +9,14 @@ int sendMsgToQFromISR(unsigned int msg)
     return 0;
 }
 
+// for 4 to 30 cm
+int voltsToCm(unsigned int volt)
+{
+    volt = volt * 50;
+    volt = volt + 3;
+    return 519/volt;
+}
+
 // recv a message from the q
 unsigned int recvFromQ()
 {
@@ -66,12 +74,13 @@ void COMMUNICATION_Tasks ( void )
                 recv = recvFromQ();
                 dbgOutputLoc(DBG_LOCATION_COMMTASK_AFTER_RECV);
                 // send to debug fxns
-                //dbgUARTVal(recv);
+                int cm = voltsToCm(recv);
+                dbgUARTVal(cm);
                 //dbgOutputVal(recv);
                 
-                char buff[16];
-                sprintf(buff, "READ: %f \n", recv);
-                writeUARTString(buff, 16);
+//                char buff[16];
+//                sprintf(buff, "%f", recv);
+//                writeUARTString(buff, 16);
 
             }
             

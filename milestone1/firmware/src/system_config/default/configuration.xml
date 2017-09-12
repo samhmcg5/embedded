@@ -258,7 +258,6 @@
         <Name dnOrder="0">drv_tmr_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/tmr</Path>
         <Checksum dnOrder="2">82458EC0B7E077B29421094ADFDE9564</Checksum>
-        <ProjectFileChecksum dnOrder="3">67CE6DEA067B195DEAE067C8976B2F04</ProjectFileChecksum>
       </Template>
       <Template dnOrder="3">
         <Name dnOrder="0">drv_tmr_mapping.c</Name>
@@ -268,17 +267,17 @@
       <Template dnOrder="4">
         <Name dnOrder="0">drv_adc_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/adc</Path>
-        <Checksum dnOrder="2">6E4D1FF06DF8B6A4ECADF25BAB7F7619</Checksum>
+        <Checksum dnOrder="2">2078F4F8C62A2637051E72C3BEB6FEDB</Checksum>
       </Template>
       <Template dnOrder="5">
         <Name dnOrder="0">drv_adc_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/adc/src</Path>
-        <Checksum dnOrder="2">EDB54F558149703D434C3CB54699F206</Checksum>
+        <Checksum dnOrder="2">618F359F32B303489D83356D9537DA11</Checksum>
       </Template>
       <Template dnOrder="6">
         <Name dnOrder="0">bsp.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/bsp</Path>
-        <Checksum dnOrder="2">8B47CF905B347CA696FDE39F0320241C</Checksum>
+        <Checksum dnOrder="2">9BC36E52C83C8371D7F55693ACDFA51C</Checksum>
       </Template>
       <Template dnOrder="7">
         <Name dnOrder="0">drv_usart_mapping.c</Name>
@@ -302,7 +301,7 @@
       <Template dnOrder="11">
         <Name dnOrder="0">bsp.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/bsp</Path>
-        <Checksum dnOrder="2">7567B3DF8AD82B4BA40BB70A80E7AC51</Checksum>
+        <Checksum dnOrder="2">4823D802073D564FCFA9FBDD4C67681C</Checksum>
       </Template>
       <Template dnOrder="12">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
@@ -367,8 +366,7 @@
       <Template dnOrder="24">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">6B396590E1690A5379E3C2C7999AB062</Checksum>
-        <ProjectFileChecksum dnOrder="3">3378CDB8602722832E376AA751631883</ProjectFileChecksum>
+        <Checksum dnOrder="2">2574260319EE728B6A0F89CF804B4F97</Checksum>
       </Template>
       <Template dnOrder="25">
         <Name dnOrder="0">drv_tmr_static.c</Name>
