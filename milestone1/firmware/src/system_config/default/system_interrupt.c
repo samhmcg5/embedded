@@ -87,64 +87,6 @@ void IntHandlerDrvTmrInstance0(void)
     PLIB_ADC_SampleAutoStartEnable(ADC_ID_1);
     sendMsgToQFromISR(voltage);
     
-//    switch(tmr_message.msg_state) {
-//        case TMR_MESSAGE_STATE_T:
-//        {
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_BEFORE_SEND);
-//            sendMsgToQFromISR('T');
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_AFTER_SEND);
-//            tmr_message.msg_state = TMR_MESSAGE_STATE_E;
-//            break;
-//        }
-//        case TMR_MESSAGE_STATE_E:
-//        {
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_BEFORE_SEND);
-//            sendMsgToQFromISR('E');
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_AFTER_SEND);
-//            tmr_message.msg_state = TMR_MESSAGE_STATE_A;
-//            break;
-//        }
-//        case TMR_MESSAGE_STATE_A:
-//        {
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_BEFORE_SEND);
-//            sendMsgToQFromISR('A');
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_AFTER_SEND);
-//            tmr_message.msg_state = TMR_MESSAGE_STATE_M;
-//            break;
-//        }
-//        case TMR_MESSAGE_STATE_M:
-//        {            
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_BEFORE_SEND);
-//            sendMsgToQFromISR('M');
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_AFTER_SEND);
-//            tmr_message.msg_state = TMR_MESSAGE_STATE_1;
-//            break;
-//        }
-//        case TMR_MESSAGE_STATE_1:
-//        {
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_BEFORE_SEND);
-//            sendMsgToQFromISR('1');
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_AFTER_SEND);
-//            tmr_message.msg_state = TMR_MESSAGE_STATE_4;
-//            break;
-//        }
-//        case TMR_MESSAGE_STATE_4:
-//        {
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_BEFORE_SEND);
-//            sendMsgToQFromISR('4');
-//            dbgOutputLoc(DBG_LOCATION_TMRTASK_AFTER_SEND);
-//            tmr_message.msg_state = TMR_MESSAGE_STATE_T;
-//            break;
-//        }
-//        default:
-//        {
-//            break;
-//        }
-//    }
-    
     dbgOutputLoc(DBG_LOCATION_TMRTASK_END);
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
 }
- /*******************************************************************************
- End of File
-*/
