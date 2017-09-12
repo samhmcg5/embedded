@@ -51,6 +51,8 @@ void COMMUNICATION_Initialize ( void );
 
 void COMMUNICATION_Tasks( void );
 
-int voltsToCm(unsigned int volt);
+int voltsToCm(double volt);
+
+unsigned char charToASCII(unsigned char ch);
 
 #endif /* _COMMUNICATION_H */

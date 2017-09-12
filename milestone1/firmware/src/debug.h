@@ -31,7 +31,7 @@ extern "C" {
     
 void halt(unsigned char outVal);    
     
-int writeToUART(char byte);
+int writeToUART(unsigned char byte);
 
 int dbgUARTVal(unsigned char outVal);
 
