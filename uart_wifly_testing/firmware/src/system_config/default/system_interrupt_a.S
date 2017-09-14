@@ -87,9 +87,9 @@ _IntHandlerDrvAdc:
 /* TMR Instance 0 Interrupt */
    .extern  IntHandlerDrvTmrInstance0
 
-   .section	.vector_8,code, keep
-   .equ     __vector_dispatch_8, IntVectorDrvTmrInstance0
-   .global  __vector_dispatch_8
+   .section	.vector_12,code, keep
+   .equ     __vector_dispatch_12, IntVectorDrvTmrInstance0
+   .global  __vector_dispatch_12
    .set     nomicromips
    .set     noreorder
    .set     nomips16

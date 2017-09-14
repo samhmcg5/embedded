@@ -88,5 +88,5 @@ void IntHandlerDrvTmrInstance0(void)
     sendMsgToQFromISR(voltage);
     
     dbgOutputLoc(DBG_LOCATION_TMRTASK_END);
-    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
