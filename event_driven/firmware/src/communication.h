@@ -22,6 +22,11 @@ typedef struct
     COMMUNICATION_STATES state;
 } COMMUNICATION_DATA;
 
+struct queueData
+{
+    unsigned int recv;
+    BaseType_t ret;
+};
 
 void COMMUNICATION_Initialize ( void );
 
@@ -35,6 +40,6 @@ QueueHandle_t uart_outgoing_q;
 
 int sendMsgToCommQFromISR(unsigned int msg);
 int sendMsgToUARTQ(unsigned char msg);
-unsigned int recvFromQ();
+struct queueData recvFromQ();
 
 #endif /* _COMMUNICATION_H */

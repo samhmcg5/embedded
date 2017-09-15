@@ -13,15 +13,15 @@ int sendMsgToCommQFromISR(unsigned int msg)
 
 // recv a message from the q
 
-unsigned int recvFromQ() 
+struct queueData recvFromQ() 
 {
     BaseType_t success = pdFALSE;
-    unsigned int recv;
+    struct queueData data;
     if (comm_incoming_q != 0) 
     {
-        success = xQueueReceive(comm_incoming_q, &recv, portMAX_DELAY);
+        success = xQueueReceive(comm_incoming_q, &data.recv, portMAX_DELAY);
     }
-    return recv;
+    return data;
 }
 
 int sendMsgToUARTQ(unsigned char msg)
@@ -62,16 +62,20 @@ void COMMUNICATION_Tasks(void)
         case COMMUNICATION_STATE_SERVICE_TASKS:
         {
             // read from queue
-            unsigned int recv;
+            struct queueData data;
 
             // Task Infinite While Loop de loop 
             while (1) 
             {
-                recv = recvFromQ();
-                // add item to the outgoing UART Queue 
-                sendMsgToUARTQ(recv & 0xFF);
-                // set the UART TX interrupt flag
-                SYS_INT_SourceEnable(INT_SOURCE_USART_1_TRANSMIT);
+                data = recvFromQ();
+                
+                if (data.ret == pdTRUE)
+                {
+                    // add item to the outgoing UART Queue 
+                    sendMsgToUARTQ(data.recv & 0xFF);
+                    // set the UART TX interrupt flag
+                    SYS_INT_SourceEnable(INT_SOURCE_USART_1_TRANSMIT);
+                }
             }
 
             break;
