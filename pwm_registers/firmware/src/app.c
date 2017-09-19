@@ -75,6 +75,12 @@ void APP_Initialize ( void )
     /* Place the App state machine in its initial state. */
     appData.state = APP_STATE_INIT;
     initMotor1and2();
+    
+    DRV_TMR0_Start();
+    DRV_TMR1_Start();
+    
+    setMotor1DC(100);
+    setMotor2DC(100);
 }
 
 void APP_Tasks ( void )
@@ -93,8 +99,6 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
-            setMotor1DC(100);
-            setMotor2DC(50);
             break;
         }
 

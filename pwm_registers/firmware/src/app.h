@@ -14,6 +14,8 @@
 
 // MOTOR 2 === motor on the left when youre facing the USB plugs
 
+unsigned char current_dc1 = 100, current_dc2 = 100;
+
 typedef enum
 {
 	APP_STATE_INIT=0,
