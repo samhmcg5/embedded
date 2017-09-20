@@ -37,7 +37,6 @@ void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE])
         //each byte of message is sent into uartqueue
         xQueueSendToBack(uart_outgoing_q, &msg[i], portMAX_DELAY);
     }
-    Nop();
     PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
 }
 
@@ -52,49 +51,95 @@ bool checkIfSendQueueIsEmpty()
     return xQueueIsQueueEmptyFromISR(uart_outgoing_q);
 }
 
-unsigned char commBuffer[UART_RX_QUEUE_SIZE];
+char commBuffer[UART_RX_QUEUE_SIZE];
 unsigned int commBufferIdx = 0;
 
 void readUartReceived() 
 {
-    Nop();
     unsigned char recv = PLIB_USART_ReceiverByteReceive(USART_ID_1);
 
-    Nop();
-    if (recv == '}') 
+// TEST 1  -- good
+//    char buf[2];
+//    buf[0] = recv + 1;
+//    buf[1] = '\0';
+//    commSendMsgFromISR(buf);
+
+//   TEST 2 -- good
+//    commBuffer[0] = recv + 1;
+//    commBuffer[1] = '\0';
+//    commSendMsgFromISR(commBuffer);
+    
+//  TEST 3    -- mostly passes
+//    if (commBufferIdx >= 3)
+//    {
+//        commBuffer[commBufferIdx] = recv;
+//        commBufferIdx++;
+//        commBuffer[commBufferIdx] = '\0';
+//        commSendMsgFromISR(commBuffer);
+//        commBufferIdx = 0;
+//    }
+//    else
+//    {
+//        commBuffer[commBufferIdx] = recv;
+//        commBufferIdx++;
+//    }
+    
+//      TEST 4
+    // get the start delimeter
+    if (recv == '{')
     {
-        //change this to our delimiter
-        if(commBufferIdx > 0){
-            if(commBuffer[commBufferIdx - 1] == '{')
-            {
-                commBuffer[0] = '\0';
-                commBufferIdx = 0;
-            }
-            else
-            {
-                commBuffer[commBufferIdx] = recv;
-                commSendMsgFromISR(commBuffer); ////FOR FUCKS SACKE UNCOMMENT
-                commBuffer[0] = '\0';
-            }
-        }
-    } 
-    else if (recv == '{') 
-    {
-        //        bufferToWrite2 = "";
         commBufferIdx = 0;
         commBuffer[commBufferIdx] = recv;
         commBufferIdx++;
-    } 
-    else 
+    }
+    // end token, add to the queue and exit
+    else if (recv == '}')
     {
         commBuffer[commBufferIdx] = recv;
         commBufferIdx++;
-        if(commBuffer[0] != '{')
-        {
-            commBuffer[0] = '\0';
-            commBufferIdx = 0;
-        }
+        commBuffer[commBufferIdx] = '\0';
+        commSendMsgFromISR(commBuffer);
     }
+    else
+    {
+        commBuffer[commBufferIdx] = recv;
+        commBufferIdx++;
+    }
+    
+//    if (recv == '}') 
+//    {
+//        //change this to our delimiter
+//        if(commBufferIdx > 0){
+//            if(commBuffer[commBufferIdx - 1] == '{')
+//            {
+//                commBuffer[0] = '\0';
+//                commBufferIdx = 0;
+//            }
+//            else
+//            {
+//                commBuffer[commBufferIdx] = recv;
+//                commSendMsgFromISR(commBuffer); ////FOR FUCKS SACKE UNCOMMENT
+//                commBuffer[0] = '\0';
+//            }
+//        }
+//    } 
+//    else if (recv == '{') 
+//    {
+//        //        bufferToWrite2 = "";
+//        commBufferIdx = 0;
+//        commBuffer[commBufferIdx] = recv;
+//        commBufferIdx++;
+//    } 
+//    else 
+//    {
+//        commBuffer[commBufferIdx] = recv;
+//        commBufferIdx++;
+//        if(commBuffer[0] != '{')
+//        {
+//            commBuffer[0] = '\0';
+//            commBufferIdx = 0;
+//        }
+//    }
 }
 
 void uartWriteMsg(char writeBuff) {
@@ -139,7 +184,7 @@ void COMMUNICATION_Tasks(void)
             {
                 if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
                 {
-                    commSendMsgToUartQueue("Team 14 \n\r");                
+                    commSendMsgToUartQueue(rec);                
                 }
             }
             break;

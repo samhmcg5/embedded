@@ -21,7 +21,6 @@ void IntHandlerDrvUsartInstance0(void)
     {
         while (1) 
         {
-            Nop();
             if (!checkIfSendQueueIsEmpty()) 
             {
                 unsigned char writeBuff;
@@ -49,16 +48,16 @@ void IntHandlerDrvUsartInstance0(void)
  
 void IntHandlerDrvTmrInstance0(void)
 {
-    unsigned char msg[UART_RX_QUEUE_SIZE];
-    msg[0] == 'T';
-    msg[1] == 'E';
-    msg[2] == 'A';
-    msg[3] == 'M';
-    msg[4] == '_';
-    msg[5] == '1';
-    msg[6] == '4';
-    msg[7] == '\0';
-    commSendMsgFromISR(msg);
+//    unsigned char msg[UART_RX_QUEUE_SIZE];
+//    msg[0] == 'T';
+//    msg[1] == 'E';
+//    msg[2] == 'A';
+//    msg[3] == 'M';
+//    msg[4] == '_';
+//    msg[5] == '1';
+//    msg[6] == '4';
+//    msg[7] == '\0';
+//    commSendMsgFromISR(msg);
     
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
