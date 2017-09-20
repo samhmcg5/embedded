@@ -154,7 +154,7 @@ void DRV_TMR0_Initialize(void)
     PLIB_TMR_PrescaleSelect(TMR_ID_2, TMR_PRESCALE_VALUE_256);
     /* Enable 32 bit mode */
     PLIB_TMR_Mode32BitEnable(TMR_ID_2);
-    /* Clear counter */ 
+    /* Clear counter */
     PLIB_TMR_Counter32BitClear(TMR_ID_2);
     /*Set period */ 
     PLIB_TMR_Period32BitSet(TMR_ID_2, 78125UL);
