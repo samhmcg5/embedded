@@ -5,40 +5,40 @@
 #define ADC_NUM_SAMPLES     16
 
 // pull the front item off the outgoing uart queue
-unsigned char recvFromUARTQ() 
-{
-    BaseType_t success = pdFALSE;
-    unsigned int recv;
-    if (comm_incoming_q != 0) 
-    {
-        success = xQueueReceiveFromISR(uart_outgoing_q, (void *)&recv, NULL);
-    }
-    return recv;
-}
 
 void IntHandlerDrvUsartInstance0(void)
 {
-    // receive available data from UART
-    while (!DRV_USART0_ReceiverBufferIsEmpty())
-    {
-        unsigned char byte = DRV_USART0_ReadByte(); 
-        sendMsgToCommQFromISR(byte);       
+    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE)) {
+        if (PLIB_USART_ReceiverDataIsAvailable(USART_ID_1)) {
+            readUartReceived();//receive uart
+        }
+        PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_RECEIVE);
+        //SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_RECEIVE);
     }
-    // send messages from outgoing queue to UART interface 
-    unsigned char recv;
-    while (pdFALSE == xQueueIsQueueEmptyFromISR(uart_outgoing_q))
-    {
-        recv = recvFromUARTQ();
-        DRV_USART0_WriteByte(recv);
+    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_TRANSMIT)) {
+        while (1) {
+            Nop();
+            if (!checkIfSendQueueIsEmpty()) {
+                unsigned char writeBuff;
+                if (PLIB_USART_TransmitterBufferIsFull(USART_ID_1)) {
+                    break;
+                }
+                uartReceiveFromOutQueueInISR(&writeBuff);
+                uartWriteMsg(writeBuff);
+            } else {
+                PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
+                break;
+
+            }
+        }
+
+        PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
     }
-    
-    SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_TRANSMIT);
-    SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_RECEIVE);
-    SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_ERROR);
-    
-    //DRV_USART_TasksTransmit(sysObj.drvUsart0);
-    //DRV_USART_TasksError(sysObj.drvUsart0);
-    //DRV_USART_TasksReceive(sysObj.drvUsart0);
+
+    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_ERROR)) {
+        halt(DBG_ERROR_UART_ERROR_FLAG);
+    }    
+ 
 }
  
 void IntHandlerDrvAdc(void)
@@ -53,8 +53,24 @@ void IntHandlerDrvAdc(void)
     avg = avg / ADC_NUM_SAMPLES;
     
     // now pop it on the uart outgoing queue
-    sendMsgToCommQFromISR(avg);
+    //sendMsgToCommQFromISR(avg);
     
     /* Clear ADC Interrupt Flag */
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
+}
+
+void IntHandlerDrvTmrInstance0(void)
+{
+    unsigned char msg[UART_RX_QUEUE_SIZE];
+    msg[0] == 'T';
+    msg[1] == 'E';
+    msg[2] == 'A';
+    msg[3] == 'M';
+    msg[4] == '_';
+    msg[5] == '1';
+    msg[6] == '4';
+    msg[7] == '\0';
+    commSendMsgFromISR(msg);
+    
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }

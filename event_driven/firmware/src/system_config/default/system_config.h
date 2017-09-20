@@ -57,7 +57,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*  This section Includes other configuration headers necessary to completely
     define this configuration.
 */
-#include "bsp.h"
 
 
 // DOM-IGNORE-BEGIN
@@ -85,7 +84,7 @@ extern "C" {
 #define SYS_CLK_FREQ                        80000000ul
 #define SYS_CLK_BUS_PERIPHERAL_1            80000000ul
 #define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       48000000ul
-#define SYS_CLK_CONFIG_PRIMARY_XTAL         8000000ul
+#define SYS_CLK_CONFIG_PRIMARY_XTAL         0ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       32768ul
    
 /*** Ports System Service Configuration ***/
@@ -129,7 +128,23 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
-// *****************************************************************************
+/*** Timer Driver Configuration ***/
+#define DRV_TMR_INTERRUPT_MODE             true
+
+/*** Timer Driver 0 Configuration ***/
+#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_2
+#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_3
+#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T3
+#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_3_VECTOR
+#define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL1
+#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0 INT_SUBPRIORITY_LEVEL0
+#define DRV_TMR_CLOCK_SOURCE_IDX0           DRV_TMR_CLKSOURCE_INTERNAL
+#define DRV_TMR_PRESCALE_IDX0               TMR_PRESCALE_VALUE_256
+#define DRV_TMR_OPERATION_MODE_IDX0         DRV_TMR_OPERATION_MODE_32_BIT
+#define DRV_TMR_ASYNC_WRITE_ENABLE_IDX0     false
+#define DRV_TMR_POWER_STATE_IDX0            
+
+ // *****************************************************************************
 /* USART Driver Configuration Options
 */
 #define DRV_USART_INSTANCES_NUMBER                  1
@@ -147,10 +162,6 @@ extern "C" {
 /*** OSAL Configuration ***/
 #define OSAL_USE_RTOS          9
 
-// *****************************************************************************
-/* BSP Configuration Options
-*/
-#define BSP_OSC_FREQUENCY 8000000
 
 
 // *****************************************************************************

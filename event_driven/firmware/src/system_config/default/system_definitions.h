@@ -54,6 +54,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/int/sys_int.h"
 #include "driver/adc/drv_adc_static.h"
 #include "peripheral/int/plib_int.h"
+#include "driver/tmr/drv_tmr_static.h"
+#include "peripheral/int/plib_int.h"
 #include "driver/usart/drv_usart_static.h"
 #include "system/ports/sys_ports.h"
 #include "FreeRTOS.h"
@@ -92,6 +94,7 @@ extern "C" {
 
 typedef struct
 {
+    SYS_MODULE_OBJ  drvTmr0;
     SYS_MODULE_OBJ  drvUsart0;
 
 } SYSTEM_OBJECTS;

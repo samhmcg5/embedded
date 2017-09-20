@@ -13,7 +13,7 @@
 #define DBG_LOCATION_TMRTASK_BEFORE_SEND    7
 #define DBG_LOCATION_TMRTASK_AFTER_SEND     8
 #define DBG_ERROR_QUEUE_FAILED_TO_CREATE    9
-    
+#define DBG_ERROR_UART_ERROR_FLAG    10    
 void halt(unsigned char outVal);    
     
 int writeToUART(unsigned char byte);

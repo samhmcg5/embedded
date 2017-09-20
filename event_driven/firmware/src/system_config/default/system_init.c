@@ -70,7 +70,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config FNOSC =      FRCPLL
 #pragma config FSOSCEN =    ON
 #pragma config IESO =       ON
-#pragma config POSCMOD =    XT
+#pragma config POSCMOD =    OFF
 #pragma config OSCIOFNC =   OFF
 #pragma config FPBDIV =     DIV_1
 #pragma config FCKSM =      CSECMD
@@ -82,12 +82,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config FPLLMUL =    MUL_20
 #pragma config FPLLODIV =   DIV_1
 #pragma config UPLLIDIV =   DIV_2
-#pragma config UPLLEN =     ON
+#pragma config UPLLEN =     OFF
 /*** DEVCFG3 ***/
 
 #pragma config USERID =     0xffff
 #pragma config FSRSSEL =    PRIORITY_7
-#pragma config FMIIEN =     OFF
+#pragma config FMIIEN =     ON
 #pragma config FETHIO =     ON
 #pragma config FCANIO =     ON
 #pragma config FUSBIDIO =   ON
@@ -99,6 +99,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Driver Initialization Data
 // *****************************************************************************
 // *****************************************************************************
+// <editor-fold defaultstate="collapsed" desc="DRV_Timer Initialization Data">
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="DRV_USART Initialization Data">
 // </editor-fold>
 
@@ -149,15 +151,15 @@ void SYS_Initialize ( void* data )
     SYS_DEVCON_JTAGDisable();
     SYS_PORTS_Initialize();
 
-    /* Board Support Package Initialization */
-    BSP_Initialize();        
-
     /* Initialize Drivers */
 
     /* Initialize ADC */
     DRV_ADC_Initialize();
 
-    sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
+    /*Initialize TMR0 */
+    DRV_TMR0_Initialize();
+ 
+     sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART1, INT_PRIORITY_LEVEL1);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1, INT_SUBPRIORITY_LEVEL0);
 

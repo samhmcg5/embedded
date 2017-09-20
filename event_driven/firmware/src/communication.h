@@ -7,8 +7,18 @@
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "system/system.h"
+#include "system/clk/sys_clk.h"
+#include "driver/usart/drv_usart.h"
+#include "system/devcon/sys_devcon.h"
+#include <sys/appio.h>
+#include <GenericTypeDefs.h>
+#include "system/common/sys_module.h"
+#include "system/msg/sys_msg.h"
+#include "debug.h"
 
-
+#define UART_RX_QUEUE_SIZE 256
+#define UART_TX_QUEUE_SIZE 256
 typedef enum
 {
 	COMMUNICATION_STATE_INIT=0,
@@ -24,7 +34,7 @@ typedef struct
 
 struct queueData
 {
-    unsigned int recv;
+   unsigned char recv[UART_RX_QUEUE_SIZE];
     BaseType_t ret;
 };
 
@@ -38,8 +48,18 @@ QueueHandle_t comm_incoming_q;
 // UART ISR reads from this Q, we write to it
 QueueHandle_t uart_outgoing_q;
 
-int sendMsgToCommQFromISR(unsigned int msg);
-int sendMsgToUARTQ(unsigned char msg);
+//RX functions
 struct queueData recvFromQ();
+int sendMsgToCommQFromISR(unsigned int msg);
+void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]);
+void commSendMsg(unsigned char msg[UART_RX_QUEUE_SIZE]);
+void readUartReceived();
+
+//TX functions
+void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]);
+bool checkIfSendQueueIsEmpty();
+void uartReceiveFromOutQueueInISR(unsigned char *msg);
+void uartWriteMsg(char writeBuff);
+
 
 #endif /* _COMMUNICATION_H */

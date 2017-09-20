@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project>                                  
-  <executable name="dist/default/production/event_driven.X.production.elf">                 
+  <executable name="dist/default/debug/event_driven.X.debug.elf">                 
     <memory name="program">                 
       <units>bytes</units>                 
       <length>531968</length>                 
-      <used>15768</used>                     
-      <free>516200</free>                     
+      <used>16124</used>                     
+      <free>515844</free>                     
     </memory>                              
     <memory name="data">              
       <units>bytes</units>                 
-      <length>131072</length>                 
-      <used>104588</used>                     
-      <free>26484</free>                     
+      <length>131584</length>                 
+      <used>105612</used>                     
+      <free>25972</free>                     
     </memory>                              
   </executable>                            
 </project>                                 
