@@ -4,7 +4,6 @@
 COMMUNICATION_DATA communicationData;
 
 // recv a message from the q
-
 struct queueData recvFromQ() 
 {
     BaseType_t success = pdFALSE;
@@ -17,75 +16,90 @@ struct queueData recvFromQ()
     return data;
 }
 //send into commtask from isr
-void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]) {//send to comms task from isr
+void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]) 
+{
+    //send to comms task from isr
     xQueueSendToBackFromISR(comm_incoming_q, msg, NULL);
 }
 
 //send into commtask
-void commSendMsg(unsigned char msg[UART_RX_QUEUE_SIZE]) {//send to the comms task
+void commSendMsg(unsigned char msg[UART_RX_QUEUE_SIZE]) 
+{
+    //send to the comms task
     xQueueSendToBack(comm_incoming_q, msg, portMAX_DELAY);
 }
 //send each byte of message into uart out queue
-void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]) {
+void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]) 
+{
     int i;
-    for(i = 0; i< strlen(msg); i++){//each byte of message is sent into uartqueue
+    for(i = 0; i< strlen(msg); i++)
+    {
+        //each byte of message is sent into uartqueue
         xQueueSendToBack(uart_outgoing_q, &msg[i], portMAX_DELAY);
     }
     Nop();
-        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
-    }
+    PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
+}
 
-void uartReceiveFromOutQueueInISR(unsigned char* msg) {//read from uart queue to transmit
+void uartReceiveFromOutQueueInISR(unsigned char* msg) 
+{
+    //read from uart queue to transmit
     xQueueReceiveFromISR(uart_outgoing_q, msg, NULL);
 }
 
-bool checkIfSendQueueIsEmpty() {
+bool checkIfSendQueueIsEmpty() 
+{
     return xQueueIsQueueEmptyFromISR(uart_outgoing_q);
 }
 
 unsigned char commBuffer[UART_RX_QUEUE_SIZE];
 unsigned int commBufferIdx = 0;
 
-void readUartReceived() {
-
+void readUartReceived() 
+{
     Nop();
     unsigned char recv = PLIB_USART_ReceiverByteReceive(USART_ID_1);
 
     Nop();
-    if (recv == '}') {//change this to our delimiter
+    if (recv == '}') 
+    {
+        //change this to our delimiter
         if(commBufferIdx > 0){
-            if(commBuffer[commBufferIdx - 1] == '{'){
+            if(commBuffer[commBufferIdx - 1] == '{')
+            {
                 commBuffer[0] = '\0';
                 commBufferIdx = 0;
             }
-            else{
+            else
+            {
                 commBuffer[commBufferIdx] = recv;
                 commSendMsgFromISR(commBuffer); ////FOR FUCKS SACKE UNCOMMENT
                 commBuffer[0] = '\0';
             }
         }
-    } else if (recv == '{') {
+    } 
+    else if (recv == '{') 
+    {
         //        bufferToWrite2 = "";
         commBufferIdx = 0;
         commBuffer[commBufferIdx] = recv;
         commBufferIdx++;
-    } else {
+    } 
+    else 
+    {
         commBuffer[commBufferIdx] = recv;
         commBufferIdx++;
-        if(commBuffer[0] != '{'){
+        if(commBuffer[0] != '{')
+        {
             commBuffer[0] = '\0';
             commBufferIdx = 0;
         }
     }
 }
 
-
 void uartWriteMsg(char writeBuff) {
     PLIB_USART_TransmitterByteSend(USART_ID_1, writeBuff); //write a byte
 }
-
-
-
 
 void COMMUNICATION_Initialize(void) 
 {
@@ -95,15 +109,11 @@ void COMMUNICATION_Initialize(void)
     comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE]));//general purpose for all incoming
     uart_outgoing_q = xQueueCreate(UART_TX_QUEUE_SIZE, sizeof (unsigned char));
 
-    // start the adc
-    DRV_ADC_Open();
-    DRV_ADC_Start();
     DRV_TMR0_Start();
 }
 
 void COMMUNICATION_Tasks(void) 
 {
-
     /* Check the application's current state. */
     switch (communicationData.state) 
     {
@@ -127,14 +137,11 @@ void COMMUNICATION_Tasks(void)
             unsigned char rec[UART_RX_QUEUE_SIZE];
             while (1) 
             {
-                
-                if(xQueueReceive(comm_incoming_q,&rec, portMAX_DELAY)){
-                    commSendMsgToUartQueue("Team 14 \n\r");
-                
+                if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
+                {
+                    commSendMsgToUartQueue("Team 14 \n\r");                
                 }
-                
             }
-
             break;
         }
 

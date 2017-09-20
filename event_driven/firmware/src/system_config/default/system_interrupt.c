@@ -8,27 +8,34 @@
 
 void IntHandlerDrvUsartInstance0(void)
 {
-    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE)) {
-        if (PLIB_USART_ReceiverDataIsAvailable(USART_ID_1)) {
+    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE)) 
+    {
+        if (PLIB_USART_ReceiverDataIsAvailable(USART_ID_1)) 
+        {
             readUartReceived();//receive uart
         }
         PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_RECEIVE);
         //SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_RECEIVE);
     }
-    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_TRANSMIT)) {
-        while (1) {
+    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_TRANSMIT)) 
+    {
+        while (1) 
+        {
             Nop();
-            if (!checkIfSendQueueIsEmpty()) {
+            if (!checkIfSendQueueIsEmpty()) 
+            {
                 unsigned char writeBuff;
-                if (PLIB_USART_TransmitterBufferIsFull(USART_ID_1)) {
-                    break;
+                if (PLIB_USART_TransmitterBufferIsFull(USART_ID_1)) 
+                {
+                    continue;
                 }
                 uartReceiveFromOutQueueInISR(&writeBuff);
                 uartWriteMsg(writeBuff);
-            } else {
+            } 
+            else 
+            {
                 PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
                 break;
-
             }
         }
 
@@ -38,27 +45,8 @@ void IntHandlerDrvUsartInstance0(void)
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_ERROR)) {
         halt(DBG_ERROR_UART_ERROR_FLAG);
     }    
- 
 }
  
-void IntHandlerDrvAdc(void)
-{
-    // take the average over the adc registers
-    unsigned int avg = 0;
-    int i;
-    for (i=0; i<ADC_NUM_SAMPLES; i++)
-    {
-        avg += PLIB_ADC_ResultGetByIndex(ADC_ID_1, i);
-    }
-    avg = avg / ADC_NUM_SAMPLES;
-    
-    // now pop it on the uart outgoing queue
-    //sendMsgToCommQFromISR(avg);
-    
-    /* Clear ADC Interrupt Flag */
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
-}
-
 void IntHandlerDrvTmrInstance0(void)
 {
     unsigned char msg[UART_RX_QUEUE_SIZE];

@@ -47,41 +47,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "ISR_Support.h"
 
-/* ADC Interrupt */
-   .extern  IntHandlerDrvAdc
-
-   .section	.vector_27,code, keep
-   .equ     __vector_dispatch_27, IntVectorDrvAdc
-   .global  __vector_dispatch_27
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  IntVectorDrvAdc
-
-IntVectorDrvAdc:
-    la    $26,  _IntHandlerDrvAdc         
-    jr    $26
-    nop
-	.end	IntVectorDrvAdc
-
-   .section	.DrvAdc_vector_text, code, keep
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  _IntHandlerDrvAdc
-
-_IntHandlerDrvAdc:
-    portSAVE_CONTEXT
-    la    s6,  IntHandlerDrvAdc
-    jalr  s6
-    nop
-    portRESTORE_CONTEXT
-    .end	_IntHandlerDrvAdc
-
-
-
  
 
 /* TMR Instance 0 Interrupt */
