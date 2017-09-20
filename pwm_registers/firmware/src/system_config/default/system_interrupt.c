@@ -4,10 +4,12 @@
 
 
 int cm_count = 0;
+char timer5_count = 0;
+unsigned char ticks1 = 0, ticks2 = 0;
 char state = 0;
     
     
-void __ISR(_TIMER_4_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
+void IntHandlerDrvTmrInstance0(void)
 {
     //current_dc1 = current_dc1 - 10;
     //setMotor1DC(current_dc1);
@@ -20,28 +22,47 @@ void __ISR(_TIMER_4_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
             state = 1;
             setMotor1Backward();
             setMotor2Backward();
+            setMotor1DC(70);
+            setMotor2DC(70);
         }
         else
         { 
             state = 0;
             setMotor1Forward();
             setMotor2Forward();
+            setMotor1DC(15);
+            setMotor2DC(15);
         }
     }
     cm_count++;
+    ticks1 = ticks1 + 60;
     
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
 }
-
-
-void __ISR(_TIMER_3_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance1(void)
+void IntHandlerDrvTmrInstance1(void)
 {
     //current_dc2 = current_dc2 - 10;
     //setMotor2DC(current_dc2);
     //setMotor2DC(0);
+    ticks2 = ticks2 + 60;
     
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
- /*******************************************************************************
- End of File
-*/
+
+void IntHandlerDrvTmrInstance2(void)
+{
+    if (timer5_count % 10 == 0)
+    {
+        struct queueData msg;
+        msg.motor1 = ticks1;
+        msg.motor2 = ticks2;
+        
+        sendMsgToQFromISR(msg);
+        
+        ticks1 = 0;
+        ticks2 = 0;
+    }
+    timer5_count++;
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
+}
+ 

@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include "app.h"
+#include "debug.h"
 
 
 APP_DATA appData;
@@ -18,6 +20,7 @@ void initMotor1and2()
     
     T2CONSET = 0x0070;   // set for 256 prescale
     PR2 = TMR2_PERIOD;  // set the period to 3125
+    
     // default motors to OFF
     OC1CON = 0x0000;    // turn off while setting up
     OC1R = 0x0000;      // primary compare register
@@ -70,17 +73,39 @@ void setMotor2DC(unsigned char dc)
     OC2RS = new_ocrs;
 }
 
+// add a msg to the q
+int sendMsgToQFromISR(struct queueData msg)
+{
+    xQueueSendFromISR(encoder_q, (void*)&msg, NULL);
+    return 0;
+}
+
+// recv a message from the q
+struct queueData recvFromQ()
+{
+    struct queueData recv;
+    if (encoder_q != 0)
+    {
+       xQueueReceive(encoder_q, &recv, portMAX_DELAY);
+    }
+    return recv;
+}
+
 void APP_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
     appData.state = APP_STATE_INIT;
+    
+    encoder_q = xQueueCreate(64, sizeof(struct queueData));
+    
     initMotor1and2();
     
     DRV_TMR0_Start();
     DRV_TMR1_Start();
+    DRV_TMR2_Start();
     
-    setMotor1DC(100);
-    setMotor2DC(100);
+    setMotor1DC(20);
+    setMotor2DC(20);
 }
 
 void APP_Tasks ( void )
@@ -99,6 +124,16 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
+            while (1)
+            {
+                struct queueData msg = recvFromQ();
+//                char buf[12];
+//                sprintf(buf, "%i\t%i\n\r", msg.motor1, msg.motor2);
+//                writeUARTString(buf,12);
+                dbgOutputVal(msg.motor1);
+                dbgOutputVal(msg.motor2);
+            }
+            
             break;
         }
 

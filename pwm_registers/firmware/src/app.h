@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "queue.h"
 
 #define MOTOR1_DIR_PIN     0x4000
 #define MOTOR2_DIR_PIN     0x0002
@@ -25,6 +26,17 @@ typedef struct
     APP_STATES state;
 } APP_DATA;
 
+struct queueData
+{
+    unsigned char motor1;
+    unsigned char motor2;
+};
+
+// write # of ticks per second here
+QueueHandle_t encoder_q;
+// Queue Fxns
+int sendMsgToQFromISR(struct queueData msg);
+struct queueData recvFromQ();
 
 /*
  * fxn: initMotor1and2()

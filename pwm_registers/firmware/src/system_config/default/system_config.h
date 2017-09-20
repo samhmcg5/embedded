@@ -155,12 +155,35 @@ extern "C" {
 #define DRV_TMR_OPERATION_MODE_IDX1         DRV_TMR_OPERATION_MODE_16_BIT
 #define DRV_TMR_ASYNC_WRITE_ENABLE_IDX1     false
 #define DRV_TMR_POWER_STATE_IDX1            
- 
+/*** Timer Driver 2 Configuration ***/
+#define DRV_TMR_PERIPHERAL_ID_IDX2          TMR_ID_5
+#define DRV_TMR_INTERRUPT_SOURCE_IDX2       INT_SOURCE_TIMER_5
+#define DRV_TMR_INTERRUPT_VECTOR_IDX2       INT_VECTOR_T5
+#define DRV_TMR_ISR_VECTOR_IDX2             _TIMER_5_VECTOR
+#define DRV_TMR_INTERRUPT_PRIORITY_IDX2     INT_PRIORITY_LEVEL1
+#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX2 INT_SUBPRIORITY_LEVEL0
+#define DRV_TMR_CLOCK_SOURCE_IDX2           DRV_TMR_CLKSOURCE_INTERNAL
+#define DRV_TMR_PRESCALE_IDX2               TMR_PRESCALE_VALUE_256
+#define DRV_TMR_OPERATION_MODE_IDX2         DRV_TMR_OPERATION_MODE_16_BIT
+#define DRV_TMR_ASYNC_WRITE_ENABLE_IDX2     false
+#define DRV_TMR_POWER_STATE_IDX2            
+ // *****************************************************************************
+/* USART Driver Configuration Options
+*/
+#define DRV_USART_INSTANCES_NUMBER                  1
+#define DRV_USART_CLIENTS_NUMBER                    1
+#define DRV_USART_INTERRUPT_MODE                    false
+#define DRV_USART_BYTE_MODEL_SUPPORT                true
+#define DRV_USART_READ_WRITE_MODEL_SUPPORT          false
+#define DRV_USART_BUFFER_QUEUE_SUPPORT              false
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Middleware & Other Library Configuration
 // *****************************************************************************
 // *****************************************************************************
+/*** OSAL Configuration ***/
+#define OSAL_USE_RTOS          9
 
 
 
