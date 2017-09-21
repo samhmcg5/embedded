@@ -23,5 +23,10 @@ while True:
 	s.send(json_str.encode())
 	data = s.recv(size)
 	file.write("Received: " + data.decode() + "\n")
+	json_str = '{ "retrieve":' + str(count) + ' }!'
+	file.write("Retrieving from server: \n")
+	s.send(json_str.encode())
+	data = s.recv(size)
+	file.write("Received from server: " + data.decode() + "\n")
 	count += 1
 file.close()
