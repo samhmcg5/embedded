@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "communication.h"
 #include "queue.h"
 
@@ -52,15 +53,18 @@ bool checkIfSendQueueIsEmpty()
 }
 
 // JSMN
-static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
+static int jsoneq(const char *json, jsmntok_t *tok, const char *s) 
+{
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
-			strncmp(json + tok->start, s, tok->end - tok->start) == 0) {
+			strncmp(json + tok->start, s, tok->end - tok->start) == 0) 
+    {
 		return 0;
 	}
 	return -1;
 }
 
-void parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) {
+int parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
+{
     JSON_STRING = rec;
     int r;
     jsmn_parser p;
@@ -72,17 +76,28 @@ void parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) {
     jsmntok_t key;
     unsigned int length;
     char keyString[length + 1];
+    
+    int i;
                     
-    int j;
-    for (j = 0; j < r; ++j)
-    {
-        key = t[j];
-        length = key.end - key.start;
-        keyString[length + 1];    
-        memcpy(keyString, &JSON_STRING[key.start], length);
-        keyString[length] = '\0';
-        commSendMsgToUartQueue(keyString);
-    }    
+    key = t[2];
+    length = key.end - key.start;
+    keyString[length + 1];    
+    memcpy(keyString, &JSON_STRING[key.start], length);
+    keyString[length] = '\0';
+    
+    return atoi(keyString);
+    
+    
+//    int j;
+//    for (j = 0; j < r; ++j)
+//    {
+//        key = t[j];
+//        length = key.end - key.start;
+//        keyString[length + 1];    
+//        memcpy(keyString, &JSON_STRING[key.start], length);
+//        keyString[length] = '\0';
+//        commSendMsgToUartQueue(keyString);
+//    }    
 }
 
 char commBuffer[UART_RX_QUEUE_SIZE];
@@ -91,36 +106,8 @@ unsigned int commBufferIdx = 0;
 void readUartReceived() 
 {
     unsigned char recv = PLIB_USART_ReceiverByteReceive(USART_ID_1);
-
-// TEST 1  -- good
-//    char buf[2];
-//    buf[0] = recv + 1;
-//    buf[1] = '\0';
-//    commSendMsgFromISR(buf);
-
-//   TEST 2 -- good
-//    commBuffer[0] = recv + 1;
-//    commBuffer[1] = '\0';
-//    commSendMsgFromISR(commBuffer);
-    
-//  TEST 3    -- mostly passes
-//    if (commBufferIdx >= 3)
-//    {
-//        commBuffer[commBufferIdx] = recv;
-//        commBufferIdx++;
-//        commBuffer[commBufferIdx] = '\0';
-//        commSendMsgFromISR(commBuffer);
-//        commBufferIdx = 0;
-//    }
-//    else
-//    {
-//        commBuffer[commBufferIdx] = recv;
-//        commBufferIdx++;
-//    }
-    
-//      TEST 4
     // get the start delimeter
-  if (recv == '{')
+    if (recv == '{')
     {
         commBufferIdx = 0;
         commBuffer[commBufferIdx] = recv;
@@ -139,41 +126,6 @@ void readUartReceived()
         commBuffer[commBufferIdx] = recv;
         commBufferIdx++;
     } 
-    
-//    if (recv == '}') 
-//    {
-//        //change this to our delimiter
-//        if(commBufferIdx > 0){
-//            if(commBuffer[commBufferIdx - 1] == '{')
-//            {
-//                commBuffer[0] = '\0';
-//                commBufferIdx = 0;
-//            }
-//            else
-//            {
-//                commBuffer[commBufferIdx] = recv;
-//                commSendMsgFromISR(commBuffer); ////FOR FUCKS SACKE UNCOMMENT
-//                commBuffer[0] = '\0';
-//            }
-//        }
-//    } 
-//    else if (recv == '{') 
-//    {
-//        //        bufferToWrite2 = "";
-//        commBufferIdx = 0;
-//        commBuffer[commBufferIdx] = recv;
-//        commBufferIdx++;
-//    } 
-//    else 
-//    {
-//        commBuffer[commBufferIdx] = recv;
-//        commBufferIdx++;
-//        if(commBuffer[0] != '{')
-//        {
-//            commBuffer[0] = '\0';
-//            commBufferIdx = 0;
-//        }
-//    }
 }
 
 void uartWriteMsg(char writeBuff) {
@@ -218,8 +170,11 @@ void COMMUNICATION_Tasks(void)
             {
                 if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
                 {
-                    parseJSON(rec);
-                    
+                    int direction = parseJSON(rec);
+                    direction++;
+                    char buf[32];
+                    sprintf(buf, "{\"ACK\" : %i}", direction);
+                    commSendMsgToUartQueue(buf);
                 }
             }
             break;
