@@ -21,10 +21,15 @@
 
 #define UART_RX_QUEUE_SIZE 256
 #define UART_TX_QUEUE_SIZE 256
+#define SERVER_TIMOUT       4 // number of quarter seconds
+
 typedef enum
 {
 	COMMUNICATION_STATE_INIT=0,
 	COMMUNICATION_STATE_SERVICE_TASKS,
+    COMM_REQUEST_SERVER,
+    COMM_AWAIT_RESPONSE,
+    COMM_ACK_SERVER
 } COMMUNICATION_STATES;
 
 
@@ -32,6 +37,8 @@ typedef struct
 {
     /* The application's current state */
     COMMUNICATION_STATES state;
+    int recvd;
+    int data;
 } COMMUNICATION_DATA;
 
 struct queueData
@@ -49,6 +56,8 @@ void COMMUNICATION_Tasks( void );
 QueueHandle_t comm_incoming_q;
 // UART ISR reads from this Q, we write to it
 QueueHandle_t uart_outgoing_q;
+// server reply timout interrupt queue
+QueueHandle_t timeout_q;
 
 //RX functions
 struct queueData recvFromQ();

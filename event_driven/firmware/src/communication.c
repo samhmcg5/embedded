@@ -2,6 +2,7 @@
 #include "communication.h"
 #include "queue.h"
 
+// communication's state
 COMMUNICATION_DATA communicationData;
 
 // recv a message from the q
@@ -45,6 +46,17 @@ void uartReceiveFromOutQueueInISR(unsigned char* msg)
 {
     //read from uart queue to transmit
     xQueueReceiveFromISR(uart_outgoing_q, msg, NULL);
+}
+
+void commSendMsgToTimeoutQ(COMMUNICATION_STATES msg) 
+{
+    xQueueSendToBack(timeout_q, &msg, portMAX_DELAY);
+}
+
+void uartReceiveFromTimeoutQInISR(COMMUNICATION_STATES * msg) 
+{
+    //read from uart queue to transmit
+    xQueueReceiveFromISR(timeout_q, &msg, NULL);
 }
 
 bool checkIfSendQueueIsEmpty() 
@@ -135,11 +147,12 @@ void uartWriteMsg(char writeBuff) {
 void COMMUNICATION_Initialize(void) 
 {
     communicationData.state = COMMUNICATION_STATE_INIT;
+    communicationData.data = 0;
     // create the q handle
-     
     comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE]));//general purpose for all incoming
     uart_outgoing_q = xQueueCreate(UART_TX_QUEUE_SIZE, sizeof (unsigned char));
-
+    timeout_q = xQueueCreate(10, sizeof(COMMUNICATION_STATES));
+    
     DRV_TMR0_Start();
 }
 
@@ -154,29 +167,68 @@ void COMMUNICATION_Tasks(void)
             bool appInitialized = true;
             if (appInitialized) 
             {
-                communicationData.state = COMMUNICATION_STATE_SERVICE_TASKS;
+                communicationData.state = COMM_REQUEST_SERVER;
             }
             break;
         }
 
         case COMMUNICATION_STATE_SERVICE_TASKS:
         {
-            // read from queue
-            struct queueData data;
-
-            // Task Infinite While Loop de loop 
+//            // Task Infinite While Loop de loop 
+//            unsigned char rec[UART_RX_QUEUE_SIZE];
+//            while (1) 
+//            {
+//                if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
+//                {
+//                    int direction = parseJSON(rec);
+//                    direction++;
+//                    char buf[32];
+//                    sprintf(buf, "{\"ACK\" : %i}", direction);
+//                    commSendMsgToUartQueue(buf);
+//                
+//            }
+            break;
+        }
+        
+        case COMM_REQUEST_SERVER:
+        {
+            commSendMsgToTimeoutQ(communicationData.state);
+            
+            char buf[32];
+            sprintf(buf, "{\"store\" : %i}!", communicationData.data);
+            commSendMsgToUartQueue(buf);
+            
+            communicationData.state = COMM_AWAIT_RESPONSE;
+            break;
+        }
+        case COMM_AWAIT_RESPONSE:
+        {
+            commSendMsgToTimeoutQ(communicationData.state);
             unsigned char rec[UART_RX_QUEUE_SIZE];
-            while (1) 
+            if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
             {
-                if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
+                // server timeout, return to request
+                if (rec[0] == '?')
                 {
-                    int direction = parseJSON(rec);
-                    direction++;
-                    char buf[32];
-                    sprintf(buf, "{\"ACK\" : %i}", direction);
-                    commSendMsgToUartQueue(buf);
+                    communicationData.state = COMM_REQUEST_SERVER;
+                    break;
                 }
+                int direction = parseJSON(rec);
+                communicationData.recvd = direction + 1;
+                communicationData.state = COMM_ACK_SERVER;
             }
+            break;
+        }
+        case COMM_ACK_SERVER:
+        {
+            commSendMsgToTimeoutQ(communicationData.state);
+            
+            char buf[32];
+            sprintf(buf, "{\"ACK\" : %i}!", communicationData.recvd);
+            commSendMsgToUartQueue(buf);
+            communicationData.data = communicationData.data + 5;
+            
+            communicationData.state = COMM_REQUEST_SERVER;
             break;
         }
 
