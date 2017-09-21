@@ -5,6 +5,8 @@
 // communication's state
 COMMUNICATION_DATA communicationData;
 
+char store_or_retrieve = 0x01;
+
 // recv a message from the q
 struct queueData recvFromQ() 
 {
@@ -147,7 +149,7 @@ void uartWriteMsg(char writeBuff) {
 void COMMUNICATION_Initialize(void) 
 {
     communicationData.state = COMMUNICATION_STATE_INIT;
-    communicationData.data = 0;
+    communicationData.data = 5000;
     // create the q handle
     comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE]));//general purpose for all incoming
     uart_outgoing_q = xQueueCreate(UART_TX_QUEUE_SIZE, sizeof (unsigned char));
@@ -171,31 +173,22 @@ void COMMUNICATION_Tasks(void)
             }
             break;
         }
-
-        case COMMUNICATION_STATE_SERVICE_TASKS:
-        {
-//            // Task Infinite While Loop de loop 
-//            unsigned char rec[UART_RX_QUEUE_SIZE];
-//            while (1) 
-//            {
-//                if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
-//                {
-//                    int direction = parseJSON(rec);
-//                    direction++;
-//                    char buf[32];
-//                    sprintf(buf, "{\"ACK\" : %i}", direction);
-//                    commSendMsgToUartQueue(buf);
-//                
-//            }
-            break;
-        }
         
         case COMM_REQUEST_SERVER:
         {
             commSendMsgToTimeoutQ(communicationData.state);
             
             char buf[32];
-            sprintf(buf, "{\"store\" : %i}!", communicationData.data);
+            if (store_or_retrieve)
+            {
+                sprintf(buf, "{\"store\" : %i}!", communicationData.data);
+                store_or_retrieve = !store_or_retrieve;
+            }
+            else
+            {
+                sprintf(buf, "{\"retrieve\" : %i}!", communicationData.data);
+                store_or_retrieve = !store_or_retrieve;
+            }
             commSendMsgToUartQueue(buf);
             
             communicationData.state = COMM_AWAIT_RESPONSE;
