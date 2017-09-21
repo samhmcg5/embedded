@@ -16,6 +16,8 @@
 #include "system/common/sys_module.h"
 #include "system/msg/sys_msg.h"
 #include "debug.h"
+#include "jsmn.h"
+#include "string.h"
 
 #define UART_RX_QUEUE_SIZE 256
 #define UART_TX_QUEUE_SIZE 256
@@ -60,6 +62,10 @@ void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]);
 bool checkIfSendQueueIsEmpty();
 void uartReceiveFromOutQueueInISR(unsigned char *msg);
 void uartWriteMsg(char writeBuff);
+
+//JSMN functions
+static const char *JSON_STRING;
+static int jsoneq(const char *json, jsmntok_t *tok, const char *s);
 
 
 #endif /* _COMMUNICATION_H */
