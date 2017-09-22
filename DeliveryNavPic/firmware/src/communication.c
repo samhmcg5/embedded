@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "communication.h"
 #include "communication_globals.h"
+#include "nav_globals.h"
 #include "queue.h"
 
 // communication's state
@@ -125,27 +126,8 @@ void COMMUNICATION_Tasks(void)
             bool appInitialized = true;
             if (appInitialized) 
             {
-                communicationData.state = COMM_REQUEST_SERVER;
+                communicationData.state = COMM_AWAIT_RESPONSE;
             }
-            break;
-        }
-        
-        case COMM_REQUEST_SERVER:
-        {
-            char buf[32];
-            if (store_or_retrieve)
-            {
-                sprintf(buf, "{\"store\" : %i}!", communicationData.data);
-                store_or_retrieve = !store_or_retrieve;
-            }
-            else
-            {
-                sprintf(buf, "{\"retrieve\" : %i}!", communicationData.data);
-                store_or_retrieve = !store_or_retrieve;
-            }
-            commSendMsgToUartQueue(buf);
-            
-            communicationData.state = COMM_AWAIT_RESPONSE;
             break;
         }
         case COMM_AWAIT_RESPONSE:
@@ -155,21 +137,17 @@ void COMMUNICATION_Tasks(void)
             {
                 int direction = parseJSON(rec);
                 communicationData.recvd = direction + 1;
-                communicationData.state = COMM_ACK_SERVER;
+                
+                struct navQueueData out;
+                out.msg = direction;
+                out.x = 0;
+                out.y = 0;
+                out.color = 0;
+                
+                sendMsgToNavQ(out);
             }
             break;
         }
-        case COMM_ACK_SERVER:
-        {
-            char buf[32];
-            sprintf(buf, "{\"ACK\" : %i}!", communicationData.recvd);
-            commSendMsgToUartQueue(buf);
-            communicationData.data = communicationData.data + 5;
-            
-            communicationData.state = COMM_REQUEST_SERVER;
-            break;
-        }
-
         default:
         {
             break;

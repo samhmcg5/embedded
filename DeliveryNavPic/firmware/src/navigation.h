@@ -5,9 +5,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "system_config.h"
 #include "system_definitions.h"
-
+#include "queue.h"
 
 typedef enum
 {
