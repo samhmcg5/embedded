@@ -133,12 +133,15 @@ void MOTOR_CONTROL_Initialize ( void )
     right_q = xQueueCreate(32, sizeof (struct pwmQueueData));
     left_q = xQueueCreate(32, sizeof (struct pwmQueueData));
     // initialize the OCs and Timer2
-//    initMotors();
-//    
-//    DRV_TMR0_Start();
-//    DRV_TMR1_Start();
-//    //DRV_TMR2_Start();
-//    
+    initMotors();
+    
+    DRV_TMR0_Start();
+    DRV_TMR1_Start();
+    //DRV_TMR2_Start();
+    setMotorR_DC(20);
+    setMotorL_DC(20);
+
+    
 //    struct pwmQueueData data;
 //    data.dc = 50;
 //    data.dir = FORWARD;

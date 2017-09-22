@@ -11,8 +11,9 @@
 unsigned char stopCountR = 0;
 unsigned char stopCountL = 0;
 
-unsigned char distR = 0;
-unsigned char distL = 0;
+unsigned char distR = 10;
+unsigned char distL = 10;
+char dir = 1;
 
 void IntHandlerDrvUsartInstance0(void)
 {
@@ -61,23 +62,29 @@ void IntHandlerDrvTmrInstance0(void)
     // if distance to go == 0, stop
     if (distL <= 0)
     {
-        setMotorL_DC(0);
+        distL = 10;
+        //setMotorL_DC(0);
+        if (dir == FORWARD)
+            setMotorL_Fwd();
+        else
+            setMotorL_Bck();
+        dir = !dir;
     }
     // check if new data is available
 //    if (distL <= 0 && !leftQIsEmpty())
-    if (!leftQIsEmpty())
-    {
-        struct pwmQueueData rec;
-        motorL_recvQInISR(&rec);
-        
-//        if (rec.dir == FORWARD)
-//            setMotorL_Fwd();
-//        else
-//            setMotorL_Bck();
-        
-        setMotorL_DC(rec.dc);
-        distL = rec.dist;
-    }
+//    if (!leftQIsEmpty())
+//    {
+//        struct pwmQueueData rec;
+//        motorL_recvQInISR(&rec);
+//        
+////        if (rec.dir == FORWARD)
+////            setMotorL_Fwd();
+////        else
+////            setMotorL_Bck();
+//        
+//        setMotorL_DC(rec.dc);
+//        distL = rec.dist;
+//    }
     
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
@@ -89,22 +96,27 @@ void IntHandlerDrvTmrInstance1(void)
     // if distance to go == 0, stop
     if (distR <= 0)
     {
-        setMotorR_DC(0);
+        distR = 10;
+        //setMotorR_DC(0);
+        if (dir == FORWARD)
+            setMotorR_Fwd();
+        else
+            setMotorR_Bck();
     }
 //    if (distR <= 0 && !rightQIsEmpty())
-    if (!rightQIsEmpty())
-    {
-        struct pwmQueueData rec;
-        motorL_recvQInISR(&rec);
-        
-//        if (rec.dir == FORWARD)
-//            setMotorR_Fwd();
-//        else
-//            setMotorR_Bck();
-        
-        setMotorR_DC(rec.dc);
-        distR = rec.dist;
-    }
+//    if (!rightQIsEmpty())
+//    {
+//        struct pwmQueueData rec;
+//        motorL_recvQInISR(&rec);
+//        
+////        if (rec.dir == FORWARD)
+////            setMotorR_Fwd();
+////        else
+////            setMotorR_Bck();
+//        
+//        setMotorR_DC(rec.dc);
+//        distR = rec.dist;
+//    }
     
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
 }
