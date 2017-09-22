@@ -62,7 +62,7 @@ unsigned char getMotorR_DC()
 
 unsigned char getMotorL_DC()
 {
-    return motor_controlData.dcR;
+    return motor_controlData.dcL;
 }
 
 void setMotorR_Fwd()
@@ -95,11 +95,14 @@ void sendMsgToMotorQ(struct motorQueueData msg)
 void sendMsgToMotor_R(struct pwmQueueData msg)
 {
     xQueueSendToBack(right_q, &msg, portMAX_DELAY);
+    PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_4);
+
 }
 
 void sendMsgToMotor_L(struct pwmQueueData msg)
 {
     xQueueSendToBack(left_q, &msg, portMAX_DELAY);
+    PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_3);
 }
 
 void motorR_recvQInISR(struct pwmQueueData* msg) 
@@ -130,18 +133,18 @@ void MOTOR_CONTROL_Initialize ( void )
     right_q = xQueueCreate(32, sizeof (struct pwmQueueData));
     left_q = xQueueCreate(32, sizeof (struct pwmQueueData));
     // initialize the OCs and Timer2
-    initMotors();
-    
-    DRV_TMR0_Start();
-    DRV_TMR1_Start();
-    DRV_TMR2_Start();
-    
-    struct pwmQueueData data;
-    data.dc = 50;
-    data.dir = FORWARD;
-    data.dist = 20;
-    sendMsgToMotor_R(data);
-    sendMsgToMotor_L(data);
+//    initMotors();
+//    
+//    DRV_TMR0_Start();
+//    DRV_TMR1_Start();
+//    //DRV_TMR2_Start();
+//    
+//    struct pwmQueueData data;
+//    data.dc = 50;
+//    data.dir = FORWARD;
+//    data.dist = 20;
+//    sendMsgToMotor_R(data);
+//    sendMsgToMotor_L(data);
 }
 
 void MOTOR_CONTROL_Tasks ( void )
@@ -167,13 +170,13 @@ void MOTOR_CONTROL_Tasks ( void )
                 sprintf(buf, "MOTOR  %i\n\r", rec.dist);
                 commSendMsgToUartQueue(buf);
                 
-                struct pwmQueueData data;
-                data.dc = 50;
-                data.dir = FORWARD;
-                data.dist = rec.dist;
-                
-                sendMsgToMotor_R(data);
-                sendMsgToMotor_L(data);
+//                struct pwmQueueData data;
+//                data.dc = 50;
+//                data.dir = FORWARD;
+//                data.dist = rec.dist;
+//                
+//                sendMsgToMotor_R(data);
+//                sendMsgToMotor_L(data);
             }
             break;
         }

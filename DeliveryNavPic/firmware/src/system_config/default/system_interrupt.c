@@ -59,10 +59,10 @@ void IntHandlerDrvTmrInstance0(void)
 {   
     distL--;
     // if distance to go == 0, stop
-//    if (distL <= 0)
-//    {
-//        setMotorL_DC(0);
-//    }
+    if (distL <= 0)
+    {
+        setMotorL_DC(0);
+    }
     // check if new data is available
 //    if (distL <= 0 && !leftQIsEmpty())
     if (!leftQIsEmpty())
@@ -87,10 +87,10 @@ void IntHandlerDrvTmrInstance1(void)
 {
     distR--;
     // if distance to go == 0, stop
-//    if (distR <= 0)
-//    {
-//        setMotorR_DC(0);
-//    }
+    if (distR <= 0)
+    {
+        setMotorR_DC(0);
+    }
 //    if (distR <= 0 && !rightQIsEmpty())
     if (!rightQIsEmpty())
     {

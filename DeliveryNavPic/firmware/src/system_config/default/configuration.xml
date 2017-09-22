@@ -249,104 +249,104 @@
         <Checksum dnOrder="2">BC814B1E833F48A33953D65B71BC498D</Checksum>
       </Template>
       <Template dnOrder="1">
-        <Name dnOrder="0">system_interrupt_a.S</Name>
-        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">538C03B34F012807D9785493FAF0CB37</Checksum>
-      </Template>
-      <Template dnOrder="2">
-        <Name dnOrder="0">drv_tmr_static.h</Name>
-        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/tmr</Path>
-        <Checksum dnOrder="2">E9C3112A6AE233C3096E30F2F81A273E</Checksum>
-      </Template>
-      <Template dnOrder="3">
-        <Name dnOrder="0">drv_tmr_mapping.c</Name>
-        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">84EC844A8E2C391E068EA80BD6DEF41F</Checksum>
-      </Template>
-      <Template dnOrder="4">
-        <Name dnOrder="0">drv_usart_mapping.c</Name>
-        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
-        <Checksum dnOrder="2">84D12D754B67B6F268A7243A5A473239</Checksum>
-      </Template>
-      <Template dnOrder="5">
-        <Name dnOrder="0">sys_devcon_local.h</Name>
-        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
-        <Checksum dnOrder="2">B66F9B4DBD85DA7F9DE775E864E01395</Checksum>
-      </Template>
-      <Template dnOrder="6">
-        <Name dnOrder="0">sys_devcon.h</Name>
-        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon</Path>
-        <Checksum dnOrder="2">07580DCDEF89D9C79B062544109C5367</Checksum>
-      </Template>
-      <Template dnOrder="7">
-        <Name dnOrder="0">FreeRTOSConfig.h</Name>
-        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">547F2250A6A44C660FF51BDA351CB66A</Checksum>
-      </Template>
-      <Template dnOrder="8">
-        <Name dnOrder="0">drv_usart_static_byte_model.c</Name>
-        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
-        <Checksum dnOrder="2">E56B5A603F0427F96760518142226E69</Checksum>
-      </Template>
-      <Template dnOrder="9">
-        <Name dnOrder="0">system_interrupt.c</Name>
-        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">DA8E805D423E9D0006B5BDF19CFCE297</Checksum>
-        <ProjectFileChecksum dnOrder="3">6C1730C36A98E0C3A866903DBACBEBF9</ProjectFileChecksum>
-      </Template>
-      <Template dnOrder="10">
         <Name dnOrder="0">drv_usart_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
         <Checksum dnOrder="2">2A97DC0B40FF487A5FF3188233E4F50E</Checksum>
       </Template>
-      <Template dnOrder="11">
+      <Template dnOrder="2">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">36CBC629735D3B4FB730057AE3851551</Checksum>
       </Template>
-      <Template dnOrder="12">
+      <Template dnOrder="3">
+        <Name dnOrder="0">system_interrupt_a.S</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">538C03B34F012807D9785493FAF0CB37</Checksum>
+      </Template>
+      <Template dnOrder="4">
         <Name dnOrder="0">main.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app</Path>
       </Template>
-      <Template dnOrder="13">
+      <Template dnOrder="5">
+        <Name dnOrder="0">drv_tmr_static.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/tmr</Path>
+        <Checksum dnOrder="2">E9C3112A6AE233C3096E30F2F81A273E</Checksum>
+      </Template>
+      <Template dnOrder="6">
+        <Name dnOrder="0">drv_tmr_mapping.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
+        <Checksum dnOrder="2">84EC844A8E2C391E068EA80BD6DEF41F</Checksum>
+      </Template>
+      <Template dnOrder="7">
         <Name dnOrder="0">system_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">1D043F148120AAE0229128C44DC711F5</Checksum>
       </Template>
-      <Template dnOrder="14">
+      <Template dnOrder="8">
         <Name dnOrder="0">system_exceptions.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">C6886A1D85FB1927A101D5B41BED7630</Checksum>
       </Template>
-      <Template dnOrder="15">
+      <Template dnOrder="9">
         <Name dnOrder="0">sys_devcon.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
         <Checksum dnOrder="2">54ADBD4A35BCA03C42C74182FCE41849</Checksum>
       </Template>
-      <Template dnOrder="16">
+      <Template dnOrder="10">
+        <Name dnOrder="0">drv_usart_mapping.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
+        <Checksum dnOrder="2">84D12D754B67B6F268A7243A5A473239</Checksum>
+      </Template>
+      <Template dnOrder="11">
+        <Name dnOrder="0">sys_devcon_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
+        <Checksum dnOrder="2">B66F9B4DBD85DA7F9DE775E864E01395</Checksum>
+      </Template>
+      <Template dnOrder="12">
         <Name dnOrder="0">drv_usart_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/usart</Path>
         <Checksum dnOrder="2">5CECAF42B01CE886D52A8868E39E7772</Checksum>
       </Template>
-      <Template dnOrder="17">
+      <Template dnOrder="13">
+        <Name dnOrder="0">sys_devcon.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon</Path>
+        <Checksum dnOrder="2">07580DCDEF89D9C79B062544109C5367</Checksum>
+      </Template>
+      <Template dnOrder="14">
+        <Name dnOrder="0">FreeRTOSConfig.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">547F2250A6A44C660FF51BDA351CB66A</Checksum>
+      </Template>
+      <Template dnOrder="15">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">6B212E7E0FA7164615845CDB1578AA2C</Checksum>
       </Template>
-      <Template dnOrder="18">
+      <Template dnOrder="16">
         <Name dnOrder="0">sys_devcon_pic32mx.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
         <Checksum dnOrder="2">5141464248E33ABE9E7D144A2D4DC129</Checksum>
       </Template>
-      <Template dnOrder="19">
+      <Template dnOrder="17">
+        <Name dnOrder="0">drv_usart_static_byte_model.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
+        <Checksum dnOrder="2">E56B5A603F0427F96760518142226E69</Checksum>
+      </Template>
+      <Template dnOrder="18">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">1CE99ADEDB07480A2038454603071F9D</Checksum>
       </Template>
-      <Template dnOrder="20">
+      <Template dnOrder="19">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
         <Checksum dnOrder="2">2B0054AEA2706AFFBE57137848F2EDA3</Checksum>
+      </Template>
+      <Template dnOrder="20">
+        <Name dnOrder="0">system_interrupt.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">DA8E805D423E9D0006B5BDF19CFCE297</Checksum>
+        <ProjectFileChecksum dnOrder="3">6C1730C36A98E0C3A866903DBACBEBF9</ProjectFileChecksum>
       </Template>
       <Template dnOrder="21">
         <Name dnOrder="0">rtos_hooks.c</Name>
