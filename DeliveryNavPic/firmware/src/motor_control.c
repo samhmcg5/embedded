@@ -1,152 +1,158 @@
-/*******************************************************************************
-  MPLAB Harmony Application Source File
-  
-  Company:
-    Microchip Technology Inc.
-  
-  File Name:
-    motor_control.c
-
-  Summary:
-    This file contains the source code for the MPLAB Harmony application.
-
-  Description:
-    This file contains the source code for the MPLAB Harmony application.  It 
-    implements the logic of the application's state machine and it may call 
-    API routines of other MPLAB Harmony modules in the system, such as drivers,
-    system services, and middleware.  However, it does not call any of the
-    system interfaces (such as the "Initialize" and "Tasks" functions) of any of
-    the modules in the system or make any assumptions about when those functions
-    are called.  That is the responsibility of the configuration-specific system
-    files.
- *******************************************************************************/
-
-// DOM-IGNORE-BEGIN
-/*******************************************************************************
-Copyright (c) 2013-2014 released Microchip Technology Inc.  All rights reserved.
-
-Microchip licenses to you the right to use, modify, copy and distribute
-Software only when embedded on a Microchip microcontroller or digital signal
-controller that is integrated into your product or third party product
-(pursuant to the sublicense terms in the accompanying license agreement).
-
-You should refer to the license agreement accompanying this Software for
-additional information regarding your rights and obligations.
-
-SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
-EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
-MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-IN NO EVENT SHALL MICROCHIP OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER
-CONTRACT, NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR
-OTHER LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
-INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR
-CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT OF
-SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
-(INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
- *******************************************************************************/
-// DOM-IGNORE-END
-
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Included Files 
-// *****************************************************************************
-// *****************************************************************************
-
 #include "motor_control.h"
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Global Data Definitions
-// *****************************************************************************
-// *****************************************************************************
-
-// *****************************************************************************
-/* Application Data
-
-  Summary:
-    Holds application data
-
-  Description:
-    This structure holds the application's data.
-
-  Remarks:
-    This structure should be initialized by the APP_Initialize function.
-    
-    Application strings and buffers are be defined outside this structure.
-*/
+#include "motor_globals.h"
+#include "nav_globals.h"
+#include "communication_globals.h"
 
 MOTOR_CONTROL_DATA motor_controlData;
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Callback Functions
-// *****************************************************************************
-// *****************************************************************************
+void initMotors()
+{
+    // default directions to forward
+    // Motor 1 direction 0x4000
+    TRISCCLR = MOTOR_RIGHT_DIR_PIN;
+    ODCCCLR  = MOTOR_RIGHT_DIR_PIN;
+    LATCCLR  = MOTOR_RIGHT_DIR_PIN;
 
-/* TODO:  Add any necessary callback functions.
-*/
+    // motor 2 direction 0x0002
+    TRISGCLR = MOTOR_LEFT_DIR_PIN;
+    ODCGCLR  = MOTOR_LEFT_DIR_PIN;
+    LATGCLR  = MOTOR_LEFT_DIR_PIN;
+    
+    T2CONSET = 0x0070;   // set for 256 prescale
+    PR2 = TMR2_PERIOD;  // set the period to 3125
+    
+    // default motors to OFF
+    OC1CON = 0x0000;    // turn off while setting up
+    OC1R = 0x0000;      // primary compare register
+    OC1RS = 0x0000;     // secondary compare register
+    OC1CON = 0x0006;    // configure for PWM mode
+    
+    OC2CON = 0x0000;    // turn off while setting up
+    OC2R = 0x0000;      // primary compare register
+    OC2RS = 0x0000;     // secondary compare register
+    OC2CON = 0x0006;    // configure for PWM mode
+    
+    T2CONSET = 0x8000;  // enable timer 2
+    OC1CONSET = 0x8000; // enable OC1
+    OC2CONSET = 0x8000; // enable OC2
+}
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Local Functions
-// *****************************************************************************
-// *****************************************************************************
+void setMotorR_DC(unsigned char dc)
+{
+    float f_dc = (float)dc / 100.0;
+    short int new_ocrs = TMR2_PERIOD * f_dc;
+    OC1RS = new_ocrs;
+    
+    motor_controlData.dcR = dc;
+}
 
+void setMotorL_DC(unsigned char dc)
+{
+    float f_dc = (float)dc / 100.0;
+    short int new_ocrs = TMR2_PERIOD * f_dc;
+    OC2RS = new_ocrs;
+    
+    motor_controlData.dcL = dc;
+}
 
-/* TODO:  Add any necessary local functions.
-*/
+unsigned char getMotorR_DC()
+{
+    return motor_controlData.dcR;
+}
 
+unsigned char getMotorL_DC()
+{
+    return motor_controlData.dcR;
+}
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Initialization and State Machine Functions
-// *****************************************************************************
-// *****************************************************************************
+void setMotorR_Fwd()
+{
+    LATCCLR  = MOTOR_RIGHT_DIR_PIN;
+}
 
-/*******************************************************************************
-  Function:
-    void MOTOR_CONTROL_Initialize ( void )
+void setMotorL_Fwd()
+{
+    LATGCLR  = MOTOR_LEFT_DIR_PIN;
+}
 
-  Remarks:
-    See prototype in motor_control.h.
- */
+void setMotorR_Bck()
+{
+    LATCCLR  = MOTOR_RIGHT_DIR_PIN;
+    LATCSET  = MOTOR_RIGHT_DIR_PIN;
+}
+
+void setMotorL_Bck()
+{
+    LATGCLR  = MOTOR_LEFT_DIR_PIN;
+    LATGSET  = MOTOR_LEFT_DIR_PIN;
+}
+
+void sendMsgToMotorQ(struct motorQueueData msg)
+{
+    xQueueSendToBack(motor_q, &msg, portMAX_DELAY);
+}
+
+void sendMsgToMotor_R(struct pwmQueueData msg)
+{
+    xQueueSendToBack(right_q, &msg, portMAX_DELAY);
+}
+
+void sendMsgToMotor_L(struct pwmQueueData msg)
+{
+    xQueueSendToBack(left_q, &msg, portMAX_DELAY);
+}
+
+void motorR_recvQInISR(struct pwmQueueData* msg) 
+{
+    xQueueReceiveFromISR(right_q, msg, NULL);
+}
+
+void motorL_recvQInISR(struct pwmQueueData* msg) 
+{
+    xQueueReceiveFromISR(left_q, msg, NULL);
+}
+
+bool rightQIsEmpty()
+{
+    return xQueueIsQueueEmptyFromISR(right_q);
+}
+
+bool leftQIsEmpty()
+{
+    return xQueueIsQueueEmptyFromISR(left_q);
+}
 
 void MOTOR_CONTROL_Initialize ( void )
 {
-    /* Place the App state machine in its initial state. */
     motor_controlData.state = MOTOR_CONTROL_STATE_INIT;
-
+    // incoming queue
+    motor_q = xQueueCreate(32, sizeof (struct motorQueueData));
+    right_q = xQueueCreate(32, sizeof (struct pwmQueueData));
+    left_q = xQueueCreate(32, sizeof (struct pwmQueueData));
+    // initialize the OCs and Timer2
+    initMotors();
     
-    /* TODO: Initialize your application's state machine and other
-     * parameters.
-     */
+    DRV_TMR0_Start();
+    DRV_TMR1_Start();
+    DRV_TMR2_Start();
+    
+    struct pwmQueueData data;
+    data.dc = 50;
+    data.dir = FORWARD;
+    data.dist = 20;
+    sendMsgToMotor_R(data);
+    sendMsgToMotor_L(data);
 }
-
-
-/******************************************************************************
-  Function:
-    void MOTOR_CONTROL_Tasks ( void )
-
-  Remarks:
-    See prototype in motor_control.h.
- */
 
 void MOTOR_CONTROL_Tasks ( void )
 {
-
-    /* Check the application's current state. */
     switch ( motor_controlData.state )
     {
-        /* Application's initial state. */
         case MOTOR_CONTROL_STATE_INIT:
         {
             bool appInitialized = true;
-       
-        
             if (appInitialized)
             {
-            
                 motor_controlData.state = MOTOR_CONTROL_STATE_SERVICE_TASKS;
             }
             break;
@@ -154,24 +160,27 @@ void MOTOR_CONTROL_Tasks ( void )
 
         case MOTOR_CONTROL_STATE_SERVICE_TASKS:
         {
-        
+            struct motorQueueData rec;
+            if(xQueueReceive(motor_q, &rec, portMAX_DELAY))
+            {
+                char buf[16];
+                sprintf(buf, "MOTOR  %i\n\r", rec.dist);
+                commSendMsgToUartQueue(buf);
+                
+                struct pwmQueueData data;
+                data.dc = 50;
+                data.dir = FORWARD;
+                data.dist = rec.dist;
+                
+                sendMsgToMotor_R(data);
+                sendMsgToMotor_L(data);
+            }
             break;
         }
 
-        /* TODO: implement your application state machine.*/
-        
-
-        /* The default state should never be executed. */
         default:
         {
-            /* TODO: Handle error in application's state machine. */
             break;
         }
     }
 }
-
- 
-
-/*******************************************************************************
- End of File
- */

@@ -83,6 +83,74 @@ _IntHandlerDrvTmrInstance0:
     .end	_IntHandlerDrvTmrInstance0
 
 
+/* TMR Instance 1 Interrupt */
+   .extern  IntHandlerDrvTmrInstance1
+
+   .section	.vector_16,code, keep
+   .equ     __vector_dispatch_16, IntVectorDrvTmrInstance1
+   .global  __vector_dispatch_16
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  IntVectorDrvTmrInstance1
+
+IntVectorDrvTmrInstance1:
+    la    $26,  _IntHandlerDrvTmrInstance1         
+    jr    $26
+    nop
+	.end	IntVectorDrvTmrInstance1
+
+   .section	.DrvTmrInstance1_vector_text, code, keep
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  _IntHandlerDrvTmrInstance1
+
+_IntHandlerDrvTmrInstance1:
+    portSAVE_CONTEXT
+    la    s6,  IntHandlerDrvTmrInstance1
+    jalr  s6
+    nop
+    portRESTORE_CONTEXT
+    .end	_IntHandlerDrvTmrInstance1
+
+
+/* TMR Instance 2 Interrupt */
+   .extern  IntHandlerDrvTmrInstance2
+
+   .section	.vector_20,code, keep
+   .equ     __vector_dispatch_20, IntVectorDrvTmrInstance2
+   .global  __vector_dispatch_20
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  IntVectorDrvTmrInstance2
+
+IntVectorDrvTmrInstance2:
+    la    $26,  _IntHandlerDrvTmrInstance2         
+    jr    $26
+    nop
+	.end	IntVectorDrvTmrInstance2
+
+   .section	.DrvTmrInstance2_vector_text, code, keep
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  _IntHandlerDrvTmrInstance2
+
+_IntHandlerDrvTmrInstance2:
+    portSAVE_CONTEXT
+    la    s6,  IntHandlerDrvTmrInstance2
+    jalr  s6
+    nop
+    portRESTORE_CONTEXT
+    .end	_IntHandlerDrvTmrInstance2
+
+
 
 
 /* USART Instance 0 Interrupt */

@@ -302,7 +302,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src;../src/default;../../../../../../../../../../microchip/harmony/v2_04/framework;../src/system_config/default/framework;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default;../../../../../../../microchip/harmony/v2_04/framework;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+                  value="../../../../../../../../../../microchip/harmony/v2_04/framework;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src;../src/system_config/default;../src/default;../../../../../../../microchip/harmony/v2_04/framework;../src/system_config/default/framework;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>

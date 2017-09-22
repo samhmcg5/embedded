@@ -1,5 +1,7 @@
 #include "navigation.h"
 #include "nav_globals.h"
+#include "communication_globals.h"
+#include "motor_globals.h"
 
 NAVIGATION_DATA navigationData;
 
@@ -34,8 +36,12 @@ void NAVIGATION_Tasks ( void )
             if(xQueueReceive(nav_q, &rec, portMAX_DELAY))
             {
                 char buf[64];
-                sprintf(buf, "ACK %i %i %i %i", rec.msg, rec.x, rec.y, rec.color);
+                sprintf(buf, "NAV %i %i %i %i\n\r", rec.msg, rec.x, rec.y, rec.color);
                 commSendMsgToUartQueue(buf);
+    
+                struct motorQueueData out_m;
+                out_m.dist = rec.msg;
+                sendMsgToMotorQ(out_m);
             }
             break;
         }

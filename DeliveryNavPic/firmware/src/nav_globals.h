@@ -6,7 +6,7 @@ struct navQueueData
 {
     char msg;   // indicates message type
     char x;     // usually destination x    
-    char y;     // est y
+    char y;     // dest y
     char color; // color of block to move??? maybe redundant
 };
 
