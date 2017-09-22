@@ -168,6 +168,8 @@ void SYS_Initialize ( void* data )
 
     /* Initialize the Application */
     COMMUNICATION_Initialize();
+    NAVIGATION_Initialize();
+    MOTOR_CONTROL_Initialize();
 }
 
 

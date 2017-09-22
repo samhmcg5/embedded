@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "communication.h"
+#include "communication_globals.h"
 #include "queue.h"
 
 // communication's state
@@ -7,18 +8,7 @@ COMMUNICATION_DATA communicationData;
 
 char store_or_retrieve = 0x01;
 
-// recv a message from the q
-struct queueData recvFromQ() 
-{
-    BaseType_t success = pdFALSE;
-    struct queueData data;
-    if (comm_incoming_q != 0) 
-    {
-        success = xQueueReceive(comm_incoming_q, &data.recv, portMAX_DELAY);
-        data.ret = success;
-    }
-    return data;
-}
+
 //send into commtask from isr
 void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]) 
 {
@@ -26,12 +16,6 @@ void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE])
     xQueueSendToBackFromISR(comm_incoming_q, msg, NULL);
 }
 
-//send into commtask
-void commSendMsg(unsigned char msg[UART_RX_QUEUE_SIZE]) 
-{
-    //send to the comms task
-    xQueueSendToBack(comm_incoming_q, msg, portMAX_DELAY);
-}
 //send each byte of message into uart out queue
 void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]) 
 {
@@ -48,17 +32,6 @@ void uartReceiveFromOutQueueInISR(unsigned char* msg)
 {
     //read from uart queue to transmit
     xQueueReceiveFromISR(uart_outgoing_q, msg, NULL);
-}
-
-void commSendMsgToTimeoutQ(COMMUNICATION_STATES msg) 
-{
-    xQueueSendToBack(timeout_q, &msg, portMAX_DELAY);
-}
-
-void uartReceiveFromTimeoutQInISR(COMMUNICATION_STATES * msg) 
-{
-    //read from uart queue to transmit
-    xQueueReceiveFromISR(timeout_q, &msg, NULL);
 }
 
 bool checkIfSendQueueIsEmpty() 
@@ -91,8 +64,6 @@ int parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     unsigned int length;
     char keyString[length + 1];
     
-    int i;
-                    
     key = t[2];
     length = key.end - key.start;
     keyString[length + 1];    
@@ -100,23 +71,9 @@ int parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     keyString[length] = '\0';
     
     return atoi(keyString);
-    
-    
-//    int j;
-//    for (j = 0; j < r; ++j)
-//    {
-//        key = t[j];
-//        length = key.end - key.start;
-//        keyString[length + 1];    
-//        memcpy(keyString, &JSON_STRING[key.start], length);
-//        keyString[length] = '\0';
-//        commSendMsgToUartQueue(keyString);
-//    }    
 }
 
-char commBuffer[UART_RX_QUEUE_SIZE];
-unsigned int commBufferIdx = 0;
-
+// called from the ISR
 void readUartReceived() 
 {
     unsigned char recv = PLIB_USART_ReceiverByteReceive(USART_ID_1);
@@ -153,8 +110,7 @@ void COMMUNICATION_Initialize(void)
     // create the q handle
     comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE]));//general purpose for all incoming
     uart_outgoing_q = xQueueCreate(UART_TX_QUEUE_SIZE, sizeof (unsigned char));
-    timeout_q = xQueueCreate(10, sizeof(COMMUNICATION_STATES));
-    
+
     DRV_TMR0_Start();
 }
 
@@ -176,8 +132,6 @@ void COMMUNICATION_Tasks(void)
         
         case COMM_REQUEST_SERVER:
         {
-            commSendMsgToTimeoutQ(communicationData.state);
-            
             char buf[32];
             if (store_or_retrieve)
             {
@@ -196,16 +150,9 @@ void COMMUNICATION_Tasks(void)
         }
         case COMM_AWAIT_RESPONSE:
         {
-            commSendMsgToTimeoutQ(communicationData.state);
             unsigned char rec[UART_RX_QUEUE_SIZE];
             if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
             {
-                // server timeout, return to request
-                if (rec[0] == '?')
-                {
-                    communicationData.state = COMM_REQUEST_SERVER;
-                    break;
-                }
                 int direction = parseJSON(rec);
                 communicationData.recvd = direction + 1;
                 communicationData.state = COMM_ACK_SERVER;
@@ -214,8 +161,6 @@ void COMMUNICATION_Tasks(void)
         }
         case COMM_ACK_SERVER:
         {
-            commSendMsgToTimeoutQ(communicationData.state);
-            
             char buf[32];
             sprintf(buf, "{\"ACK\" : %i}!", communicationData.recvd);
             commSendMsgToUartQueue(buf);

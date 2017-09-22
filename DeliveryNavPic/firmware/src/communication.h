@@ -40,12 +40,6 @@ typedef struct
     int data;
 } COMMUNICATION_DATA;
 
-struct queueData
-{
-   unsigned char recv[UART_RX_QUEUE_SIZE];
-    BaseType_t ret;
-};
-
 void COMMUNICATION_Initialize ( void );
 
 void COMMUNICATION_Tasks( void );
@@ -53,23 +47,20 @@ void COMMUNICATION_Tasks( void );
 // UART message queues
 // comms thread reads from this Q
 QueueHandle_t comm_incoming_q;
-// UART ISR reads from this Q, we write to it
-QueueHandle_t uart_outgoing_q;
-// server reply timout interrupt queue
-QueueHandle_t timeout_q;
 
 //RX functions
-struct queueData recvFromQ();
 int sendMsgToCommQFromISR(unsigned int msg);
 void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]);
-void commSendMsg(unsigned char msg[UART_RX_QUEUE_SIZE]);
 void readUartReceived();
 
 //TX functions
-void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]);
 bool checkIfSendQueueIsEmpty();
 void uartReceiveFromOutQueueInISR(unsigned char *msg);
 void uartWriteMsg(char writeBuff);
+
+// Used to parse incoming
+char commBuffer[UART_RX_QUEUE_SIZE];
+unsigned int commBufferIdx = 0;
 
 //JSMN functions
 static const char *JSON_STRING;

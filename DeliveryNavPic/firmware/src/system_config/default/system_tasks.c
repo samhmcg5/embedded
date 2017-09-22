@@ -55,6 +55,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "communication.h"
+#include "navigation.h"
+#include "motor_control.h"
 
 
 // *****************************************************************************
@@ -69,6 +71,8 @@ static void _SYS_Tasks ( void );
  
  
 static void _COMMUNICATION_Tasks(void);
+static void _NAVIGATION_Tasks(void);
+static void _MOTOR_CONTROL_Tasks(void);
 
 
 // *****************************************************************************
@@ -97,6 +101,16 @@ void SYS_Tasks ( void )
     /* Create OS Thread for COMMUNICATION Tasks. */
     xTaskCreate((TaskFunction_t) _COMMUNICATION_Tasks,
                 "COMMUNICATION Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for NAVIGATION Tasks. */
+    xTaskCreate((TaskFunction_t) _NAVIGATION_Tasks,
+                "NAVIGATION Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for MOTOR_CONTROL Tasks. */
+    xTaskCreate((TaskFunction_t) _MOTOR_CONTROL_Tasks,
+                "MOTOR_CONTROL Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -146,6 +160,40 @@ static void _COMMUNICATION_Tasks(void)
     while(1)
     {
         COMMUNICATION_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _NAVIGATION_Tasks ( void )
+
+  Summary:
+    Maintains state machine of NAVIGATION.
+*/
+
+static void _NAVIGATION_Tasks(void)
+{
+    while(1)
+    {
+        NAVIGATION_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _MOTOR_CONTROL_Tasks ( void )
+
+  Summary:
+    Maintains state machine of MOTOR_CONTROL.
+*/
+
+static void _MOTOR_CONTROL_Tasks(void)
+{
+    while(1)
+    {
+        MOTOR_CONTROL_Tasks();
     }
 }
 
