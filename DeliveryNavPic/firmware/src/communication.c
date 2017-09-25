@@ -52,7 +52,6 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s)
 struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
 {
     struct navQueueData out;
-    out.type = ACTION;
     
     JSON_STRING = rec;
     int r;
@@ -66,26 +65,51 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     unsigned int length;
     char keyString[length + 1];
     
-    key = t[4];
-    length = key.end - key.start;
-    keyString[length + 1];    
-    memcpy(keyString, &JSON_STRING[key.start], length);
-    keyString[length] = '\0';
-    out.a = atoi(keyString);
-    
-    key = t[6];
-    length = key.end - key.start;
-    keyString[length + 1];    
-    memcpy(keyString, &JSON_STRING[key.start], length);
-    keyString[length] = '\0';
-    out.b = atoi(keyString);
-    
-    key = t[8];
-    length = key.end - key.start;
-    keyString[length + 1];    
-    memcpy(keyString, &JSON_STRING[key.start], length);
-    keyString[length] = '\0';
-    out.c = atoi(keyString);
+    if(r == 9) // ACTION
+    {
+        out.type = ACTION;
+        key = t[4];
+        length = key.end - key.start;
+        keyString[length + 1];    
+        memcpy(keyString, &JSON_STRING[key.start], length);
+        keyString[length] = '\0';
+        out.a = atoi(keyString);
+
+        key = t[6];
+        length = key.end - key.start;
+        keyString[length + 1];    
+        memcpy(keyString, &JSON_STRING[key.start], length);
+        keyString[length] = '\0';
+        out.b = atoi(keyString);
+
+        key = t[8];
+        length = key.end - key.start;
+        keyString[length + 1];    
+        memcpy(keyString, &JSON_STRING[key.start], length);
+        keyString[length] = '\0';
+        out.c = atoi(keyString);
+    }
+    else if (r == 7) // TASK
+    {
+        out.type = TASK;
+        key = t[4];
+        length = key.end - key.start;
+        keyString[length + 1];    
+        memcpy(keyString, &JSON_STRING[key.start], length);
+        keyString[length] = '\0';
+        out.a = atoi(keyString);
+
+        key = t[6];
+        length = key.end - key.start;
+        keyString[length + 1];    
+        memcpy(keyString, &JSON_STRING[key.start], length);
+        keyString[length] = '\0';
+        out.b = atoi(keyString);
+    }
+    else // ERROR
+    {
+        // send message back to server something is wrong
+    }
     
     return out;
 }
