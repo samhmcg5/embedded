@@ -18,15 +18,7 @@ s.connect((host,port))
 
 file.write("Connected to server: \n")
 while True:
-	json_str = '{ "store":' + str(count) + ' }!' 
+	json_str = input("Message to send to server: ") 
 	file.write("Sending to server: \n")
 	s.send(json_str.encode())
-	data = s.recv(size)
-	file.write("Received: " + data.decode() + "\n")
-	json_str = '{ "retrieve":' + str(count) + ' }!'
-	file.write("Retrieving from server: \n")
-	s.send(json_str.encode())
-	data = s.recv(size)
-	file.write("Received from server: " + data.decode() + "\n")
-	count += 1
 file.close()
