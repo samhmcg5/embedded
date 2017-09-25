@@ -57,17 +57,17 @@ void NAVIGATION_Tasks ( void )
                 else if (rec.type == SPEEDS)
                 {
                     char buf[128];
-                    if (rec.c > 0 || rec.d > 0)
-                        sprintf(buf, "!{\"seq\":%i, \"right_dir\":%i, \"left_dir\":%i, \"right_speed\":%i, \"left_speed\":%i}", 
-                                outgoing_seq, rec.a, rec.b, rec.c, rec.d);
-                    else
-                        sprintf(buf, "!{\"seq\":%i, \"status\":\"idle\"}", outgoing_seq);
+                    //if (rec.c > 0 || rec.d > 0)
+                    sprintf(buf, "{seq:%i, right_dir:%i, left_dir:%i, right_speed:%u, left_speed:%u}!", 
+                            outgoing_seq, rec.a, rec.b, rec.c, rec.d);
+                    //else
+                    //    sprintf(buf, "{\"seq\":%i, \"status\":\"idle\"}!", outgoing_seq);
                     commSendMsgToUartQueue(buf);
                 }
                 else if (rec.type == POSITION)
                 {
                     char buf[64];
-                    sprintf(buf, "!{\"seq\":%i, \"x\":%i, \"y\":%i}", outgoing_seq, rec.a, rec.b);
+                    sprintf(buf, "{seq:%i, x:%i, y:%i}!", outgoing_seq, rec.a, rec.b);
                     commSendMsgToUartQueue(buf);
                 }
                 else if (rec.type == STATUS)

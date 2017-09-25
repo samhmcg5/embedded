@@ -16,8 +16,12 @@
 
 // MOTOR 2 === motor on the left when youre facing the USB plugs
 
-unsigned char distR = 0;
-unsigned char distL = 0;
+unsigned int distR = 0; // measured in ticks
+unsigned int distL = 0;
+unsigned int total_ticksL = 0;
+unsigned int total_ticksR = 0;
+unsigned int goalL = 0;
+unsigned int goalR = 0;
 
 // incoming motor queue
 QueueHandle_t motor_q;
@@ -37,6 +41,8 @@ typedef struct
     MOTOR_CONTROL_STATES state;
     unsigned char dcL;
     unsigned char dcR;
+    unsigned char dirL;
+    unsigned char dirR;
 } MOTOR_CONTROL_DATA;
 
 void MOTOR_CONTROL_Initialize ( void );

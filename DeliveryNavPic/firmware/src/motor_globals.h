@@ -31,6 +31,8 @@ void sendMsgToMotor_L(struct pwmQueueData);
 
 unsigned char getMotorR_DC();
 unsigned char getMotorL_DC();
+unsigned char getMotorR_Dir();
+unsigned char getMotorL_Dir();
 
 #endif	/* MOTOR_GLOBALS_H */
 

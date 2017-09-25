@@ -157,7 +157,7 @@ void DRV_TMR0_Initialize(void)
     /* Clear counter */ 
     PLIB_TMR_Counter16BitClear(TMR_ID_3);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_3, 60);
+    PLIB_TMR_Period16BitSet(TMR_ID_3, 3000);
     /* Setup Interrupt */   
     PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_PRIORITY_LEVEL1);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_SUBPRIORITY_LEVEL0);          
@@ -335,7 +335,7 @@ void DRV_TMR1_Initialize(void)
     /* Clear counter */ 
     PLIB_TMR_Counter16BitClear(TMR_ID_4);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_4, 60);
+    PLIB_TMR_Period16BitSet(TMR_ID_4, 3000);
     /* Setup Interrupt */   
     PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_PRIORITY_LEVEL1);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_SUBPRIORITY_LEVEL0);          
