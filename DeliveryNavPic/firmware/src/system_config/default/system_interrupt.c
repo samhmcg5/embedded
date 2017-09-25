@@ -4,11 +4,12 @@
 #include "motor_control.h"
 #include "motor_globals.h"
 #include "system_definitions.h"
+#include "nav_globals.h"
 
 #define ADC_NUM_SAMPLES     16
 #define SERVER_TIMEOUT      8
 
-char dir = 1;
+char isr_count = 0;
 
 void IntHandlerDrvUsartInstance0(void)
 {
@@ -48,10 +49,6 @@ void IntHandlerDrvUsartInstance0(void)
 
         PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
     }
-
-//    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_ERROR)) {
-//        halt(DBG_ERROR_UART_ERROR_FLAG);
-//    }    
 }
  
 // motor L
@@ -125,3 +122,29 @@ void IntHandlerDrvTmrInstance1(void)
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
 }
 
+void IntHandlerDrvTmrInstance2(void)
+{
+    isr_count++;
+    struct navQueueData data;
+    // send speed and direction at rate of 2 Hz
+    if (isr_count % 5 == 0)
+    {
+        data.type = SPEEDS;
+        data.a = (LATC & MOTOR_RIGHT_DIR_PIN);
+        data.b = (LATG & MOTOR_LEFT_DIR_PIN);
+        data.c = getMotorR_DC();
+        data.d = getMotorL_DC();
+        
+        sendMsgToNavQFromISR(data);
+    }
+    // send positions at 0.75 Hz
+    if (isr_count % 15 == 0)
+    {
+        // TODO
+        data.type = POSITION;
+        data.a = 0; // x
+        data.b = 0; // y
+    }
+    
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
+}

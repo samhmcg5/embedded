@@ -66,8 +66,6 @@ void setMotorL_Bck();
 // Set Duty Cycles (number between 0 and 100)
 void setMotorR_DC(unsigned char dc);
 void setMotorL_DC(unsigned char dc);
-unsigned char getMotorR_DC();
-unsigned char getMotorL_DC();
 
 void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right);
 

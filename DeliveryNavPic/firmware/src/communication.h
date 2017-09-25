@@ -47,6 +47,8 @@ void COMMUNICATION_Tasks( void );
 // UART message queues
 // comms thread reads from this Q
 QueueHandle_t comm_incoming_q;
+// UART ISR reads from this Q, we write to it
+QueueHandle_t uart_outgoing_q;
 
 //RX functions
 int sendMsgToCommQFromISR(unsigned int msg);
@@ -61,6 +63,9 @@ void uartWriteMsg(char writeBuff);
 // Used to parse incoming
 char commBuffer[UART_RX_QUEUE_SIZE];
 unsigned int commBufferIdx = 0;
+
+// used to check messages
+int prev_inc_seq = 0;
 
 //JSMN functions
 static const char *JSON_STRING;

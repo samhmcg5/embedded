@@ -16,6 +16,13 @@ typedef enum
 	NAVIGATION_STATE_SERVICE_TASKS,
 } NAVIGATION_STATES;
 
+typedef enum
+{
+    idle=0,
+    pickup,
+    delivery,
+} STATUS;
+
 typedef struct
 {
     NAVIGATION_STATES state;

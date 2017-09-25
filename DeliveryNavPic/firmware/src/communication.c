@@ -7,9 +7,6 @@
 // communication's state
 COMMUNICATION_DATA communicationData;
 
-char store_or_retrieve = 0x01;
-
-
 //send into commtask from isr
 void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]) 
 {
@@ -23,9 +20,10 @@ void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE])
     int i;
     for(i = 0; i< strlen(msg); i++)
     {
-        //each byte of message is sent into uartqueue
+        //each byte of message is sent into uart queue
         xQueueSendToBack(uart_outgoing_q, &msg[i], portMAX_DELAY);
     }
+    outgoing_seq++;
     PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
 }
 
@@ -118,7 +116,8 @@ void readUartReceived()
     } 
 }
 
-void uartWriteMsg(char writeBuff) {
+void uartWriteMsg(char writeBuff) 
+{
     PLIB_USART_TransmitterByteSend(USART_ID_1, writeBuff); //write a byte
 }
 

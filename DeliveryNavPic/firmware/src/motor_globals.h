@@ -29,5 +29,8 @@ struct pwmQueueData
 void sendMsgToMotor_R(struct pwmQueueData);
 void sendMsgToMotor_L(struct pwmQueueData);
 
+unsigned char getMotorR_DC();
+unsigned char getMotorL_DC();
+
 #endif	/* MOTOR_GLOBALS_H */
 

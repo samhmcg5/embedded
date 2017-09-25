@@ -10,6 +10,11 @@ void sendMsgToNavQ(struct navQueueData msg)
     xQueueSendToBack(nav_q, &msg, portMAX_DELAY);
 }
 
+void sendMsgToNavQFromISR(struct navQueueData msg)
+{
+    xQueueSendToBackFromISR(nav_q, &msg, NULL);
+}
+
 void NAVIGATION_Initialize ( void )
 {
     navigationData.state = NAVIGATION_STATE_INIT;
@@ -39,27 +44,40 @@ void NAVIGATION_Tasks ( void )
             {
                 dbgOutputLoc(NAV_THREAD_RECVD);
                 
-                struct motorQueueData out_m;
                 // pass directly to the motor queue
                 if (rec.type == ACTION)
                 {
+                    struct motorQueueData out_m;
                     out_m.action = rec.a;
-                    out_m.dist = rec.b;
-                    out_m.speed = rec.c;
+                    out_m.dist   = rec.b;
+                    out_m.speed  = rec.c;
+                    sendMsgToMotorQ(out_m);
                 }
+                // recvd from motor, pass to UART
                 else if (rec.type == SPEEDS)
                 {
-                    // TODO
+                    char buf[128];
+                    if (rec.c > 0 || rec.d > 0)
+                        sprintf(buf, "!{\"seq\":%i, \"right_dir\":%i, \"left_dir\":%i, \"right_speed\":%i, \"left_speed\":%i}", 
+                                outgoing_seq, rec.a, rec.b, rec.c, rec.d);
+                    else
+                        sprintf(buf, "!{\"seq\":%i, \"status\":\"idle\"}", outgoing_seq);
+                    commSendMsgToUartQueue(buf);
                 }
                 else if (rec.type == POSITION)
                 {
-                    // TODO
+                    char buf[64];
+                    sprintf(buf, "!{\"seq\":%i, \"x\":%i, \"y\":%i}", outgoing_seq, rec.a, rec.b);
+                    commSendMsgToUartQueue(buf);
                 }
-                else // figure out path to the object
+                else if (rec.type == STATUS)
                 {
                     // TODO
                 }
-                sendMsgToMotorQ(out_m);
+                else // figure out path to the object, convert to action items
+                {
+                    // TODO
+                }
             }
             break;
         }

@@ -24,7 +24,7 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             right->dir = BACKWARD;
             right->dc = data.speed;
             right->dist = data.dist;
-            break;
+            break;  
         case TURN_LEFT:
             left->dir = BACKWARD;
             left->dc = data.speed;
@@ -42,10 +42,10 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             right->dist = data.dist;
             break;
         case STOP:
-            left->dir = FORWARD;
+            left->dir = 0;
             left->dc = 0;
             left->dist = 0;
-            right->dir = FORWARD;
+            right->dir = 0;
             right->dc = 0;
             right->dist = 0;
             break;
@@ -53,7 +53,6 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             // handle and error
             break;
     }
-    
 }
 
 void initMotors()
