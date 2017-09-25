@@ -32,15 +32,33 @@ void NAVIGATION_Tasks ( void )
 
         case NAVIGATION_STATE_SERVICE_TASKS:
         {
+            dbgOutputLoc(NAV_THREAD_WAIT);
+            
             struct navQueueData rec;
             if(xQueueReceive(nav_q, &rec, portMAX_DELAY))
             {
-                char buf[64];
-                sprintf(buf, "NAV %i %i %i %i\n\r", rec.msg, rec.x, rec.y, rec.color);
-                commSendMsgToUartQueue(buf);
-    
+                dbgOutputLoc(NAV_THREAD_RECVD);
+                
                 struct motorQueueData out_m;
-                out_m.dist = rec.msg;
+                // pass directly to the motor queue
+                if (rec.type == ACTION)
+                {
+                    out_m.action = rec.a;
+                    out_m.dist = rec.b;
+                    out_m.speed = rec.c;
+                }
+                else if (rec.type == SPEEDS)
+                {
+                    // TODO
+                }
+                else if (rec.type == POSITION)
+                {
+                    // TODO
+                }
+                else // figure out path to the object
+                {
+                    // TODO
+                }
                 sendMsgToMotorQ(out_m);
             }
             break;

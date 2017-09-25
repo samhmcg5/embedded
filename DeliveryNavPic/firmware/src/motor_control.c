@@ -5,6 +5,57 @@
 
 MOTOR_CONTROL_DATA motor_controlData;
 
+void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right)
+{
+    switch (data.action)
+    {
+        case FORWARD:
+            left->dir = FORWARD;
+            left->dc = data.speed;
+            left->dist = data.dist;
+            right->dir = FORWARD;
+            right->dc = data.speed;
+            right->dist = data.dist;
+            break;
+        case BACKWARD:
+            left->dir = BACKWARD;
+            left->dc = data.speed;
+            left->dist = data.dist;
+            right->dir = BACKWARD;
+            right->dc = data.speed;
+            right->dist = data.dist;
+            break;
+        case TURN_LEFT:
+            left->dir = BACKWARD;
+            left->dc = data.speed;
+            left->dist = data.dist;
+            right->dir = FORWARD;
+            right->dc = data.speed;
+            right->dist = data.dist;
+            break;
+        case TURN_RIGHT:
+            left->dir = FORWARD;
+            left->dc = data.speed;
+            left->dist = data.dist;
+            right->dir = BACKWARD;
+            right->dc = data.speed;
+            right->dist = data.dist;
+            break;
+        case STOP:
+            left->dir = FORWARD;
+            left->dc = 0;
+            left->dist = 0;
+            right->dir = FORWARD;
+            right->dc = 0;
+            right->dist = 0;
+            break;
+        default:
+            // handle and error
+            break;
+    }
+    
+}
+
 void initMotors()
 {
     // default directions to forward
@@ -21,7 +72,7 @@ void initMotors()
     T2CONSET = 0x0070;   // set for 256 prescale
     PR2 = TMR2_PERIOD;  // set the period to 3125
     
-    // default motors to OFF
+    // initialize motors to OFF (duty cycle = 0%)
     OC1CON = 0x0000;    // turn off while setting up
     OC1R = 0x0000;      // primary compare register
     OC1RS = 0x0000;     // secondary compare register
@@ -39,8 +90,10 @@ void initMotors()
 
 void setMotorR_DC(unsigned char dc)
 {
+    // convert duty cycle arg to a float between 0 and 1
     float f_dc = (float)dc / 100.0;
     short int new_ocrs = TMR2_PERIOD * f_dc;
+    // set the output compare register
     OC1RS = new_ocrs;
     
     motor_controlData.dcR = dc;
@@ -94,15 +147,40 @@ void sendMsgToMotorQ(struct motorQueueData msg)
 
 void sendMsgToMotor_R(struct pwmQueueData msg)
 {
-    xQueueSendToBack(right_q, &msg, portMAX_DELAY);
-    PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_4);
-
+    dbgOutputLoc(MOTOR_THR_SEND_TO_Q_R);
+    
+    if (getMotorR_DC() == 0)
+    {
+        setMotorR_DC(msg.dc);
+        distR = msg.dist;
+        if (msg.dir == FORWARD)
+            setMotorR_Fwd();
+        else
+            setMotorR_Bck();   
+    }
+    else
+    {
+     xQueueSendToBack(right_q, &msg, portMAX_DELAY);
+    }
 }
 
 void sendMsgToMotor_L(struct pwmQueueData msg)
 {
-    xQueueSendToBack(left_q, &msg, portMAX_DELAY);
-    PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_3);
+    dbgOutputLoc(MOTOR_THR_SEND_TO_Q_L);
+
+    if (getMotorL_DC() == 0)
+    {
+        setMotorL_DC(msg.dc);
+        distL = msg.dist;
+        if (msg.dir == FORWARD)
+            setMotorL_Fwd();
+        else
+            setMotorL_Bck();   
+    }
+    else
+    {
+     xQueueSendToBack(left_q, &msg, portMAX_DELAY);
+    }
 }
 
 void motorR_recvQInISR(struct pwmQueueData* msg) 
@@ -131,23 +209,13 @@ void MOTOR_CONTROL_Initialize ( void )
     // incoming queue
     motor_q = xQueueCreate(32, sizeof (struct motorQueueData));
     right_q = xQueueCreate(32, sizeof (struct pwmQueueData));
-    left_q = xQueueCreate(32, sizeof (struct pwmQueueData));
+    left_q  = xQueueCreate(32, sizeof (struct pwmQueueData));
     // initialize the OCs and Timer2
     initMotors();
     
+    // start the encoder counters
     DRV_TMR0_Start();
     DRV_TMR1_Start();
-    //DRV_TMR2_Start();
-    setMotorR_DC(20);
-    setMotorL_DC(20);
-
-    
-//    struct pwmQueueData data;
-//    data.dc = 50;
-//    data.dir = FORWARD;
-//    data.dist = 20;
-//    sendMsgToMotor_R(data);
-//    sendMsgToMotor_L(data);
 }
 
 void MOTOR_CONTROL_Tasks ( void )
@@ -159,27 +227,25 @@ void MOTOR_CONTROL_Tasks ( void )
             bool appInitialized = true;
             if (appInitialized)
             {
-                motor_controlData.state = MOTOR_CONTROL_STATE_SERVICE_TASKS;
+                motor_controlData.state = MOTOR_CONTROL_HANDLE_INCOMING;
             }
             break;
         }
 
-        case MOTOR_CONTROL_STATE_SERVICE_TASKS:
+        case MOTOR_CONTROL_HANDLE_INCOMING:
         {
+            dbgOutputLoc(MOTOR_THREAD_WAIT);
+            
             struct motorQueueData rec;
             if(xQueueReceive(motor_q, &rec, portMAX_DELAY))
             {
-                char buf[16];
-                sprintf(buf, "MOTOR  %i\n\r", rec.dist);
-                commSendMsgToUartQueue(buf);
+                dbgOutputLoc(MOTOR_THREAD_RECVD);
                 
-//                struct pwmQueueData data;
-//                data.dc = 50;
-//                data.dir = FORWARD;
-//                data.dist = rec.dist;
-//                
-//                sendMsgToMotor_R(data);
-//                sendMsgToMotor_L(data);
+                struct pwmQueueData left, right;
+                generateActionItems(rec, &left, &right);
+                
+                sendMsgToMotor_L(left);
+                sendMsgToMotor_R(right);
             }
             break;
         }

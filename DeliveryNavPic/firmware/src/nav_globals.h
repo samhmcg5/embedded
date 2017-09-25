@@ -1,13 +1,18 @@
 #ifndef NAV_GLOBALS_H
 #define	NAV_GLOBALS_H
 
+#define ACTION      0
+#define TASK        1
+#define SPEEDS      2
+#define POSITION    3
+
 // data inside Nav's incoming queue
 struct navQueueData
 {
-    char msg;   // indicates message type
-    char x;     // usually destination x    
-    char y;     // dest y
-    char color; // color of block to move??? maybe redundant
+    char type;  // indicates message type (action of task)
+    char a;     // type of action OR color
+    char b;     // action dist OR x destination
+    char c;     // intensity
 };
 
 // incoming nav queue

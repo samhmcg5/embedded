@@ -4,16 +4,27 @@
 #include "system_config.h"
 #include "system_definitions.h"
 
-#define DBG_LOCATION_COMMTASK_START         1
-#define DBG_LOCATION_COMMTASK_WHILE_LOOP    2
-#define DBG_LOCATION_COMMTASK_BEFORE_RECV   3
-#define DBG_LOCATION_COMMTASK_AFTER_RECV    4
-#define DBG_LOCATION_TMRTASK_START          5
-#define DBG_LOCATION_TMRTASK_END            6
-#define DBG_LOCATION_TMRTASK_BEFORE_SEND    7
-#define DBG_LOCATION_TMRTASK_AFTER_SEND     8
-#define DBG_ERROR_QUEUE_FAILED_TO_CREATE    9
-#define DBG_ERROR_UART_ERROR_FLAG    10    
+#define COMM_THREAD_RECVD		0x0
+#define NAV_THREAD_RECVD        0x1
+#define MOTOR_THREAD_RECVD      0x2
+
+#define COMM_THREAD_WAIT		0x3
+#define NAV_THREAD_WAIT         0x4
+#define MOTOR_THREAD_WAIT       0x5
+
+#define ISR_UART_RX				0x6
+#define ISR_UART_TX				0x7
+
+#define ISR_MOTOR_L_START		0x8
+#define ISR_MOTOR_R_START		0x9
+#define ISR_MOTOR_L_DONE		0xA
+#define ISR_MOTOR_R_DONE		0xB
+#define ISR_MOTOR_L_Q_READ		0xC
+#define ISR_MOTOR_R_Q_READ		0xD
+
+#define MOTOR_THR_SEND_TO_Q_L	0xE
+#define MOTOR_THR_SEND_TO_Q_R	0xF
+
 void halt(unsigned char outVal);    
     
 int writeToUART(unsigned char byte);
@@ -26,7 +37,4 @@ void dbgOutputLoc(unsigned char outVal);
 
 void writeUARTString(char * str, int len);
 
-unsigned char charToASCII(unsigned char ch);
-
 #endif	/* DEBUG_H */
-

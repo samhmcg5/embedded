@@ -8,17 +8,14 @@
 #define ADC_NUM_SAMPLES     16
 #define SERVER_TIMEOUT      8
 
-unsigned char stopCountR = 0;
-unsigned char stopCountL = 0;
-
-unsigned char distR = 10;
-unsigned char distL = 10;
 char dir = 1;
 
 void IntHandlerDrvUsartInstance0(void)
 {
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE)) 
     {
+        dbgOutputLoc(ISR_UART_RX);
+        
         if (PLIB_USART_ReceiverDataIsAvailable(USART_ID_1)) 
         {
             readUartReceived();//receive uart
@@ -28,6 +25,8 @@ void IntHandlerDrvUsartInstance0(void)
     }
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_TRANSMIT)) 
     {
+        dbgOutputLoc(ISR_UART_TX);
+        
         while (1) 
         {
             if (!checkIfSendQueueIsEmpty()) 
@@ -50,99 +49,79 @@ void IntHandlerDrvUsartInstance0(void)
         PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
     }
 
-    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_ERROR)) {
-        halt(DBG_ERROR_UART_ERROR_FLAG);
-    }    
+//    if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_ERROR)) {
+//        halt(DBG_ERROR_UART_ERROR_FLAG);
+//    }    
 }
  
 // motor L
 void IntHandlerDrvTmrInstance0(void)
 {   
-    distL--;
-    // if distance to go == 0, stop
+    dbgOutputLoc(ISR_MOTOR_L_START);
+    dbgOutputVal(distL);
+    
+    // remove 1 cm from the remaining distance to go
+    distL--; 
+    // Is the current task complete? 
     if (distL <= 0)
     {
-        distL = 10;
-        //setMotorL_DC(0);
-        if (dir == FORWARD)
-            setMotorL_Fwd();
-        else
-            setMotorL_Bck();
-        dir = !dir;
+        dbgOutputLoc(ISR_MOTOR_L_DONE);
+        // if we're done, set the speed to zero
+        setMotorL_DC(0);
+        // look for next task in queue
+        if (!leftQIsEmpty())
+        {
+            dbgOutputLoc(ISR_MOTOR_L_Q_READ);
+            // read data
+            struct pwmQueueData data;
+            motorL_recvQInISR(&data);
+            
+            dbgOutputVal(data.dist);
+            // set motor motion stuff
+            setMotorL_DC(data.dc);
+            distL = data.dist;
+            if (data.dir == FORWARD)
+                setMotorL_Fwd();
+            else
+                setMotorL_Bck();
+        }
     }
-    // check if new data is available
-//    if (distL <= 0 && !leftQIsEmpty())
-//    if (!leftQIsEmpty())
-//    {
-//        struct pwmQueueData rec;
-//        motorL_recvQInISR(&rec);
-//        
-////        if (rec.dir == FORWARD)
-////            setMotorL_Fwd();
-////        else
-////            setMotorL_Bck();
-//        
-//        setMotorL_DC(rec.dc);
-//        distL = rec.dist;
-//    }
-    
+    // else continue the current task, so do nothing here
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
 
 // motor R
 void IntHandlerDrvTmrInstance1(void)
 {
-    distR--;
-    // if distance to go == 0, stop
+    dbgOutputLoc(ISR_MOTOR_R_START);
+    
+    // remove 1 cm from the remaining distance to go
+    distR--; 
+    // Is the current task complete? 
     if (distR <= 0)
     {
-        distR = 10;
-        //setMotorR_DC(0);
-        if (dir == FORWARD)
-            setMotorR_Fwd();
-        else
-            setMotorR_Bck();
+        dbgOutputLoc(ISR_MOTOR_R_DONE);
+        // if we're done, set the speed to zero
+        setMotorR_DC(0);
+        // look for next task in queue
+        if (!rightQIsEmpty())
+        {
+            dbgOutputLoc(ISR_MOTOR_R_Q_READ);
+            // read data
+            struct pwmQueueData data;
+            motorR_recvQInISR(&data);
+            
+            dbgOutputVal(data.dist);
+            // set motor motion stuff
+            setMotorR_DC(data.dc);
+            distR = data.dist;
+            if (data.dir == FORWARD)
+                setMotorR_Fwd();
+            else
+                setMotorR_Bck();
+        }
     }
-//    if (distR <= 0 && !rightQIsEmpty())
-//    if (!rightQIsEmpty())
-//    {
-//        struct pwmQueueData rec;
-//        motorL_recvQInISR(&rec);
-//        
-////        if (rec.dir == FORWARD)
-////            setMotorR_Fwd();
-////        else
-////            setMotorR_Bck();
-//        
-//        setMotorR_DC(rec.dc);
-//        distR = rec.dist;
-//    }
-    
+    // else continue the current task, so do nothing here
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
 }
 
-// 10 Hz timer interrupt, used for stops
-void IntHandlerDrvTmrInstance2(void)
-{
-    unsigned char dcR = getMotorR_DC();
-    unsigned char dcL = getMotorL_DC();
-    
-    if (dcR == 0)
-        stopCountR++;
-    if (dcL == 0)
-        stopCountL++;
-    
-    // is stopped for more than 1 sec, trigger the interrupts
-    if (stopCountR >= 10)
-    {
-        stopCountR = 0;
-        //PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_4);
-    }
-    if (stopCountL >= 10)
-    {
-        stopCountL = 0;
-        //PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_3);
-    }
-    
-    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
-}

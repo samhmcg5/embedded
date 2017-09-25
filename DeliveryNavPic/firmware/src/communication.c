@@ -51,8 +51,11 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s)
 	return -1;
 }
 
-int parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
+struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
 {
+    struct navQueueData out;
+    out.type = ACTION;
+    
     JSON_STRING = rec;
     int r;
     jsmn_parser p;
@@ -65,13 +68,28 @@ int parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     unsigned int length;
     char keyString[length + 1];
     
-    key = t[2];
+    key = t[4];
     length = key.end - key.start;
     keyString[length + 1];    
     memcpy(keyString, &JSON_STRING[key.start], length);
     keyString[length] = '\0';
+    out.a = atoi(keyString);
     
-    return atoi(keyString);
+    key = t[6];
+    length = key.end - key.start;
+    keyString[length + 1];    
+    memcpy(keyString, &JSON_STRING[key.start], length);
+    keyString[length] = '\0';
+    out.b = atoi(keyString);
+    
+    key = t[8];
+    length = key.end - key.start;
+    keyString[length + 1];    
+    memcpy(keyString, &JSON_STRING[key.start], length);
+    keyString[length] = '\0';
+    out.c = atoi(keyString);
+    
+    return out;
 }
 
 // called from the ISR
@@ -132,18 +150,14 @@ void COMMUNICATION_Tasks(void)
         }
         case COMM_AWAIT_RESPONSE:
         {
+            dbgOutputLoc(COMM_THREAD_WAIT);
+            
             unsigned char rec[UART_RX_QUEUE_SIZE];
             if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
             {
-                int direction = parseJSON(rec);
-                communicationData.recvd = direction + 1;
+                dbgOutputLoc(COMM_THREAD_RECVD);
                 
-                struct navQueueData out;
-                out.msg = direction;
-                out.x = 0;
-                out.y = 0;
-                out.color = 0;
-                
+                struct  navQueueData out = parseJSON(rec);
                 sendMsgToNavQ(out);
             }
             break;

@@ -16,6 +16,9 @@
 
 // MOTOR 2 === motor on the left when youre facing the USB plugs
 
+unsigned char distR = 0;
+unsigned char distL = 0;
+
 // incoming motor queue
 QueueHandle_t motor_q;
 // action queue for right motor
@@ -26,7 +29,7 @@ QueueHandle_t left_q;
 typedef enum
 {
 	MOTOR_CONTROL_STATE_INIT=0,
-	MOTOR_CONTROL_STATE_SERVICE_TASKS,
+	MOTOR_CONTROL_HANDLE_INCOMING,
 } MOTOR_CONTROL_STATES;
 
 typedef struct
@@ -65,5 +68,7 @@ void setMotorR_DC(unsigned char dc);
 void setMotorL_DC(unsigned char dc);
 unsigned char getMotorR_DC();
 unsigned char getMotorL_DC();
+
+void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right);
 
 #endif /* _MOTOR_CONTROL_H */
