@@ -11,6 +11,15 @@
 
 char isr_count = 0;
 
+unsigned int sumArrayLen10(unsigned int * arr)
+{
+    unsigned int sum = 0;
+    int i;
+    for (i=0; i<10; i++)
+        sum += arr[i];
+    return sum;
+}
+
 void IntHandlerDrvUsartInstance0(void)
 {
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE)) 
@@ -128,18 +137,20 @@ void IntHandlerDrvTmrInstance2(void)
     /* Get the current value from the timer registers */
     short int ticksL = DRV_TMR0_CounterValueGet();
     short int ticksR = DRV_TMR1_CounterValueGet();
-    
-    /* Clear the counter registers */
-    DRV_TMR0_CounterClear();
-    DRV_TMR1_CounterClear();
             
     /* Add to total ticks per this half second run */
+//    total_ticksL[isr_count % 10] = ticksL;
+//    total_ticksR[isr_count % 10] = ticksR;
     total_ticksL += ticksL;
     total_ticksR += ticksR;
     
     /* increment the distnace traveled per motor in ticks*/
     distL        += ticksL;
     distR        += ticksR;
+    
+    /* Clear the counter registers */
+    DRV_TMR0_CounterClear();
+    DRV_TMR1_CounterClear();
     
     /* If we have reached the goal of ticks to travel ... */
     if (distL >= goalL)
@@ -200,7 +211,9 @@ void IntHandlerDrvTmrInstance2(void)
         data.type = SPEEDS;
         data.a = getMotorR_Dir();
         data.b = getMotorL_Dir();
+//        data.c = ticksR;
         data.c = total_ticksR;
+//        data.d = ticksL;
         data.d = total_ticksL;
         
         sendMsgToNavQFromISR(data);

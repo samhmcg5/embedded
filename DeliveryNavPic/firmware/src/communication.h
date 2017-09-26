@@ -19,9 +19,8 @@
 #include "jsmn.h"
 #include "string.h"
 
-#define UART_RX_QUEUE_SIZE 256
-#define UART_TX_QUEUE_SIZE 256
-#define SERVER_TIMOUT       4 // number of quarter seconds
+#define UART_RX_QUEUE_SIZE  256
+#define UART_TX_QUEUE_SIZE  256
 
 typedef enum
 {
@@ -70,6 +69,8 @@ int prev_inc_seq = 0;
 //JSMN functions
 static const char *JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s);
+struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]);
+int getIntFromKey(jsmntok_t key); 
 
 
 #endif /* _COMMUNICATION_H */

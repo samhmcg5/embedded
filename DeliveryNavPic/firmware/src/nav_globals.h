@@ -15,8 +15,8 @@ struct navQueueData
     char type;  // indicates message type (action of task)
     char a;     // type of action OR color
     char b;     // action dist OR x destination
-    char c;     // intensity
-    char d;
+    unsigned int c;     // intensity
+    unsigned int d;
 };
 
 // incoming nav queue
