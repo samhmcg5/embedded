@@ -149,6 +149,7 @@ def store(criteria, json_obj, col):
 # Gets action message to respective pic
 def retrieve(seq_num, col):
 	raw_doc = col.find_one('{ "ACTION": { "$exists": true } }')
+	print(raw_doc)
 	del raw_doc['_id']
 	raw_doc[SEQ_FIELD] = seq_num
 	return json.dumps(raw_doc) + DELIM

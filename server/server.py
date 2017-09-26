@@ -111,6 +111,11 @@ while True:
                 	# update position
                 	if DISTANCE in scan_nav:
                 		srv.store(json.loads('{ "SCAN_NAV.DISTANCE": { "$exists": true } }'), json_obj, scan_nav_col)
+                
+                temp_send = input("Send something to alex: ")
+                if temp_send is 'y':
+                	#scan_nav_rtrn_msg = srv.retrieve(seq_num, scan_nav_col)
+                	srv.send_msg(client, '{ "SEQ": 0, "ACTION": 0 }!')
 
                 # handle delivery rover navigation message calls
                 elif DELIV_NAV in json_obj:
