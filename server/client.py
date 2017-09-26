@@ -7,7 +7,7 @@ A simple echo client
 import socket
 
 host = '192.168.1.123'
-port = 2000
+port = 20000
 size = 1024
 filename = "client_log.txt"
 file = open(filename, 'w')
@@ -50,4 +50,6 @@ while True:
 	json_str = msg_list[msg_num]
 	file.write("Sending to server: \n")
 	s.send(json_str.encode())
+	data = s.recv(40)
+	print("Message received from server: ", data)
 file.close()

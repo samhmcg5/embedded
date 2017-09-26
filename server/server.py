@@ -4,6 +4,7 @@
 A simple echo server that handles some exceptions
 """
 from pymongo import MongoClient
+import bsonjs
 import pprint as pprint
 import srv_msg_def as srv
 import sys
@@ -12,34 +13,37 @@ import json
 
 # Server configurations
 IP_ADDR = '192.168.1.123'
-PORT = 2000
+PORT = 20000
 
 # Message data fields
 DELIM, SEQ_FIELD, RECV, SENT, FORMAT_ERR = srv.get_msg_constants()
-SCAN_NAV = srv.get_scanner_navigation_fields()
+SCAN_NAV, DISTANCE = srv.get_scanner_navigation_fields()
 SCAN_SENSE, ZONE, RED, BLUE, GREEN = srv.get_scanner_sensing_fields()
 DELIV_NAV, STATUS, MESSAGE, X, Y, RIGHT_DIR, LEFT_DIR, RIGHT_SPEED, LEFT_SPEED = srv.get_delivery_navigation_fields()
-DELIV_SENSE, DIRECTION = srv.get_delivery_sensing_fields()
+DELIV_SENSE = srv.get_delivery_sensing_fields()
 
 # Database collecitions
 
 # Initialize and connect to database 
-print(srv.is_db_online())
 mongo = None
 if srv.is_db_online() is not True:	
     mongo = srv.connect_to_mongo()
 scan_snsg_col, scan_nav_col, deliv_snsg_col, deliv_nav_col  = srv.get_collections()
-print(srv.is_db_online())
 
+global s
+global client
+global address
+global msg_length
+
+s = None
+client = None
+address = None
+msg_length = None
+    
 # Main server processing
 while True:
-
     # Initialize and start server listening for clients
     buf = ""
-    s = None
-    client = None
-    address = None
-    msg_length = None
     if srv.is_srv_online() is not True:  
     	s = srv.start_server(IP_ADDR, PORT)
     	client, address = srv.client_connect(s)
@@ -66,7 +70,6 @@ while True:
                 
                 if srv.is_json(buf) is True:
                     json_obj = json.loads(buf)
-                    print("Here")
                 else:
                     buf = ""
                     data = ""
@@ -74,16 +77,20 @@ while True:
                 buf = ""
                 data = "" 
 
-                pprint.pprint(json_obj)
-
                 # Begin to handle messages
-                rtrn_msg = {} # build empty json obj 
+                scan_sense_rtrn_msg = ""  
+                scan_nav_rtrn_msg = ""
+                deliv_sense_rtrn_msg = ""
+                deliv_nav_rtrn_msg = ""
                 seq_num = None
 
                 # update sequence number 
                 if SEQ_FIELD in json_obj:
                     seq_num = srv.handle_seq(json_obj)
-                    rtrn_msg[SEQ_FIELD] = seq_num
+                    #scan_sense_rtrn_msg[SEQ_FIELD] = seq_num
+                    #scan_nav_rtrn_msg[SEQ_FIELD] = seq_num
+                    #deliv_sense_rtrn_msg[SEQ_FIELD] = seq_num
+                    #deliv_nav_rtrn_msg[SEQ_FIELD] = seq_num
                 else: 
                     srv.print_msg(FORMAT_ERR, "SEQ field does not exist!")
 
@@ -94,6 +101,18 @@ while True:
                     if ZONE in scan_sense:
                     	if RED and GREEN and BLUE in scan_sense:
                         	srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[ZONE]) + ' }'), json_obj, scan_snsg_col)
+                    	else:
+                        	srv.print_msg(FORMAT_ERR, "RED, GREEN, or BLUE fields do not exist!")
+                    else:
+                    	srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
+                    raw_doc = scan_snsg_col.find_one(json.loads('{ "ACTION": { "$exists": true } }'))
+                    print(raw_doc)
+                    del raw_doc['_id']
+                    raw_doc[SEQ_FIELD] = seq_num
+                    scan_sense_rtrn_msg = json.dumps(raw_doc) + DELIM
+                    print(scan_sense_rtrn_msg)
+                    srv.send_msg(s, scan_sense_rtrn_msg)
+
                 
                 # handle scanner rover navigation message calls 
                 elif SCAN_NAV in json_obj:
@@ -120,10 +139,10 @@ while True:
                 	deliv_sense = json_obj[DELIV_SENSE]
                 	# update rover status
                 	if ZONE and STATUS in deliv_sense:
-                		srv.store(json.loads('{ "DELIV_SENSE.ZONE": { "$exists": true } }'), json_obj, deliv_snsg_col) 
+                		srv.store(json.loads('{ "DELIV_SENSE.ZONE": { "$exists": true } }'), json_obj, deliv_snsg_col)
 
-
-
+                else:
+                	srv.print_msg(FORMAT_ERR, "Message is not generated from a specific rover task!") 
 
                 break
 

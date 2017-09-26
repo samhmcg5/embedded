@@ -43,10 +43,15 @@ ZONE = 'ZONE'
 RED = 'RED'
 BLUE = 'BLUE'
 GREEN = 'GREEN'
+SCAN_SENSE_DEFAULT_ZONE_ACTION = '{ "SEQ": 0, "ZONE": 1, "ACTION": 0 }' 
+SCAN_SENSE_DEFAULT_ZONE_1 = '{ "SEQ": 0, "ZONE": 1, "RED": 0, "GREEN": 0, "BLUE": 0 }'
+SCAN_SENSE_DEFAULT_ZONE_2 = '{ "SEQ": 0, "ZONE": 2, "RED": 0, "GREEN": 0, "BLUE": 0 }'
+SCAN_SENSE_DEFAULT_ZONE_3 = '{ "SEQ": 0, "ZONE": 3, "RED": 0, "GREEN": 0, "BLUE": 0 }'
 
 # Scanner navigation fields
 SCAN_NAV = 'SCAN_NAV'
 DISTANCE = 'DISTANCE'
+SCAN_NAV_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0 }'
 
 # Delivery navigation fields
 DELIV_NAV = 'DELIV_NAV'
@@ -58,9 +63,12 @@ RIGHT_DIR = 'RIGHT_DIR'
 LEFT_DIR = 'LEFT_DIR' 
 RIGHT_SPEED = 'RIGHT_SPEED' 
 LEFT_SPEED = 'LEFT_SPEED'
+DELIV_NAV_DEFAULT_PATH = '{ "SEQ": 0, "COLOR": 0, "X": 0}'
+DELIV_NAV_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0 }'
 
 # Delivery Sensing fields
 DELIV_SENSE = 'DELIV_SENSE'
+DELIV_SENSE_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0 }'
 # ZONE and STATUS defined same as before
 
 # Info messages
@@ -75,13 +83,42 @@ INFO_SRV_WAIT = 'SERVER INFO: Waiting for client connection.'
 INFO_SRV_CONNECT = 'SERVER INFO: Connected to client.'
 INFO_SRV_MSG_WAIT = 'SERVER INFO: Waiting for message from client.'
 INFO_SRV_MSG_RECV = 'SERVER INFO: Received message from client.'
-INFO_SRV_MSG_SENT = 'SERVER INFO: Sent message to client.'
+INFO_SRV_MSG_SENDING = 'SERVER INFO: Sending message to client.'
+INFO_SRV_MSG_SENT = 'SERVER_INFO: Sent message to client.'
 
 # Standard error messages
 ERROR_SRV_CONN = 'SERVER ERROR: Client is not connected! Attempting to reconnect...'
 ERROR_MSG_FORMAT = 'SERVER ERROR: Message is not JSON object type!'
 ERROR_DB_CONN = 'DATABASE ERROR: Database is not connected!'
 
+# Creates default scanner sensing db fields
+def create_default_server_msg_fields(col, name):
+	list = []
+	json_obj = None
+	if name is SCANNER_SENSING_COL_NAME:
+		json_obj = json.loads(SCAN_SENSE_DEFAULT_ZONE_ACTION)
+		list.append(json_obj)
+		json_obj = json.loads(SCAN_SENSE_DEFAULT_ZONE_1)
+		list.append(json_obj)
+		json_obj = json.loads(SCAN_SENSE_DEFAULT_ZONE_2)
+		list.append(json_obj)
+		json_obj = json.loads(SCAN_SENSE_DEFAULT_ZONE_3)
+		list.append(json_obj)
+	elif name is SCANNER_NAVIGATION_COL_NAME:
+		json_obj = json.loads(SCAN_NAV_DEFAULT_ACTION)
+		list.append(json_obj)
+	elif name is DELIVERY_SENSING_COL_NAME:
+		json_obj = json.loads(DELIV_SENSE_DEFAULT_ACTION)
+		list.append(json_obj)
+	elif name is DELIVERY_NAVIGATION_COL_NAME:
+		json_obj = json.loads(DELIV_NAV_DEFAULT_PATH)
+		list.append(json_obj)
+		json_obj = json.loads(DELIV_NAV_DEFAULT_ACTION)
+		list.append(json_obj)
+	
+	for json_obj in list:
+		col.replace_one(json_obj, json_obj, True)
+	return
 
 # Updates incoming messaage sequence number to expected result 
 def handle_seq(json_obj):
@@ -114,6 +151,7 @@ def connect_to_mongo():
 
 	# Connect to Mongo
 	mongo_client = MongoClient(localhost, mongo_port)
+	global MONGODB_ONLINE
 	MONGODB_ONLINE = True
 	print(INFO_DB_CONN + "\n")
 	sys.stdout.flush()
@@ -128,6 +166,10 @@ def connect_to_mongo():
 	scan_nav_col = db[SCANNER_NAVIGATION_COL_NAME]
 	deliv_snsg_col = db[DELIVERY_SENSING_COL_NAME]
 	deliv_nav_col = db[DELIVERY_NAVIGATION_COL_NAME]
+	create_default_server_msg_fields(scan_snsg_col, SCANNER_SENSING_COL_NAME)
+	create_default_server_msg_fields(scan_nav_col, SCANNER_NAVIGATION_COL_NAME)
+	create_default_server_msg_fields(deliv_snsg_col, DELIVERY_SENSING_COL_NAME)
+	create_default_server_msg_fields(deliv_nav_col, DELIVERY_NAVIGATION_COL_NAME)
 	return
 
 # Determines if connected to database
@@ -141,6 +183,7 @@ def is_srv_online():
 # Initialize and bring up server waiting for client connection
 def start_server(ip_addr, port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE,1)
 	s.bind((ip_addr, port))
 	s.listen(backlog)
 	print(INFO_SRV_START + "\n")
@@ -152,6 +195,7 @@ def client_connect(sckt):
 	print(INFO_SRV_WAIT + "\n")
 	sys.stdout.flush()
 	client, address = sckt.accept()
+	global SERVER_ONLINE
 	SERVER_ONLINE = True
 	print(INFO_SRV_CONNECT + " Client Address: " + str(address) + "\n")
 	sys.stdout.flush()
@@ -166,12 +210,27 @@ def recv_msg(client, length):
 	try: 
 		data = client.recv(size)
 	except (ConnectionError, KeyboardInterrupt):
+		global SERVER_ONLINE
 		SERVER_ONLINE = False
 		print(ERROR_SRV_CONN + "\n")
 		sys.stdout.flush()
 		return
 	data = data.decode()	
 	return data 
+
+# Deliver message to client
+def send_msg(sckt, msg):
+	global SERVER_ONLINE
+	print(INFO_SRV_MSG_SENDING + "\n")
+	try:
+		print(str(SERVER_ONLINE))
+		sckt.send(msg.encode())
+		print(INFO_SRV_MSG_SENT + "\n")
+	except (ConnectionError): 
+		SERVER_ONLINE = False
+		print(ERROR_SRV_CONN + "\n")
+		sys.stdout.flush()
+	return
 
 # Determines if buffer contains wifly init msg
 def init_msg(buffer):
