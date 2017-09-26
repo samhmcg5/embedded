@@ -9,12 +9,14 @@ sys.stdout.flush()
 # Server globals
 backlog = 4
 size = 1
+global SERVER_ONLINE
 SERVER_ONLINE = False
 
 # Database globals
 localhost = '127.0.0.1'
 mongo_port = 27017
 mongo_client = None
+global MONGODB_ONLINE
 MONGODB_ONLINE = False
 DATABASE_NAME = 'TEAM14'
 SCANNER_SENSING_COL_NAME = 'SCANNER_SENSING'
@@ -64,7 +66,7 @@ LEFT_DIR = 'LEFT_DIR'
 RIGHT_SPEED = 'RIGHT_SPEED' 
 LEFT_SPEED = 'LEFT_SPEED'
 DELIV_NAV_DEFAULT_PATH = '{ "SEQ": 0, "COLOR": 0, "X": 0}'
-DELIV_NAV_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0 }'
+DELIV_NAV_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0, "DISTANCE": 0, "INTENSITY":0 }'
 
 # Delivery Sensing fields
 DELIV_SENSE = 'DELIV_SENSE'
@@ -121,8 +123,8 @@ def create_default_server_msg_fields(col, name):
 	return
 
 # Updates incoming messaage sequence number to expected result 
-def handle_seq(json_obj):
-	seq_num = json_obj[SEQ_FIELD] + 1
+def handle_seq(seq):
+	seq_num = seq + 1
 	return seq_num;
 
 # Determines if an incoming message is in JSON format
@@ -144,6 +146,33 @@ def store(criteria, json_obj, col):
 	sys.stdout.flush()
 	return
 
+# Gets action message to respective pic
+def retrieve(seq_num, col):
+	raw_doc = col.find_one('{ "ACTION": { "$exists": true } }')
+	del raw_doc['_id']
+	raw_doc[SEQ_FIELD] = seq_num
+	return json.dumps(raw_doc) + DELIM
+
+
+# Clean database
+def clean_db():
+	mongo_client = MongoClient()
+	mongo_client.drop_database(DATABASE_NAME)
+	print(INFO_DB_INIT + "\n")
+	sys.stdout.flush()
+	db = mongo_client[DATABASE_NAME]
+	print(INFO_DB_INIT_SENSING + "\n")
+	sys.stdout.flush()
+	scan_snsg_col = db[SCANNER_SENSING_COL_NAME]
+	scan_nav_col = db[SCANNER_NAVIGATION_COL_NAME]
+	deliv_snsg_col = db[DELIVERY_SENSING_COL_NAME]
+	deliv_nav_col = db[DELIVERY_NAVIGATION_COL_NAME]
+	create_default_server_msg_fields(scan_snsg_col, SCANNER_SENSING_COL_NAME)
+	create_default_server_msg_fields(scan_nav_col, SCANNER_NAVIGATION_COL_NAME)
+	create_default_server_msg_fields(deliv_snsg_col, DELIVERY_SENSING_COL_NAME)
+	create_default_server_msg_fields(deliv_nav_col, DELIVERY_NAVIGATION_COL_NAME)
+	return
+
 # Initiate connection to the database and initialize fields
 def connect_to_mongo():
 	print(INFO_DB_CONN_ATT + "\n")
@@ -151,7 +180,6 @@ def connect_to_mongo():
 
 	# Connect to Mongo
 	mongo_client = MongoClient(localhost, mongo_port)
-	global MONGODB_ONLINE
 	MONGODB_ONLINE = True
 	print(INFO_DB_CONN + "\n")
 	sys.stdout.flush()
@@ -183,7 +211,7 @@ def is_srv_online():
 # Initialize and bring up server waiting for client connection
 def start_server(ip_addr, port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE,1)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((ip_addr, port))
 	s.listen(backlog)
 	print(INFO_SRV_START + "\n")
@@ -195,7 +223,6 @@ def client_connect(sckt):
 	print(INFO_SRV_WAIT + "\n")
 	sys.stdout.flush()
 	client, address = sckt.accept()
-	global SERVER_ONLINE
 	SERVER_ONLINE = True
 	print(INFO_SRV_CONNECT + " Client Address: " + str(address) + "\n")
 	sys.stdout.flush()
@@ -203,14 +230,13 @@ def client_connect(sckt):
 
 # Receive single byte from client
 def recv_msg(client, length):
-	if length is 0:
-		print(INFO_SRV_MSG_WAIT + "\n")
-		sys.stdout.flush()
 	data = None
-	try: 
+	try:
+		if length is 0:
+			print(INFO_SRV_MSG_WAIT + "\n")
+			sys.stdout.flush()
 		data = client.recv(size)
 	except (ConnectionError, KeyboardInterrupt):
-		global SERVER_ONLINE
 		SERVER_ONLINE = False
 		print(ERROR_SRV_CONN + "\n")
 		sys.stdout.flush()
@@ -219,12 +245,10 @@ def recv_msg(client, length):
 	return data 
 
 # Deliver message to client
-def send_msg(sckt, msg):
-	global SERVER_ONLINE
+def send_msg(client, msg):
 	print(INFO_SRV_MSG_SENDING + "\n")
 	try:
-		print(str(SERVER_ONLINE))
-		sckt.send(msg.encode())
+		client.send(msg.encode())
 		print(INFO_SRV_MSG_SENT + "\n")
 	except (ConnectionError): 
 		SERVER_ONLINE = False

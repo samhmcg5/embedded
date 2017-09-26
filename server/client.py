@@ -7,7 +7,7 @@ A simple echo client
 import socket
 
 host = '192.168.1.123'
-port = 20000
+port = 2000
 size = 1024
 filename = "client_log.txt"
 file = open(filename, 'w')

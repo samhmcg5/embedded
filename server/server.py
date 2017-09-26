@@ -13,7 +13,7 @@ import json
 
 # Server configurations
 IP_ADDR = '192.168.1.123'
-PORT = 20000
+PORT = 2000
 
 # Message data fields
 DELIM, SEQ_FIELD, RECV, SENT, FORMAT_ERR = srv.get_msg_constants()
@@ -25,6 +25,7 @@ DELIV_SENSE = srv.get_delivery_sensing_fields()
 # Database collecitions
 
 # Initialize and connect to database 
+global mongo
 mongo = None
 if srv.is_db_online() is not True:	
     mongo = srv.connect_to_mongo()
@@ -34,6 +35,7 @@ global s
 global client
 global address
 global msg_length
+global seq_num
 
 s = None
 client = None
@@ -43,6 +45,7 @@ msg_length = None
 # Main server processing
 while True:
     # Initialize and start server listening for clients
+    seq_num = 1
     buf = ""
     if srv.is_srv_online() is not True:  
     	s = srv.start_server(IP_ADDR, PORT)
@@ -55,7 +58,7 @@ while True:
             msg_length = len(buf)
             data = srv.recv_msg(client, msg_length)
             if not data:
-           	    break
+            	raise ConnectionError('SERVER ERROR: Client is not connected! Attempting to reconnect...')
             buf += data
             while True:
                 if srv.init_msg(buf) is True:
@@ -82,18 +85,10 @@ while True:
                 scan_nav_rtrn_msg = ""
                 deliv_sense_rtrn_msg = ""
                 deliv_nav_rtrn_msg = ""
-                seq_num = None
 
                 # update sequence number 
-                if SEQ_FIELD in json_obj:
-                    seq_num = srv.handle_seq(json_obj)
-                    #scan_sense_rtrn_msg[SEQ_FIELD] = seq_num
-                    #scan_nav_rtrn_msg[SEQ_FIELD] = seq_num
-                    #deliv_sense_rtrn_msg[SEQ_FIELD] = seq_num
-                    #deliv_nav_rtrn_msg[SEQ_FIELD] = seq_num
-                else: 
-                    srv.print_msg(FORMAT_ERR, "SEQ field does not exist!")
-
+                seq_num = srv.handle_seq(seq_num)
+                
                 # handle scanner rover sensing message calls
                 if SCAN_SENSE in json_obj:
                     scan_sense = json_obj[SCAN_SENSE]
@@ -105,13 +100,9 @@ while True:
                         	srv.print_msg(FORMAT_ERR, "RED, GREEN, or BLUE fields do not exist!")
                     else:
                     	srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
-                    raw_doc = scan_snsg_col.find_one(json.loads('{ "ACTION": { "$exists": true } }'))
-                    print(raw_doc)
-                    del raw_doc['_id']
-                    raw_doc[SEQ_FIELD] = seq_num
-                    scan_sense_rtrn_msg = json.dumps(raw_doc) + DELIM
-                    print(scan_sense_rtrn_msg)
-                    srv.send_msg(s, scan_sense_rtrn_msg)
+                    # send message back of current action (STOP or CONTINUE)
+                    scan_sense_rtrn_msg = srv.retrieve(seq_num, scan_snsg_col)
+                    srv.send_msg(client, scan_sense_rtrn_msg)
 
                 
                 # handle scanner rover navigation message calls 
@@ -133,6 +124,11 @@ while True:
                 	# update spped and direction
                 	elif RIGHT_DIR and LEFT_DIR and RIGHT_SPEED and LEFT_SPEED in deliv_nav:
                 		srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, deliv_nav_col)
+                	if STATUS in deliv_nav:
+                		if deliv_nav[STATUS] is 0:
+                			# send message for next action (FWD, BACKWARD, etc)
+                			deliv_nav_rtrn_msg = srv.retrieve(seq_num, deliv_nav_col)
+                			srv.send_msg(client, deliv_nav_rtrn_msg)
 
                 # handle delivery rover sensing message calls
                 elif DELIV_SENSE in json_obj:
@@ -146,6 +142,8 @@ while True:
 
                 break
 
-        except ValueError as err:
-            print(err)
-            break
+        except (ValueError, ConnectionError, KeyboardInterrupt) as err:
+        	s.close()
+        	srv.clean_db()
+        	print(err)
+        	break
