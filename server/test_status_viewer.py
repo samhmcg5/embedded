@@ -1,6 +1,6 @@
 import socket
 
-host    = '192.168.1.123'
+host    = '192.168.1.124'
 port    = 2005
 backlog = 5
 length  = None
