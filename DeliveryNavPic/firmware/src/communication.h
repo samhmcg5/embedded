@@ -19,9 +19,8 @@
 #include "jsmn.h"
 #include "string.h"
 
-#define UART_RX_QUEUE_SIZE 256
-#define UART_TX_QUEUE_SIZE 256
-#define SERVER_TIMOUT       4 // number of quarter seconds
+#define UART_RX_QUEUE_SIZE  256
+#define UART_TX_QUEUE_SIZE  256
 
 typedef enum
 {
@@ -47,6 +46,8 @@ void COMMUNICATION_Tasks( void );
 // UART message queues
 // comms thread reads from this Q
 QueueHandle_t comm_incoming_q;
+// UART ISR reads from this Q, we write to it
+QueueHandle_t uart_outgoing_q;
 
 //RX functions
 int sendMsgToCommQFromISR(unsigned int msg);
@@ -62,9 +63,14 @@ void uartWriteMsg(char writeBuff);
 char commBuffer[UART_RX_QUEUE_SIZE];
 unsigned int commBufferIdx = 0;
 
+// used to check messages
+int prev_inc_seq = 0;
+
 //JSMN functions
 static const char *JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s);
+struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]);
+int getIntFromKey(jsmntok_t key); 
 
 
 #endif /* _COMMUNICATION_H */

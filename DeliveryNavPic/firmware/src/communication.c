@@ -7,9 +7,6 @@
 // communication's state
 COMMUNICATION_DATA communicationData;
 
-char store_or_retrieve = 0x01;
-
-
 //send into commtask from isr
 void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]) 
 {
@@ -23,9 +20,10 @@ void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE])
     int i;
     for(i = 0; i< strlen(msg); i++)
     {
-        //each byte of message is sent into uartqueue
+        //each byte of message is sent into uart queue
         xQueueSendToBack(uart_outgoing_q, &msg[i], portMAX_DELAY);
     }
+    outgoing_seq++;
     PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
 }
 
@@ -51,10 +49,18 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s)
 	return -1;
 }
 
+int getIntFromKey(jsmntok_t key)
+{
+    unsigned int length = key.end - key.start;
+    char keyString[length + 1];    
+    memcpy(keyString, &JSON_STRING[key.start], length);
+    keyString[length] = '\0';
+    return atoi(keyString);
+}
+
 struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
 {
     struct navQueueData out;
-    out.type = ACTION;
     
     JSON_STRING = rec;
     int r;
@@ -62,33 +68,38 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     jsmntok_t t[128]; /* We expect no more than 128 tokens */
     jsmn_init(&p);
     r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
-                    
-    // PARSING TOKENS AND SENDING BACK FOR DEBUG 
-    jsmntok_t key;
-    unsigned int length;
-    char keyString[length + 1];
     
-    key = t[4];
-    length = key.end - key.start;
-    keyString[length + 1];    
-    memcpy(keyString, &JSON_STRING[key.start], length);
-    keyString[length] = '\0';
-    out.a = atoi(keyString);
-    
-    key = t[6];
-    length = key.end - key.start;
-    keyString[length + 1];    
-    memcpy(keyString, &JSON_STRING[key.start], length);
-    keyString[length] = '\0';
-    out.b = atoi(keyString);
-    
-    key = t[8];
-    length = key.end - key.start;
-    keyString[length + 1];    
-    memcpy(keyString, &JSON_STRING[key.start], length);
-    keyString[length] = '\0';
-    out.c = atoi(keyString);
-    
+    /* Get the sequence ID number */
+    int seq = getIntFromKey(t[2]);
+    /* Is it the expected next sequence? */
+    if (seq != prev_inc_seq + 1) // ERROR
+    {
+        char buf[128];
+        sprintf(buf, STR_SEQUENCE_ERROR, outgoing_seq, prev_inc_seq, seq);
+        commSendMsgToUartQueue(buf);
+    }
+    prev_inc_seq = seq;
+
+    if(r == 9) // ACTION
+    {
+        out.type = ACTION;
+        out.a = getIntFromKey(t[4]);
+        out.b = getIntFromKey(t[6]);
+        out.c = getIntFromKey(t[8]);
+    }
+    else if (r == 7) // TASK
+    {
+        out.type = TASK;
+        out.a = getIntFromKey(t[4]);
+        out.b =  getIntFromKey(t[6]);
+    }
+    else // ERROR
+    {
+        // send message back to server something is wrong
+        char buf[128];
+        sprintf(buf, STR_JSON_ERROR, outgoing_seq);
+        commSendMsgToUartQueue(buf);
+    }
     return out;
 }
 
@@ -118,7 +129,8 @@ void readUartReceived()
     } 
 }
 
-void uartWriteMsg(char writeBuff) {
+void uartWriteMsg(char writeBuff) 
+{
     PLIB_USART_TransmitterByteSend(USART_ID_1, writeBuff); //write a byte
 }
 

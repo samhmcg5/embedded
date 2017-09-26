@@ -24,7 +24,7 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             right->dir = BACKWARD;
             right->dc = data.speed;
             right->dist = data.dist;
-            break;
+            break;  
         case TURN_LEFT:
             left->dir = BACKWARD;
             left->dc = data.speed;
@@ -42,10 +42,10 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             right->dist = data.dist;
             break;
         case STOP:
-            left->dir = FORWARD;
+            left->dir = 0;
             left->dc = 0;
             left->dist = 0;
-            right->dir = FORWARD;
+            right->dir = 0;
             right->dc = 0;
             right->dist = 0;
             break;
@@ -53,7 +53,6 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             // handle and error
             break;
     }
-    
 }
 
 void initMotors()
@@ -118,26 +117,42 @@ unsigned char getMotorL_DC()
     return motor_controlData.dcL;
 }
 
+unsigned char getMotorR_Dir()
+{
+    return motor_controlData.dirR;
+}
+
+unsigned char getMotorL_Dir()
+{
+    return motor_controlData.dirL;
+}
+
 void setMotorR_Fwd()
 {
     LATCCLR  = MOTOR_RIGHT_DIR_PIN;
+    motor_controlData.dirR = FORWARD;
 }
 
 void setMotorL_Fwd()
 {
     LATGCLR  = MOTOR_LEFT_DIR_PIN;
+    motor_controlData.dirL = FORWARD;
 }
 
 void setMotorR_Bck()
 {
     LATCCLR  = MOTOR_RIGHT_DIR_PIN;
     LATCSET  = MOTOR_RIGHT_DIR_PIN;
+    
+    motor_controlData.dirR = BACKWARD;
 }
 
 void setMotorL_Bck()
 {
     LATGCLR  = MOTOR_LEFT_DIR_PIN;
     LATGSET  = MOTOR_LEFT_DIR_PIN;
+    
+    motor_controlData.dirL = BACKWARD;
 }
 
 void sendMsgToMotorQ(struct motorQueueData msg)
@@ -152,7 +167,7 @@ void sendMsgToMotor_R(struct pwmQueueData msg)
     if (getMotorR_DC() == 0)
     {
         setMotorR_DC(msg.dc);
-        distR = msg.dist;
+        goalR = msg.dist * 60;
         if (msg.dir == FORWARD)
             setMotorR_Fwd();
         else
@@ -171,7 +186,7 @@ void sendMsgToMotor_L(struct pwmQueueData msg)
     if (getMotorL_DC() == 0)
     {
         setMotorL_DC(msg.dc);
-        distL = msg.dist;
+        goalL = msg.dist * 60;
         if (msg.dir == FORWARD)
             setMotorL_Fwd();
         else
@@ -216,6 +231,7 @@ void MOTOR_CONTROL_Initialize ( void )
     // start the encoder counters
     DRV_TMR0_Start();
     DRV_TMR1_Start();
+    DRV_TMR2_Start();
 }
 
 void MOTOR_CONTROL_Tasks ( void )
