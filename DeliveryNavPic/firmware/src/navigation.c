@@ -1,5 +1,4 @@
 #include "navigation.h"
-#include "nav_globals.h"
 #include "communication_globals.h"
 #include "motor_globals.h"
 
@@ -15,9 +14,59 @@ void sendMsgToNavQFromISR(struct navQueueData msg)
     xQueueSendToBackFromISR(nav_q, &msg, NULL);
 }
 
+void handleIncomingMsg(struct navQueueData data)
+{
+    switch (data.type)
+    {
+        case ACTION:
+        {
+            struct motorQueueData out_m;
+            out_m.action = data.a;
+            out_m.dist   = data.b;
+            out_m.speed  = data.c;
+            sendMsgToMotorQ(out_m);
+            break;
+        }
+        case TASK:
+        {
+            // TODO
+            break;
+        }
+        case POSITION:
+        {
+            char buf[64];
+            sprintf(buf, STR_UPDATE_POS, outgoing_seq, data.a, data.b);
+            commSendMsgToUartQueue(buf);
+            break;
+        }
+        case SPEEDS:
+        {
+            char buf[128];
+            sprintf(buf, STR_UPDATE_SPEED, outgoing_seq, data.a, data.b, data.c, data.d);
+            commSendMsgToUartQueue(buf);
+            if (data.c == 0 && data.d == 0 && navigationData.status == moving)
+            {
+                sprintf(buf, STR_IDLE, outgoing_seq);
+                commSendMsgToUartQueue(buf);
+                navigationData.status = idle;
+            }
+            else if ( (data.c != 0 || data.d != 0) && navigationData.status == idle)
+            {
+                navigationData.status = moving;
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+}
+
 void NAVIGATION_Initialize ( void )
 {
     navigationData.state = NAVIGATION_STATE_INIT;
+    navigationData.status = idle;
     nav_q = xQueueCreate(32, sizeof (struct navQueueData));
 }
 
@@ -43,41 +92,7 @@ void NAVIGATION_Tasks ( void )
             if(xQueueReceive(nav_q, &rec, portMAX_DELAY))
             {
                 dbgOutputLoc(NAV_THREAD_RECVD);
-                
-                // pass directly to the motor queue
-                if (rec.type == ACTION)
-                {
-                    struct motorQueueData out_m;
-                    out_m.action = rec.a;
-                    out_m.dist   = rec.b;
-                    out_m.speed  = rec.c;
-                    sendMsgToMotorQ(out_m);
-                }
-                // recvd from motor, pass to UART
-                else if (rec.type == SPEEDS)
-                {
-                    char buf[128];
-                    //if (rec.c > 0 || rec.d > 0)
-                    sprintf(buf, "{\"SEQ\":%i, \"DELIV_NAV\":{ \"RIGHT_DIR\":%i, \"LEFT_DIR\":%i, \"RIGHT_SPEED\":%u, \"LEFT_SPEED\":%u } }!", 
-                            outgoing_seq, rec.a, rec.b, rec.c, rec.d);
-                    //else
-                    //    sprintf(buf, "{\"seq\":%i, \"status\":\"idle\"}!", outgoing_seq);
-                    commSendMsgToUartQueue(buf);
-                }
-                else if (rec.type == POSITION)
-                {
-                    char buf[64];
-                    sprintf(buf, "{\"SEQ\":%i, \"DELIV_NAV\": { \"X\":%u, \"Y\":%u } }!", outgoing_seq, rec.a, rec.b);
-                    commSendMsgToUartQueue(buf);
-                }
-                else if (rec.type == STATUS)
-                {
-                    // TODO
-                }
-                else // figure out path to the object, convert to action items
-                {
-                    // TODO
-                }
+                handleIncomingMsg(rec);
             }
             break;
         }

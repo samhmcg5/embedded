@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "nav_globals.h"
 #include "queue.h"
 
 typedef enum
@@ -19,18 +20,20 @@ typedef enum
 typedef enum
 {
     idle=0,
-    pickup,
-    delivery,
+    moving,
 } STATUS;
 
 typedef struct
 {
     NAVIGATION_STATES state;
+    STATUS status;
 } NAVIGATION_DATA;
 
 void NAVIGATION_Initialize ( void );
 
 void NAVIGATION_Tasks( void );
+
+void handleIncomingMsg(struct navQueueData data);
 
 
 #endif /* _NAVIGATION_H */

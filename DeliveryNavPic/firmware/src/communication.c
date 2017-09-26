@@ -75,9 +75,7 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     if (seq != prev_inc_seq + 1) // ERROR
     {
         char buf[128];
-        sprintf(buf, 
-            "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":1,\"MSG\":\"missing sequence num, expected %u got %u\"}}!"
-            , outgoing_seq, prev_inc_seq, seq);
+        sprintf(buf, STR_SEQUENCE_ERROR, outgoing_seq, prev_inc_seq, seq);
         commSendMsgToUartQueue(buf);
     }
     prev_inc_seq = seq;
@@ -99,7 +97,7 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     {
         // send message back to server something is wrong
         char buf[128];
-        sprintf(buf, "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":1,\"MSG\":\"Bad JSON message format\"}}!", outgoing_seq);
+        sprintf(buf, STR_JSON_ERROR, outgoing_seq);
         commSendMsgToUartQueue(buf);
     }
     return out;

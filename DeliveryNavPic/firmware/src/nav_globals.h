@@ -7,7 +7,6 @@
 // send to UART, coming from motor thread
 #define SPEEDS      2
 #define POSITION    3
-#define STATUS      4
 
 // data inside Nav's incoming queue
 struct navQueueData
