@@ -51,9 +51,8 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s)
 
 int getIntFromKey(jsmntok_t key)
 {
-    key = t[4];
-    length = key.end - key.start;
-    keyString[length + 1];    
+    unsigned int length = key.end - key.start;
+    char keyString[length + 1];    
     memcpy(keyString, &JSON_STRING[key.start], length);
     keyString[length] = '\0';
     return atoi(keyString);
@@ -69,55 +68,40 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     jsmntok_t t[128]; /* We expect no more than 128 tokens */
     jsmn_init(&p);
     r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
-                    
-    // PARSING TOKENS AND SENDING BACK FOR DEBUG 
-    jsmntok_t key;
-    unsigned int length;
-    char keyString[length + 1];
     
+    /* Get the sequence ID number */
+    int seq = getIntFromKey(t[2]);
+    /* Is it the expected next sequence? */
+    if (seq != prev_inc_seq + 1) // ERROR
+    {
+        char buf[128];
+        sprintf(buf, 
+            "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":1,\"MSG\":\"missing sequence num, expected %u got %u\"}}!"
+            , outgoing_seq, prev_inc_seq, seq);
+        commSendMsgToUartQueue(buf);
+    }
+    prev_inc_seq = seq;
+
     if(r == 9) // ACTION
     {
         out.type = ACTION;
-
         out.a = getIntFromKey(t[4]);
-
-        key = t[6];
-        length = key.end - key.start;
-        keyString[length + 1];    
-        memcpy(keyString, &JSON_STRING[key.start], length);
-        keyString[length] = '\0';
-        out.b = getIntFromKey(t[4]);
-
-        key = t[8];
-        length = key.end - key.start;
-        keyString[length + 1];    
-        memcpy(keyString, &JSON_STRING[key.start], length);
-        keyString[length] = '\0';
-        out.c = atoi(keyString);
+        out.b = getIntFromKey(t[6]);
+        out.c = getIntFromKey(t[8]);
     }
     else if (r == 7) // TASK
     {
         out.type = TASK;
-
-        key = t[4];
-        length = key.end - key.start;
-        keyString[length + 1];    
-        memcpy(keyString, &JSON_STRING[key.start], length);
-        keyString[length] = '\0';
-        out.a = atoi(keyString);
-
-        key = t[6];
-        length = key.end - key.start;
-        keyString[length + 1];    
-        memcpy(keyString, &JSON_STRING[key.start], length);
-        keyString[length] = '\0';
-        out.b = atoi(keyString);
+        out.a = getIntFromKey(t[4]);
+        out.b =  getIntFromKey(t[6]);
     }
     else // ERROR
     {
         // send message back to server something is wrong
+        char buf[128];
+        sprintf(buf, "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":1,\"MSG\":\"Bad JSON message format\"}}!", outgoing_seq);
+        commSendMsgToUartQueue(buf);
     }
-    
     return out;
 }
 
