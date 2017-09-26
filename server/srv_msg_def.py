@@ -18,8 +18,16 @@ mongo_client = None
 MONGODB_ONLINE = False
 DATABASE_NAME = 'TEAM14'
 SCANNER_SENSING_COL_NAME = 'SCANNER_SENSING'
+SCANNER_NAVIGATION_COL_NAME = 'SCANNER_NAVIGATION'
+DELIVERY_SENSING_COL_NAME = 'DELIVERY_SENSING'
+DELIVERY_NAVIGATION_COL_NAME = 'DELIVERY_NAVIGATION'
 db = None
+
+# Database collections
 scan_snsg_col = None
+scan_nav_col = None
+deliv_snsg_col = None
+deliv_nav_col = None
 
 # Message constants
 DELIM = "!"
@@ -28,12 +36,32 @@ WIFLY_INIT_MSG = '*HELLO*'
 RECV = 'RECV'
 SENT = 'SENT'
 FORMAT_ERR = 'FORMAT_ERR'
-SCAN_SENSE = 'SCAN_SENSE'
 
 # Scanner sensing fields
+SCAN_SENSE = 'SCAN_SENSE'
+ZONE = 'ZONE'
 RED = 'RED'
 BLUE = 'BLUE'
 GREEN = 'GREEN'
+
+# Scanner navigation fields
+SCAN_NAV = 'SCAN_NAV'
+DISTANCE = 'DISTANCE'
+
+# Delivery navigation fields
+DELIV_NAV = 'DELIV_NAV'
+STATUS = 'STATUS' 
+MESSAGE = 'MESSAGE'
+X = 'X' 
+Y = 'Y' 
+RIGHT_DIR = 'RIGHT_DIR' 
+LEFT_DIR = 'LEFT_DIR' 
+RIGHT_SPEED = 'RIGHT_SPEED' 
+LEFT_SPEED = 'LEFT_SPEED'
+
+# Delivery Sensing fields
+DELIV_SENSE = 'DELIV_SENSE'
+# ZONE and STATUS defined same as before
 
 # Info messages
 INFO_DB_CONN_ATT = 'DATABASE INFO: Attempting to connect to database.' 
@@ -57,8 +85,6 @@ ERROR_DB_CONN = 'DATABASE ERROR: Database is not connected!'
 
 # Updates incoming messaage sequence number to expected result 
 def handle_seq(json_obj):
-	print(json_obj[SEQ_FIELD])
-	sys.stdout.flush()
 	seq_num = json_obj[SEQ_FIELD] + 1
 	return seq_num;
 
@@ -73,21 +99,19 @@ def is_json(json_str):
 	return True
 
 # Stores a JSON formatted object in the database
-def store(criteria, json_obj, mongo):
-	#if MONGODB_ONLINE is True:
-		print(INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj) + "\n")
-		sys.stdout.flush()
-		mongo[DATABASE_NAME][SCANNER_SENSING_COL_NAME].replaceOne(criteria, json_obj, "{ upsert: true }")
-		print(INFO_DB_STORE_SUC)
-		sys.stdout.flush()
-	#else:
-		raise ValueError(ERROR_DB_CONN + "\n")
-		return
+def store(criteria, json_obj, col):
+	print(INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj) + "\n")
+	sys.stdout.flush()
+	res = col.replace_one(criteria, json_obj, True)
+	print(INFO_DB_STORE_SUC)
+	sys.stdout.flush()
+	return
 
 # Initiate connection to the database and initialize fields
 def connect_to_mongo():
 	print(INFO_DB_CONN_ATT + "\n")
 	sys.stdout.flush()
+
 	# Connect to Mongo
 	mongo_client = MongoClient(localhost, mongo_port)
 	MONGODB_ONLINE = True
@@ -100,10 +124,11 @@ def connect_to_mongo():
 	db = mongo_client[DATABASE_NAME]
 	print(INFO_DB_INIT_SENSING + "\n")
 	sys.stdout.flush()
-	#db.create_collection(SCANNER_SENSING_COL_NAME)
 	scan_snsg_col = db[SCANNER_SENSING_COL_NAME]
-	scan_snsg_col.insert_one(json.loads('{ "COLLECTION_INIT": 1 }'))
-	return mongo_client
+	scan_nav_col = db[SCANNER_NAVIGATION_COL_NAME]
+	deliv_snsg_col = db[DELIVERY_SENSING_COL_NAME]
+	deliv_nav_col = db[DELIVERY_NAVIGATION_COL_NAME]
+	return
 
 # Determines if connected to database
 def is_db_online():
@@ -156,21 +181,30 @@ def init_msg(buffer):
 def get_msg_constants():
 	return DELIM, SEQ_FIELD, RECV, SENT, FORMAT_ERR
 
-# Returns message field names for various rover responsibilities
-"""
-ADD FIELD FOR YOUR ROVER TASK (SCAN_NAV, DELIV_NAV, etc)
-
-Intended to be used as the top field for message 
-"""
-def get_rover_msg_fields():
-	return SCAN_SENSE
-
 # Return the name of the collections
 def get_collections():
-	return scan_snsg_col
+	mongo_client = MongoClient()
+	scan_snsg_col = mongo_client[DATABASE_NAME][SCANNER_SENSING_COL_NAME]
+	scan_nav_col = mongo_client[DATABASE_NAME][SCANNER_NAVIGATION_COL_NAME]
+	deliv_snsg_col = mongo_client[DATABASE_NAME][DELIVERY_SENSING_COL_NAME]
+	deliv_nav_col = mongo_client[DATABASE_NAME][DELIVERY_NAVIGATION_COL_NAME]
+	return scan_snsg_col, scan_nav_col, deliv_snsg_col, deliv_nav_col
 
-def get_scanner_rover_fields():
-	return RED, BLUE, GREEN
+# Return the json fields for a scanner sensing message
+def get_scanner_sensing_fields():
+	return SCAN_SENSE, ZONE, RED, BLUE, GREEN
+	
+# Return the json fields for a scanner navigation message
+def get_scanner_navigation_fields():
+	return SCAN_NAV, DISTANCE
+
+# Return the json fields for a delivery navigation message
+def get_delivery_navigation_fields():
+	return DELIV_NAV, STATUS, MESSAGE, X, Y, RIGHT_DIR, LEFT_DIR, RIGHT_SPEED, LEFT_SPEED
+
+# Return the json fields for a delivery sensing message
+def get_delivery_sensing_fields():
+	return DELIV_SENSE #, ZONE, STATUS (uses zone and status from deliv_nav fields since they are the same)
 
 # Output message of specific type
 def print_msg(case, msg):
