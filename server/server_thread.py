@@ -4,7 +4,7 @@ from collections import deque
 import time
 
 # for passing global data
-d = deque()
+status_d = deque()
 
 #################################
 ####### DELIVER NAVIGATE ########
@@ -31,11 +31,10 @@ class DelivNavThread(Thread):
 
     # override from base class
     def run(self):
-        print("DelivNavThread on port %s"%self.port)
-        d.append("Thread sleeps for 2 seconds")
+        status_d.append("DelivNavThread on port %s"%self.port)
         time.sleep(2)
         #print("Thread %d woke up"%(secs))
-        d.append("Thread 2 woke up")
+        status_d.append("Thread 2 woke up")
 
 
 #################################
@@ -63,11 +62,10 @@ class DelivSenseThread(Thread):
 
     # override from base class
     def run(self):
-        print("DelivSenseThread on port %s"%self.port)
-        d.append("Thread sleeps for 3 seconds")
+        status_d.append("DelivSenseThread on port %s"%self.port)
         time.sleep(3)
         #print("Thread %d woke up"%(secs))
-        d.append("Thread 3 woke up")
+        status_d.append("Thread 3 woke up")
 
 
 
@@ -97,10 +95,9 @@ class ScanNavThread(Thread):
 
     # override from base class
     def run(self):
-        print("ScanNavThread on port %s"%self.port)
-        d.append("Thread sleeps for 4 seconds")
+        status_d.append("ScanNavThread on port %s"%self.port)
         time.sleep(4)
-        d.append("Thread 4 woke up")
+        status_d.append("Thread 4 woke up")
 
 
 #################################
@@ -128,10 +125,9 @@ class ScanSenseThread(Thread):
 
     # override from base class
     def run(self):
-        print("ScanSenseThread on port %s"%self.port)
-        d.append("Thread sleeps for 5 seconds")
+        status_d.append("ScanSenseThread on port %s"%self.port)
         time.sleep(5)
-        d.append("Thread 5 woke up")
+        status_d.append("Thread 5 woke up")
 
 
 #################################
@@ -155,7 +151,7 @@ class StatusConsoleThread(Thread):
         print("StatusConsoleThread on port %s"%self.port)
         while True:
             try:
-                print(d.popleft())
+                print(status_d.popleft())
             except IndexError:
                 continue
         print("StatusConsoleThread exiting...")
