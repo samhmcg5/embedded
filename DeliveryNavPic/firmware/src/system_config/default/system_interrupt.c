@@ -44,7 +44,7 @@ void IntHandlerDrvUsartInstance0(void)
                 unsigned char writeBuff;
                 if (PLIB_USART_TransmitterBufferIsFull(USART_ID_1)) 
                 {
-                    continue;
+                    break;
                 }
                 uartReceiveFromOutQueueInISR(&writeBuff);
                 uartWriteMsg(writeBuff);
