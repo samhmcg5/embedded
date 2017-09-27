@@ -131,76 +131,76 @@ void IntHandlerDrvTmrInstance1(void)
 
 void IntHandlerDrvTmrInstance2(void)
 {
-    isr_count++;
-    /* Get the current value from the timer registers */
-    short int ticksL = DRV_TMR0_CounterValueGet();
-    short int ticksR = DRV_TMR1_CounterValueGet();
-            
-    /* Add to total ticks per this half second run */
-//    total_ticksL[isr_count % 10] = ticksL;
-//    total_ticksR[isr_count % 10] = ticksR;
-    total_ticksL += ticksL;
-    total_ticksR += ticksR;
-    
-    /* increment the distnace traveled per motor in ticks*/
-    distL        += ticksL;
-    distR        += ticksR;
-    
-    /* Clear the counter registers */
-    DRV_TMR0_CounterClear();
-    DRV_TMR1_CounterClear();
-    
-    /* If we have reached the goal of ticks to travel ... */
-    if (distL >= goalL)
-    {
-        distL = 0; // reset the distance traveled 
-        if (!leftQIsEmpty())
-        {
-            /* Read the next action off the queue */
-            dbgOutputLoc(ISR_MOTOR_L_Q_READ);
-            // read data
-            struct pwmQueueData data;
-            motorL_recvQInISR(&data);
-            
-            dbgOutputVal(data.dist);
-            // set motor motion stuff
-            setMotorL_DC(data.dc);
-            goalL = data.dist * 60;
-            if (data.dir == FORWARD)
-                setMotorL_Fwd();
-            else
-                setMotorL_Bck();
-        }
-        else
-        {
-            /* Stop the motors if no task available */
-            setMotorL_DC(0);
-        }
-    }
-    if (distR >= goalL)
-    {
-        distR = 0;
-        if (!rightQIsEmpty())
-        {
-            dbgOutputLoc(ISR_MOTOR_R_Q_READ);
-            // read data
-            struct pwmQueueData data;
-            motorR_recvQInISR(&data);
-            
-            dbgOutputVal(data.dist);
-            // set motor motion stuff
-            setMotorR_DC(data.dc);
-            goalR = data.dist * 60;
-            if (data.dir == FORWARD)
-                setMotorR_Fwd();
-            else
-                setMotorR_Bck();
-        }
-        else
-        {
-            setMotorR_DC(0);
-        }
-    }
+//    isr_count++;
+//    /* Get the current value from the timer registers */
+//    short int ticksL = DRV_TMR0_CounterValueGet();
+//    short int ticksR = DRV_TMR1_CounterValueGet();
+//            
+//    /* Add to total ticks per this half second run */
+////    total_ticksL[isr_count % 10] = ticksL;
+////    total_ticksR[isr_count % 10] = ticksR;
+//    total_ticksL += ticksL;
+//    total_ticksR += ticksR;
+//    
+//    /* increment the distnace traveled per motor in ticks*/
+//    distL        += ticksL;
+//    distR        += ticksR;
+//    
+//    /* Clear the counter registers */
+//    DRV_TMR0_CounterClear();
+//    DRV_TMR1_CounterClear();
+//    
+//    /* If we have reached the goal of ticks to travel ... */
+//    if (distL >= goalL)
+//    {
+//        distL = 0; // reset the distance traveled 
+//        if (!leftQIsEmpty())
+//        {
+//            /* Read the next action off the queue */
+//            dbgOutputLoc(ISR_MOTOR_L_Q_READ);
+//            // read data
+//            struct pwmQueueData data;
+//            motorL_recvQInISR(&data);
+//            
+//            dbgOutputVal(data.dist);
+//            // set motor motion stuff
+//            setMotorL_DC(data.dc);
+//            goalL = data.dist * 60;
+//            if (data.dir == FORWARD)
+//                setMotorL_Fwd();
+//            else
+//                setMotorL_Bck();
+//        }
+//        else
+//        {
+//            /* Stop the motors if no task available */
+//            setMotorL_DC(0);
+//        }
+//    }
+//    if (distR >= goalL)
+//    {
+//        distR = 0;
+//        if (!rightQIsEmpty())
+//        {
+//            dbgOutputLoc(ISR_MOTOR_R_Q_READ);
+//            // read data
+//            struct pwmQueueData data;
+//            motorR_recvQInISR(&data);
+//            
+//            dbgOutputVal(data.dist);
+//            // set motor motion stuff
+//            setMotorR_DC(data.dc);
+//            goalR = data.dist * 60;
+//            if (data.dir == FORWARD)
+//                setMotorR_Fwd();
+//            else
+//                setMotorR_Bck();
+//        }
+//        else
+//        {
+//            setMotorR_DC(0);
+//        }
+//    }
     
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
 }

@@ -19,10 +19,10 @@ PORT = 2000
 
 # Message data fields
 DELIM, SEQ_FIELD, RECV, SENT, FORMAT_ERR = srv.get_msg_constants()
-SCAN_NAV, DISTANCE = srv.get_scanner_navigation_fields()
-SCAN_SENSE, ZONE, RED, BLUE, GREEN = srv.get_scanner_sensing_fields()
+SCAN_NAV, DISTANCE                       = srv.get_scanner_navigation_fields()
+SCAN_SENSE, ZONE, RED, BLUE, GREEN       = srv.get_scanner_sensing_fields()
 DELIV_NAV, STATUS, MESSAGE, X, Y, RIGHT_DIR, LEFT_DIR, RIGHT_SPEED, LEFT_SPEED = srv.get_delivery_navigation_fields()
-DELIV_SENSE = srv.get_delivery_sensing_fields()
+DELIV_SENSE                              = srv.get_delivery_sensing_fields()
 
 # Database collecitions
 
@@ -30,7 +30,7 @@ DELIV_SENSE = srv.get_delivery_sensing_fields()
 global mongo
 global scan_snsg_col
 mongo = None
-if srv.is_db_online() is not True:	
+if srv.is_db_online() is not True:  
     mongo = srv.connect_to_mongo()
 scan_snsg_col, scan_nav_col, deliv_snsg_col, deliv_nav_col  = srv.get_collections()
 
@@ -40,9 +40,9 @@ global address
 global msg_length
 global seq_num
 
-s = None
-client = None
-address = None
+s          = None
+client     = None
+address    = None
 msg_length = None
     
 # Main server processing
@@ -51,8 +51,8 @@ while True:
     seq_num = 0
     buf = ""
     if srv.is_srv_online() is not True:  
-    	s = srv.start_server(IP_ADDR, PORT)
-    	client, address = srv.client_connect(s)
+        s = srv.start_server(IP_ADDR, PORT)
+        client, address = srv.client_connect(s)
     
     # Handle messages
     while True:
@@ -62,7 +62,7 @@ while True:
             #t0 = time.clock()
             data = srv.recv_msg(client, msg_length)
             if not data:
-            	raise ConnectionError('SERVER ERROR: Client is not connected! Attempting to reconnect...')
+                raise ConnectionError('SERVER ERROR: Client is not connected! Attempting to reconnect...')
             buf += data
             while True:
                 if srv.init_msg(buf) is True:
@@ -101,13 +101,19 @@ while True:
                     scan_sense = json_obj[SCAN_SENSE]
                     # update quota status
                     if ZONE in scan_sense:
-                    	if RED and GREEN and BLUE in scan_sense:
-                        	srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[ZONE]) + ' }'), json_obj, scan_snsg_col)
-                    	else:
-                        	srv.print_msg(FORMAT_ERR, "RED, GREEN, or BLUE fields do not exist!")
+                        if RED and GREEN and BLUE in scan_sense:
+                            srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[ZONE]) + ' }'), json_obj, scan_snsg_col)
+                        else:
+                            srv.print_msg(FORMAT_ERR, "RED, GREEN, or BLUE fields do not exist!")
                     else:
+<<<<<<< HEAD
                     	srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
                     
+||||||| merged common ancestors
+                    	srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
+=======
+                        srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
+>>>>>>> 9f1b06fddfd71bfe45048970fe2d7ec41d66b901
                     # send message back of current action (STOP or CONTINUE)
                     #scan_sense_rtrn_msg = srv.retrieve(seq_num, scan_snsg_col)
                     #temp_send = input("Send? ")
@@ -138,43 +144,65 @@ while True:
                         sys.stdout.flush()
                 # handle scanner rover navigation message calls 
                 elif SCAN_NAV in json_obj:
+<<<<<<< HEAD
                 	scan_nav = json_obj[SCAN_NAV]
                 	# update position
                 	if DISTANCE in scan_nav:
                 		srv.store(json.loads('{ "SCAN_NAV.DISTANCE": { "$exists": true } }'), json_obj, scan_nav_col)
+||||||| merged common ancestors
+                	scan_nav = json_obj[SCAN_NAV]
+                	# update position
+                	if DISTANCE in scan_nav:
+                		srv.store(json.loads('{ "SCAN_NAV.DISTANCE": { "$exists": true } }'), json_obj, scan_nav_col)
+                
+                temp_send = input("Send something to alex: ")
+                if temp_send is 'y':
+                	#scan_nav_rtrn_msg = srv.retrieve(seq_num, scan_nav_col)
+                	srv.send_msg(client, '{ "SEQ": 0, "ACTION": 0 }!')
+=======
+                    scan_nav = json_obj[SCAN_NAV]
+                    # update position
+                    if DISTANCE in scan_nav:
+                        srv.store(json.loads('{ "SCAN_NAV.DISTANCE": { "$exists": true } }'), json_obj, scan_nav_col)
+                
+                temp_send = input("Send something to alex: ")
+                if temp_send is 'y':
+                    #scan_nav_rtrn_msg = srv.retrieve(seq_num, scan_nav_col)
+                    srv.send_msg(client, '{ "SEQ": 0, "ACTION": 0 }!')
+>>>>>>> 9f1b06fddfd71bfe45048970fe2d7ec41d66b901
 
                 # handle delivery rover navigation message calls
                 elif DELIV_NAV in json_obj:
-                	deliv_nav = json_obj[DELIV_NAV]
-                	# update rover status
-                	if STATUS and MESSAGE in deliv_nav:
-                		srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, deliv_nav_col)
-                	# update position
-                	elif X and Y in deliv_nav:
-                		srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, deliv_nav_col)
-                	# update spped and direction
-                	elif RIGHT_DIR and LEFT_DIR and RIGHT_SPEED and LEFT_SPEED in deliv_nav:
-                		srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, deliv_nav_col)
-                	if STATUS in deliv_nav:
-                		if deliv_nav[STATUS] is 0:
-                			# send message for next action (FWD, BACKWARD, etc)
-                			deliv_nav_rtrn_msg = srv.retrieve(seq_num, deliv_nav_col)
-                			srv.send_msg(client, deliv_nav_rtrn_msg)
+                    deliv_nav = json_obj[DELIV_NAV]
+                    # update rover status
+                    if STATUS and MESSAGE in deliv_nav:
+                        srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, deliv_nav_col)
+                    # update position
+                    elif X and Y in deliv_nav:
+                        srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, deliv_nav_col)
+                    # update spped and direction
+                    elif RIGHT_DIR and LEFT_DIR and RIGHT_SPEED and LEFT_SPEED in deliv_nav:
+                        srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, deliv_nav_col)
+                    if STATUS in deliv_nav:
+                        if deliv_nav[STATUS] is 0:
+                            # send message for next action (FWD, BACKWARD, etc)
+                            deliv_nav_rtrn_msg = srv.retrieve(seq_num, deliv_nav_col)
+                            srv.send_msg(client, deliv_nav_rtrn_msg)
 
                 # handle delivery rover sensing message calls
                 elif DELIV_SENSE in json_obj:
-                	deliv_sense = json_obj[DELIV_SENSE]
-                	# update rover status
-                	if ZONE and STATUS in deliv_sense:
-                		srv.store(json.loads('{ "DELIV_SENSE.ZONE": { "$exists": true } }'), json_obj, deliv_snsg_col)
+                    deliv_sense = json_obj[DELIV_SENSE]
+                    # update rover status
+                    if ZONE and STATUS in deliv_sense:
+                        srv.store(json.loads('{ "DELIV_SENSE.ZONE": { "$exists": true } }'), json_obj, deliv_snsg_col)
 
                 else:
-                	srv.print_msg(FORMAT_ERR, "Message is not generated from a specific rover task!") 
+                    srv.print_msg(FORMAT_ERR, "Message is not generated from a specific rover task!") 
 
                 break
 
         except (ValueError, ConnectionError, KeyboardInterrupt) as err:
-        	s.close()
-        	srv.clean_db()
-        	print(err)
-        	break
+            s.close()
+            srv.clean_db()
+            print(err)
+            break

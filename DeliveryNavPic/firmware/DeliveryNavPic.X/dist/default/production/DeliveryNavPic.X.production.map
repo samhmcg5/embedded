@@ -209,11 +209,10 @@ section                    address  length [bytes]      (dec)  Description
 .text.SYS_DEVCON_Perfor 0x9d004f50           0xe0         224   
 .text.xQueueReceiveFrom 0x9d005030           0xe0         224   
 .text.vTaskSwitchContex 0x9d005110           0xe0         224   
-.text.general_exception 0x9d0051f0           0xdc         220   
-.text.IntHandlerDrvUsar 0x9d0052cc           0xd8         216   
-.rodata                 0x9d0053a4           0xd4         212  Read-only const 
-.text._mon_putc         0x9d005478           0xd4         212   
-.rodata                 0x9d00554c            0x4           4  Read-only const 
+.text.IntHandlerDrvUsar 0x9d0051f0           0xdc         220   
+.text.general_exception 0x9d0052cc           0xdc         220   
+.rodata                 0x9d0053a8           0xd4         212  Read-only const 
+.text._mon_putc         0x9d00547c           0xd4         212   
 .rodata                 0x9d005550           0xd0         208  Read-only const 
 .text.SYS_Initialize    0x9d005620           0xc8         200   
 .text.xQueueGenericRese 0x9d0056e8           0xc0         192   
@@ -332,7 +331,8 @@ section                    address  length [bytes]      (dec)  Description
 .rodata                 0x9d0076c8            0x8           8  Read-only const 
 .text._on_reset         0x9d0076d0            0x8           8   
 .text._on_bootstrap     0x9d0076d8            0x8           8   
-      Total kseg0_program_mem used  :      0x76e0       30432  5.8% of 0x80000
+.rodata                 0x9d0076e0            0x4           4  Read-only const 
+      Total kseg0_program_mem used  :      0x76e4       30436  5.8% of 0x80000
 
 kseg0 Boot-Memory Usage
 section                    address  length [bytes]      (dec)  Description
@@ -404,7 +404,7 @@ section                    address  length [bytes]      (dec)  Description
 .bev_excpt              0xbfc00380           0x10          16  BEV-Exception 
          Total kseg1_boot_mem used  :       0x218         536  45.9% of 0x490
         --------------------------------------------------------------------------
-         Total Program Memory used  :      0x7ac8       31432  5.9% of 0x81e00
+         Total Program Memory used  :      0x7acc       31436  5.9% of 0x81e00
         --------------------------------------------------------------------------
 
 
@@ -2983,26 +2983,26 @@ LOAD data_init
                 0x9d005110       0xe0 build/default/production/_ext/739232943/tasks.o
                 0x9d005110                vTaskSwitchContext
 
-.text.general_exception
-                0x9d0051f0       0xdc
- .text.general_exception
-                0x9d0051f0       0xdc c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(general-exception.o)
-                0x9d0051f0                _general_exception_context
-
 .text.IntHandlerDrvUsartInstance0
-                0x9d0052cc       0xd8
+                0x9d0051f0       0xdc
  .text.IntHandlerDrvUsartInstance0
-                0x9d0052cc       0xd8 build/default/production/_ext/1688732426/system_interrupt.o
-                0x9d0052cc                IntHandlerDrvUsartInstance0
+                0x9d0051f0       0xdc build/default/production/_ext/1688732426/system_interrupt.o
+                0x9d0051f0                IntHandlerDrvUsartInstance0
 
-.rodata         0x9d0053a4       0xd4
- .rodata        0x9d0053a4       0xd4 build/default/production/_ext/1360937237/navigation.o
+.text.general_exception
+                0x9d0052cc       0xdc
+ .text.general_exception
+                0x9d0052cc       0xdc c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(general-exception.o)
+                0x9d0052cc                _general_exception_context
+
+.rodata         0x9d0053a8       0xd4
+ .rodata        0x9d0053a8       0xd4 build/default/production/_ext/1360937237/navigation.o
 
 .text._mon_putc
-                0x9d005478       0xd4
+                0x9d00547c       0xd4
  .text._mon_putc
-                0x9d005478       0xd4 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(_mon_putc.o)
-                0x9d005478                _mon_putc
+                0x9d00547c       0xd4 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(_mon_putc.o)
+                0x9d00547c                _mon_putc
 
 .rodata         0x9d005550       0xd0
  .rodata        0x9d005550       0xd0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libc.a(doprnt_cdnopuxX.eo)
@@ -3675,6 +3675,6 @@ LOAD data_init
                 0x9d0076d8        0x8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(default-on-bootstrap.o)
                 0x9d0076d8                _on_bootstrap
 
-.rodata         0x9d00554c        0x4
- .rodata        0x9d00554c        0x4 build/default/production/_ext/1575994309/port.o
-                0x9d00554c                xISRStackTop
+.rodata         0x9d0076e0        0x4
+ .rodata        0x9d0076e0        0x4 build/default/production/_ext/1575994309/port.o
+                0x9d0076e0                xISRStackTop

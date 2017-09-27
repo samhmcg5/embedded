@@ -2,72 +2,104 @@ import socket
 import json
 import sys
 import signal
+import defines_status_viewer as def_status
+import pickle
+# to add some color
+from colorama import init
+init()
+from colorama import Back
 
-client = None
-
-def signal_handler(signal, frame):
-        print('Exiting...')
-        sys.stdout.flush()
-        if client is not None:
-            print('Closing port...')
-            sys.stdout.flush()
-            client.close()
-        sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
-
-
-# JSON format === { "pic":"str", "type":"str", "message":"str" }
-# type = 0 for update
-#      = 1 for error
-#      = 2 for request
-
-# Determines if an incoming message is in JSON format
-ERROR_MSG_FORMAT = 'SERVER ERROR: Message is not JSON object type!'
-def is_json(json_str):
-    try:
-        json_obj = json.loads(json_str)
-    except ValueError:
-        print(ERROR_MSG_FORMAT + "\n")
-        sys.stdout.flush()
-        return False
-    return True
-
+#################################
+########### GLOBALS #############
+#################################
 
 host    = '192.168.1.123'
-port    = 2005
+port    = 2004
 backlog = 5
-length  = None
+length  = 1024
 size    = 1
 buf     = ""
 data    = ""
+#client  = None
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((host,port))
-s.listen(backlog)
+#################################
+####### HELPER FUNCTIONS ########
+#################################
 
-print("Waiting for a connection:")
-sys.stdout.flush()
-client, address = s.accept()
-print("Connected to Client:")
-sys.stdout.flush()
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+# Handle a SIGINT
+def signalHandler(signal, frame):
+    print('Exiting...')
+    sys.stdout.flush()
+    # if client is not None:
+    #     print('Closing port...')
+    #     client.close()
+    sys.exit(0)
 
-while True:
-    # read data from the server 
-    while data != '!':
-        data = client.recv(size).decode()
-        buf += data
-    # parse the buffer into json
-    buf  = buf[:-1]
-    if is_json(buf) is True:
-        json_obj = json.loads(buf)
-        print("[%s-%s] %s" % (json_obj['pic'], json_obj['type'],json_obj['message']))
-        sys.stdout.flush()
+# register the signal handler 
+signal.signal(signal.SIGINT, signalHandler)
+
+# Do we have a JSON object?
+def isJSON(json_str):
+    try:
+        json_obj = json.loads(json_str)
+    except ValueError:
+        return False
+    return True
+
+# write the JSON to terminal and the correct file
+def writeJSON(json_obj):
+    color = getColor(json_obj['mtype'])
+    print(color + "[%s-%s] %s" % (json_obj['origin'], json_obj['mtype'],json_obj['text']))
+
+# get the color to show based on the type of message
+def getColor(str):
+    if str == 'ERROR':
+        return Back.RED
+    if str == 'REQUEST':
+        return Back.GREEN
     else:
-        buf  = ""
-        data = ""
-        continue    
-    buf  = ""
-    data = ""
+        return Back.RESET
 
-client.close()
+# return a connection
+def createSocket():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((host,port))
+    return s
+
+# read what should be an entire JSON message from the socket
+def readMessage(sock):
+    buf = ""
+    data = ""
+    while data != '!':
+        data = sock.recv(size).decode()
+        buf += data
+    # remove the delimeter
+    buf  = buf[:-1]
+    return buf
+
+
+
+#################################
+######## Main Function ##########
+#################################
+
+def main():
+    print("Waiting for connection to server...")
+    sock = createSocket()
+    print("Connected to server")
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+    while True:
+        buf = readMessage(sock)
+        # un pickle ?
+        print(buf)
+        #print(buf)
+        if isJSON(buf):
+            json_obj = json.loads(buf)
+            writeJSON(json_obj)
+        else:
+            print("INCOMING DATA ERROR: Not JSON Type")
+            continue
+
+
+main()

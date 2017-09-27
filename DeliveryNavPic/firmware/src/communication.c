@@ -75,7 +75,7 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     if (seq != prev_inc_seq + 1) // ERROR
     {
         char buf[128];
-        sprintf(buf, STR_SEQUENCE_ERROR, outgoing_seq, prev_inc_seq, seq);
+        sprintf(buf, STR_SEQUENCE_ERROR, outgoing_seq, prev_inc_seq+1, seq);
         commSendMsgToUartQueue(buf);
     }
     prev_inc_seq = seq;
