@@ -139,6 +139,11 @@ class DelivSenseThread(ServerThreadBase):
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
+        if 'IRDIST' in json_obj[srv.DELIV_SENSE] and json_obj[srv.Deliv_SENSE]['IRDIST'] >= 500:
+            if recv_seq % 2 is 0:
+                srv.send_msg(client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 1}!')
+            else
+                srv.send_msg(client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 0}!')
         return
 
 
