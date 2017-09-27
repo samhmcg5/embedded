@@ -60,6 +60,7 @@ int getIntFromKey(jsmntok_t key)
 
 struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
 {
+    dbgOutputLoc(PARSE_JSON_START);
     struct motorQueueData out;
     
     JSON_STRING = rec;
@@ -80,9 +81,12 @@ struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     }
     prev_inc_seq = seq;
 
-    if(r == 7) // ACTION
+    if(r == 9) // ACTION
     {
-        out.action = getIntFromKey(t[6]);
+        dbgOutputLoc(PARSE_JSON_ACTION);
+        out.action = getIntFromKey(t[4]);
+        out.dist = getIntFromKey(t[6]);
+        out.speed = getIntFromKey(t[8]);
     }
     else // ERROR
     {
@@ -91,6 +95,8 @@ struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
         sprintf(buf, STR_JSON_ERROR, outgoing_seq);
         commSendMsgToUartQueue(buf);
     }
+    
+    dbgOutputLoc(PARSE_JSON_END);
     return out;
 }
 
@@ -133,7 +139,7 @@ void COMMUNICATION_Initialize(void)
     comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE]));//general purpose for all incoming
     uart_outgoing_q = xQueueCreate(UART_TX_QUEUE_SIZE, sizeof (unsigned char));
 
-    DRV_TMR0_Start();
+//    DRV_TMR0_Start();
 }
 
 void COMMUNICATION_Tasks(void) 
@@ -159,9 +165,10 @@ void COMMUNICATION_Tasks(void)
             if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
             {
                 dbgOutputLoc(COMM_THREAD_RECVD);
-                
+                //commSendMsgToUartQueue(rec);
                 struct  motorQueueData out = parseJSON(rec);
-                sendMsgToMotorQ(out);
+                //sendMsgToMotorQ(out);
+                dbgOutputLoc(COMM_THREAD_PARSED);
             }
             break;
         }

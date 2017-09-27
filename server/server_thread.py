@@ -4,6 +4,7 @@ from collections import deque
 import json
 import time
 import defines_status_viewer as status
+import pickle
 
 # for passing global data
 status_d = deque()
@@ -18,9 +19,9 @@ class ServerThreadBase(Thread):
         self.ip_addr = ip_addr
         # connect to DB
         self.mongo = None
-        # if srv.is_db_online() is not True:  
+        #if srv.is_db_online() is not True:  
         #     self.mongo = srv.connect_to_mongo()
-        #     self.scan_snsg_col, self.scan_nav_col, self.deliv_snsg_col, self.deliv_nav_col  = srv.get_collections()
+        #self.mongo_client = MongoClient()
         # initialize some members
         self.client     = None
         self.address    = None
@@ -98,8 +99,8 @@ class ServerThreadBase(Thread):
                         #break
                 except (ValueError, ConnectionError, KeyboardInterrupt) as err:
                     self.s.close()
-                    srv.clean_db()
-                    msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", "Caught Exception "+err)
+                    #srv.clean_db()
+                    msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", "Caught Exception "+str(err))
                     self.sendToStatusThread(msg)
                     break
 
@@ -113,10 +114,15 @@ class DelivNavThread(ServerThreadBase):
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
         self.name = "DeliveryNav"
+        #self.col  = self.mongo_client[srv.DATABASE_NAME][srv.DELIVERY_NAVIGATION_COL_NAME]
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
+        # if not srv.DELIV_NAV in json_obj:
+        #    return
+        # deliv_nav = json_obj[srv.DELIV_NAV]
+
         return
 
 
@@ -128,6 +134,7 @@ class DelivSenseThread(ServerThreadBase):
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
         self.name = "DeliverySense"
+        #self.col  = self.mongo_client[srv.DATABASE_NAME][srv.DELIVERY_SENSING_COL_NAME]
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
@@ -143,6 +150,7 @@ class ScanNavThread(ServerThreadBase):
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
         self.name = "ScannerNav"
+        #self.col  = self.mongo_client[srv.DATABASE_NAME][srv.SCANNER_NAVIGATION_COL_NAME]
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
@@ -158,6 +166,7 @@ class ScanSenseThread(ServerThreadBase):
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
         self.name = "ScannerSense"
+        #self.col  = self.mongo_client[srv.DATABASE_NAME][srv.SCANNER_SENSING_COL_NAME]
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
@@ -200,6 +209,7 @@ class StatusConsoleThread(Thread):
                     if self.verbose:
                         print(status.msgToString(recvd))
                     # format message into JSON
+                    # pickle the JSON
                     json_msg = status.STATUS_JSON%(recvd.origin, recvd.mtype, recvd.subj, recvd.text)
                     #print(json_msg)
                     #srv.send_msg(self.client, json_msg)

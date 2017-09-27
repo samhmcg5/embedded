@@ -3,6 +3,7 @@ import json
 import sys
 import signal
 import defines_status_viewer as def_status
+import pickle
 # to add some color
 from colorama import init
 init()
@@ -90,6 +91,7 @@ def main():
 
     while True:
         buf = readMessage(sock)
+        # un pickle ?
         print(buf)
         #print(buf)
         if isJSON(buf):

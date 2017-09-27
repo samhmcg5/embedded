@@ -3,15 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/communication_globals.h</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/motor_globals.h</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/line_sensor_globals.h</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/communication.h</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/motor_control.c</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/line_sensor.h</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/communication.c</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/motor_control.h</file>
-            <file>file:/C:/Users/Alex/MPLABXProjects/embedded/ScannerNavPic/firmware/src/line_sensor.c</file>
+            <file>file:/C:/cygwin64/home/sam/embedded/ScannerNavPic/firmware/src/communication.c</file>
+            <file>file:/C:/cygwin64/home/sam/embedded/ScannerNavPic/firmware/src/system_config/default/system_interrupt.c</file>
+            <file>file:/C:/cygwin64/home/sam/embedded/ScannerNavPic/firmware/src/motor_control.c</file>
+            <file>file:/C:/cygwin64/home/sam/embedded/ScannerNavPic/firmware/src/communication_globals.h</file>
+            <file>file:/C:/cygwin64/home/sam/embedded/ScannerNavPic/firmware/src/debug.h</file>
         </group>
     </open-files>
 </project-private>
