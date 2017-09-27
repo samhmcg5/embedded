@@ -1,5 +1,5 @@
-#ifndef LINE_SENSOR_H
-#define LINE_SENSOR_H
+#ifndef _LINE_SENSOR_H
+#define _LINE_SENSOR_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -7,8 +7,19 @@
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
-#include "motor_globals.h"
-#include "motor_control.h" // FIXME not sure if needed
+#include "queue.h"
+
+// incoming motor queue
+QueueHandle_t sensor_q;
+
+struct sensorQueueData
+{
+    char front_sensor;
+    char rear_sensor;
+};
+
+void sendMsgToSensorQFromISR(struct sensorQueueData msg);
+void sensorHandleIncomingMsg(struct sensorQueueData data);
 
 typedef enum
 {
@@ -30,8 +41,7 @@ typedef struct
 } LINE_SENSOR_DATA;
 
 void LINE_SENSOR_Initialize ( void );
+
 void LINE_SENSOR_Tasks( void );
 
-
-#endif /* LINE_SENSOR_H */
-
+#endif

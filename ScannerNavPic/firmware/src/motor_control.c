@@ -1,13 +1,12 @@
 #include "motor_control.h"
 #include "motor_globals.h"
+#include "communication.h"
 #include "communication_globals.h"
 
 MOTOR_CONTROL_DATA motor_controlData;
 
 void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right)
 {
-    //data.speed = 50;
-    //data.dist = 15;
     switch (data.action)
     {
         case FORWARD:
@@ -161,6 +160,67 @@ void sendMsgToMotorQ(struct motorQueueData msg)
     xQueueSendToBack(motor_q, &msg, portMAX_DELAY);
 }
 
+void sendMsgToMotorQFromISR(struct motorQueueData msg)
+{
+    xQueueSendToBackFromISR(motor_q, &msg, NULL);
+}
+
+void handleIncomingMsg(struct motorQueueData data)
+{
+    switch (data.type)
+    {
+        case ACTION:
+        {
+            struct pwmQueueData left, right;
+            generateActionItems(data, &left, &right);    
+            sendMsgToMotor_L(left);
+            sendMsgToMotor_R(right);
+            break;
+        }
+        case POSITION:
+        {
+            char buf[64];
+            sprintf(buf, STR_UPDATE_POS, outgoing_seq, data.action, data.dist);
+            commSendMsgToUartQueue(buf);
+            break;
+        }
+        case SENSOR:
+        {
+            struct pwmQueueData left, right;
+            generateActionItems(data, &left, &right);    
+            sendMsgToMotor_L(left);
+            sendMsgToMotor_R(right);
+            
+            char buf[64];
+            sprintf(buf, "Line Sensor Update: Seq: %i, Action: %i, Dist: %i, Speed: %i\n", outgoing_seq, data.action, data.dist, data.speed);
+            commSendMsgToUartQueue(buf);
+            
+            break;
+        }
+//        case SPEEDS:
+//        {
+//            char buf[128];
+//            sprintf(buf, STR_UPDATE_SPEED, outgoing_seq, data.a, data.b, data.c, data.d);
+//            commSendMsgToUartQueue(buf);
+//            if (data.c == 0 && data.d == 0 && navigationData.status == moving)
+//            {
+//                sprintf(buf, STR_IDLE, outgoing_seq);
+//                commSendMsgToUartQueue(buf);
+//                navigationData.status = idle;
+//            }
+//            else if ( (data.c != 0 || data.d != 0) && navigationData.status == idle)
+//            {
+//                navigationData.status = moving;
+//            }
+//            break;
+//        }
+        default:
+        {
+            break;
+        }
+    }
+}
+
 void sendMsgToMotor_R(struct pwmQueueData msg)
 {
     dbgOutputLoc(MOTOR_THR_SEND_TO_Q_R);
@@ -258,11 +318,7 @@ void MOTOR_CONTROL_Tasks ( void )
             {
                 dbgOutputLoc(MOTOR_THREAD_RECVD);
                 
-                struct pwmQueueData left, right;
-                generateActionItems(rec, &left, &right);
-                
-                sendMsgToMotor_L(left);
-                sendMsgToMotor_R(right);
+                handleIncomingMsg(rec);
             }
             break;
         }
