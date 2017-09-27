@@ -9,15 +9,25 @@
 #define TURN_RIGHT  3
 #define STOP        4
 
+// send to motor
+#define ACTION      0
+#define TASK        1
+// send to UART, coming from motor thread
+#define SPEEDS      2
+#define POSITION    3
+#define SENSOR      4
+
 // data inside Nav's incoming queue
 struct motorQueueData
 {
+    char type;
     char action;
     char dist;
     char speed;
 };
 
 void sendMsgToMotorQ(struct motorQueueData msg);
+void sendMsgToMotorQFromISR(struct motorQueueData msg);
 
 struct pwmQueueData
 {

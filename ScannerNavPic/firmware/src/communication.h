@@ -18,9 +18,7 @@
 #include "debug.h"
 #include "jsmn.h"
 #include "string.h"
-
-#define UART_RX_QUEUE_SIZE  256
-#define UART_TX_QUEUE_SIZE  256
+#include "communication_globals.h"
 
 typedef enum
 {

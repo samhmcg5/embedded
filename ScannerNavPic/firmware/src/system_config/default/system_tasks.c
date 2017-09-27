@@ -71,8 +71,9 @@ static void _SYS_Tasks ( void );
  
  
 static void _COMMUNICATION_Tasks(void);
-static void _LINE_SENSOR_Tasks(void);
+static void _NAVIGATION_Tasks(void);
 static void _MOTOR_CONTROL_Tasks(void);
+static void _LINE_SENSOR_Tasks(void);
 
 
 // *****************************************************************************
@@ -103,7 +104,7 @@ void SYS_Tasks ( void )
                 "COMMUNICATION Tasks",
                 1024, NULL, 1, NULL);
 
-    /* Create OS Thread for LINE_SENSOR Tasks. */
+    /* Create OS Thread for NAVIGATION Tasks. */
     xTaskCreate((TaskFunction_t) _LINE_SENSOR_Tasks,
                 "LINE_SENSOR Tasks",
                 1024, NULL, 1, NULL);
@@ -166,10 +167,10 @@ static void _COMMUNICATION_Tasks(void)
 
 /*******************************************************************************
   Function:
-    void _LINE_SENSOR_Tasks ( void )
+    void _NAVIGATION_Tasks ( void )
 
   Summary:
-    Maintains state machine of LINE_SENSOR.
+    Maintains state machine of NAVIGATION.
 */
 
 static void _LINE_SENSOR_Tasks(void)

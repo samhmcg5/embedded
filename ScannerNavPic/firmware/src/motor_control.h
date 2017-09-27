@@ -74,5 +74,6 @@ void setMotorR_DC(unsigned char dc);
 void setMotorL_DC(unsigned char dc);
 
 void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right);
+//void handleIncomingMsg(struct motorQueueData data);
 
 #endif /* _MOTOR_CONTROL_H */

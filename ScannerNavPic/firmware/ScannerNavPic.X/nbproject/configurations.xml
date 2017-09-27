@@ -11,9 +11,8 @@
           <itemPath>../src/jsmn.h</itemPath>
           <itemPath>../src/debug.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="f5" displayName="line" projectFiles="true">
+        <logicalFolder name="f3" displayName="line_sensor" projectFiles="true">
           <itemPath>../src/line_sensor.h</itemPath>
-          <itemPath>../src/line_sensor_globals.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f4" displayName="motor" projectFiles="true">
           <itemPath>../src/motor_control.h</itemPath>
@@ -149,7 +148,7 @@
           <itemPath>../src/debug.c</itemPath>
           <itemPath>../src/jsmn.c</itemPath>
         </logicalFolder>
-        <logicalFolder name="f5" displayName="line" projectFiles="true">
+        <logicalFolder name="f4" displayName="line_sensor" projectFiles="true">
           <itemPath>../src/line_sensor.c</itemPath>
         </logicalFolder>
         <logicalFolder name="f3" displayName="motor" projectFiles="true">
