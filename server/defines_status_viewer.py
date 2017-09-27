@@ -35,7 +35,7 @@ JSON FORMAT:
 # S_CAUGHT_EXCPT = 4
 
 # to parse into json...
-STATUS_JSON = "{ \"origin\":%i, \"mtype\":%i, \"subj\":%i, \"text\":%s }!"
+STATUS_JSON = "{\"origin\":\"%s\", \"mtype\":\"%s\", \"subj\":\"%s\", \"text\":\"%s\"}!"
 
 # struct to add to the queue to pass between threads
 StatusMsg = namedtuple('StatusMsg', ['origin', 'mtype', 'subj', 'text'])

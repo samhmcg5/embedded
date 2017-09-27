@@ -243,14 +243,14 @@ def recv_msg(client, length):
 
 # Deliver message to client
 def send_msg(client, msg):
-    print(INFO_SRV_MSG_SENDING)
+    #print(INFO_SRV_MSG_SENDING)
     try:
         client.send(msg.encode())
-        print(INFO_SRV_MSG_SENT)
+        #print(INFO_SRV_MSG_SENT)
     except (ConnectionError): 
         SERVER_ONLINE = False
-        print(ERROR_SRV_CONN)
-        sys.stdout.flush()
+        #print(ERROR_SRV_CONN)
+        #sys.stdout.flush()
     return
 
 # Determines if buffer contains wifly init msg

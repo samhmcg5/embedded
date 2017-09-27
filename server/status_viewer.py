@@ -15,11 +15,11 @@ from colorama import Back
 host    = '192.168.1.123'
 port    = 2004
 backlog = 5
-length  = None
+length  = 1024
 size    = 1
 buf     = ""
 data    = ""
-client  = None
+#client  = None
 
 #################################
 ####### HELPER FUNCTIONS ########
@@ -29,9 +29,9 @@ client  = None
 def signalHandler(signal, frame):
     print('Exiting...')
     sys.stdout.flush()
-    if client is not None:
-        print('Closing port...')
-        client.close()
+    # if client is not None:
+    #     print('Closing port...')
+    #     client.close()
     sys.exit(0)
 
 # register the signal handler 
@@ -47,9 +47,8 @@ def isJSON(json_str):
 
 # write the JSON to terminal and the correct file
 def writeJSON(json_obj):
-    color = getColor(json_obj['type'])
-    print(color + "[%s-%s] %s" % (json_obj['pic'], json_obj['type'],json_obj['message']))
-    sys.stdout.flush()
+    color = getColor(json_obj['mtype'])
+    print(color + "[%s-%s] %s" % (json_obj['origin'], json_obj['mtype'],json_obj['text']))
 
 # get the color to show based on the type of message
 def getColor(str):
@@ -63,16 +62,15 @@ def getColor(str):
 # return a connection
 def createSocket():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((host,port))
-    s.listen(backlog)
+    s.connect((host,port))
     return s
 
 # read what should be an entire JSON message from the socket
-def readMessage(cli):
+def readMessage(sock):
     buf = ""
     data = ""
     while data != '!':
-        data = cli.recv(size).decode()
+        data = sock.recv(size).decode()
         buf += data
     # remove the delimeter
     buf  = buf[:-1]
@@ -85,23 +83,21 @@ def readMessage(cli):
 #################################
 
 def main():
-    sock = createSocket()
     print("Waiting for connection to server...")
-    sys.stdout.flush()
-    client, address = sock.accept()
+    sock = createSocket()
     print("Connected to server")
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     while True:
-        buf = readMessage(client)
+        buf = readMessage(sock)
+        print(buf)
+        #print(buf)
         if isJSON(buf):
             json_obj = json.loads(buf)
             writeJSON(json_obj)
         else:
             print("INCOMING DATA ERROR: Not JSON Type")
-            sys.stdout.flush()
             continue
 
 
 main()
-client.close()

@@ -170,9 +170,10 @@ class ScanSenseThread(ServerThreadBase):
 #################################
 class StatusConsoleThread(Thread):
     # class constructor
-    def __init__(self, port, ip_addr):
+    def __init__(self, port, ip_addr, verbose=False):
         self.port    = port
         self.ip_addr = ip_addr
+        self.verbose = verbose
         # initialize some members
         self.client     = None
         self.address    = None
@@ -180,14 +181,30 @@ class StatusConsoleThread(Thread):
         # call the base class init
         Thread.__init__(self)
 
+    # start the connection to the client
+    def initClient(self):
+        self.seq_num = 1
+        if srv.is_srv_online() is not True:  
+            self.s = srv.start_server(self.ip_addr, self.port)
+            self.client, self.address = srv.client_connect(self.s)
+
     # override from base class
     def run(self):
         print("[StatusConsoleThread]: on port %s"%self.port)
+
         while True:
-            try:
-                print(status.msgToString(status_d.popleft()))
-            except IndexError:
-                continue
-        print("[StatusConsoleThread]: exiting...")
-        sys.stdout.flush()
+            #self.initClient()
+            while True:
+                try:
+                    recvd = status_d.popleft()
+                    if self.verbose:
+                        print(status.msgToString(recvd))
+                    # format message into JSON
+                    json_msg = status.STATUS_JSON%(recvd.origin, recvd.mtype, recvd.subj, recvd.text)
+                    #print(json_msg)
+                    #srv.send_msg(self.client, json_msg)
+                except IndexError:
+                    continue
+            print("[StatusConsoleThread]: exiting...")
+            sys.stdout.flush()
 
