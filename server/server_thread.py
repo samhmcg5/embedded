@@ -37,7 +37,7 @@ class ServerThreadBase(Thread):
             self.msg_length = len(buf)
             data = srv.recv_msg(self.client, self.msg_length)
             if not data:
-                raise ConnectionError('Client is not connected! Attempting to reconnect...')
+                raise ConnectionError('Client not connected! Reconnecting...')
             buf += data
 
             # if *HELLO* seen scrap the data
@@ -106,6 +106,7 @@ class DelivNavThread(ServerThreadBase):
     def sendToStatusThread(self, msg):
         status_d.append("[DelivNavThread]: " + msg)
 
+    # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
         return
@@ -123,11 +124,10 @@ class DelivSenseThread(ServerThreadBase):
     def sendToStatusThread(self, msg):
         status_d.append("[DelivSenseThread]: " + msg)
 
+    # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
         return
-
-
 
 
 #################################
@@ -142,6 +142,7 @@ class ScanNavThread(ServerThreadBase):
     def sendToStatusThread(self, msg):
         status_d.append("[ScanNavThread]: " + msg)
 
+    # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
         return
@@ -159,6 +160,7 @@ class ScanSenseThread(ServerThreadBase):
     def sendToStatusThread(self, msg):
         status_d.append("[ScanSenseThread]: " + msg)
 
+    # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
         return

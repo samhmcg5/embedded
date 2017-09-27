@@ -1,7 +1,8 @@
 import socket
+import sys
 
 host    = '192.168.1.123'
-port    = 2000
+port    = int(sys.argv[1])
 backlog = 5
 length  = None
 size    = 1024
