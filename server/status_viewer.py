@@ -2,6 +2,8 @@ import socket
 import json
 import sys
 import signal
+import defines_status_viewer as def_status
+# to add some color
 from colorama import init
 init()
 from colorama import Back
@@ -10,7 +12,7 @@ from colorama import Back
 ########### GLOBALS #############
 #################################
 
-host    = '192.168.1.124'
+host    = '192.168.1.123'
 port    = 2004
 backlog = 5
 length  = None
@@ -29,7 +31,6 @@ def signalHandler(signal, frame):
     sys.stdout.flush()
     if client is not None:
         print('Closing port...')
-        sys.stdout.flush()
         client.close()
     sys.exit(0)
 
@@ -88,8 +89,7 @@ def main():
     print("Waiting for connection to server...")
     sys.stdout.flush()
     client, address = sock.accept()
-    print("Connected to serber")
-    sys.stdout.flush()
+    print("Connected to server")
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     while True:
@@ -98,7 +98,7 @@ def main():
             json_obj = json.loads(buf)
             writeJSON(json_obj)
         else:
-            print("INCOMING DATA ERRPR: Not JSON Type")
+            print("INCOMING DATA ERROR: Not JSON Type")
             sys.stdout.flush()
             continue
 

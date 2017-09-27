@@ -3,6 +3,7 @@ from threading import Thread
 from collections import deque
 import json
 import time
+import defines_status_viewer as status
 
 # for passing global data
 status_d = deque()
@@ -25,9 +26,14 @@ class ServerThreadBase(Thread):
         self.address    = None
         self.s          = None
         self.msg_length = None
-        self.seq_num    = 1
-        # call the base class init
+        self.seq_num    = 1     # sequence to send
+        self.recv_seq   = 0     # last sequence received
+        # call the Thread class init
         Thread.__init__(self)
+
+    # send the message to the outgoing queue
+    def sendToStatusThread(self, msg):
+        status_d.append(msg)
 
     # read from the socket until data is not available, BLOCKING
     def readFromClient(self):
@@ -44,7 +50,7 @@ class ServerThreadBase(Thread):
             if srv.init_msg(buf) is True:
                 buf = ""
                 break
-        msg = srv.get_msg(srv.RECV, buf)
+        msg = status.StatusMsg(self.name, "RECVD", "NONE", srv.get_msg(srv.RECV, buf))
         self.sendToStatusThread(msg)
         # remove delimeter to create JSON object
         buf = buf[:-1] 
@@ -64,14 +70,17 @@ class ServerThreadBase(Thread):
 
     # Main thread method
     def run(self):
-        self.sendToStatusThread("on port %s"%self.port)
+        msg = status.StatusMsg(self.name, "SERVER", "NONE", "on port %s"%self.port)
+        self.sendToStatusThread(msg)
         # Main server processing
         while True:
-            self.sendToStatusThread("awaiting connection...")
+            msg = status.StatusMsg(self.name, "SERVER", "NONE", "awaiting connection...")
+            self.sendToStatusThread(msg)
             # Initialize and start server listening for clients
             # run this on dropped connections
             self.initClient()
-            self.sendToStatusThread("connected!")
+            msg = status.StatusMsg(self.name, "SERVER", "NONE", "connected!")
+            self.sendToStatusThread(msg)
             # Handle messages
             while True:
                 try:
@@ -84,12 +93,14 @@ class ServerThreadBase(Thread):
                         # handle the valid JSON object
                         self.handleJSON(json_obj)
                     else:
-                        self.sendToStatusThread(srv.ERROR_MSG_FORMAT)
+                        msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", srv.ERROR_MSG_FORMAT)
+                        self.sendToStatusThread(msg)
                         #break
                 except (ValueError, ConnectionError, KeyboardInterrupt) as err:
                     self.s.close()
                     srv.clean_db()
-                    self.sendToStatusThread("Caught Exception " + err)
+                    msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", "Caught Exception "+err)
+                    self.sendToStatusThread(msg)
                     break
 
 
@@ -101,10 +112,7 @@ class DelivNavThread(ServerThreadBase):
     # class constructor
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
-
-    # send the message to the outgoing queue
-    def sendToStatusThread(self, msg):
-        status_d.append("[DelivNavThread]: " + msg)
+        self.name = "DeliveryNav"
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
@@ -119,10 +127,7 @@ class DelivSenseThread(ServerThreadBase):
     # class constructor
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
-
-    # send the message to the outgoing queue
-    def sendToStatusThread(self, msg):
-        status_d.append("[DelivSenseThread]: " + msg)
+        self.name = "DeliverySense"
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
@@ -137,10 +142,7 @@ class ScanNavThread(ServerThreadBase):
 # class constructor
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
-
-    # send the message to the outgoing queue
-    def sendToStatusThread(self, msg):
-        status_d.append("[ScanNavThread]: " + msg)
+        self.name = "ScannerNav"
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
@@ -155,10 +157,7 @@ class ScanSenseThread(ServerThreadBase):
 # class constructor
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
-
-    # send the message to the outgoing queue
-    def sendToStatusThread(self, msg):
-        status_d.append("[ScanSenseThread]: " + msg)
+        self.name = "ScannerSense"
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
@@ -186,7 +185,7 @@ class StatusConsoleThread(Thread):
         print("[StatusConsoleThread]: on port %s"%self.port)
         while True:
             try:
-                print(status_d.popleft())
+                print(status.msgToString(status_d.popleft()))
             except IndexError:
                 continue
         print("[StatusConsoleThread]: exiting...")
