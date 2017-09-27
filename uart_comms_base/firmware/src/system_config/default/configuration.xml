@@ -296,7 +296,7 @@
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">9E5E20D44698573B31EE60D9D88064DF</Checksum>
-        <ProjectFileChecksum dnOrder="3">E05952133832A361F3F239E3107D48BA</ProjectFileChecksum>
+        <ProjectFileChecksum dnOrder="3">4511618E36BDE129F656F6485E47FD84</ProjectFileChecksum>
       </Template>
       <Template dnOrder="11">
         <Name dnOrder="0">drv_usart_static.c</Name>
@@ -374,24 +374,24 @@
     </Templates>
     <CompilerItems dnOrder="2">
       <C32-AS dnOrder="0">
-        <Include dnOrder="0" value="../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include"/>
-        <Include dnOrder="1" value="../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+        <Include dnOrder="0" value="../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include"/>
+        <Include dnOrder="1" value="../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <Include dnOrder="2" value="../src/system_config/default"/>
       </C32-AS>
       <C32 dnOrder="1">
-        <Include dnOrder="0" value="C:\cygwin64\home\sam\embedded\event_driven\firmware\src"/>
-        <Include dnOrder="1" value="C:\cygwin64\home\sam\embedded\event_driven\firmware\src\system_config\default"/>
-        <Include dnOrder="2" value="C:\cygwin64\home\sam\embedded\event_driven\firmware\src\default"/>
+        <Include dnOrder="0" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\LatestCode\embedded\uart_comms_base\firmware\src"/>
+        <Include dnOrder="1" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\LatestCode\embedded\uart_comms_base\firmware\src\system_config\default"/>
+        <Include dnOrder="2" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\LatestCode\embedded\uart_comms_base\firmware\src\default"/>
         <Include dnOrder="3" value="C:\microchip\harmony\v2_04\framework"/>
-        <Include dnOrder="4" value="C:\cygwin64\home\sam\embedded\event_driven\firmware\src\system_config\default\framework"/>
-        <Include dnOrder="5" value="../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include"/>
-        <Include dnOrder="6" value="../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+        <Include dnOrder="4" value="C:\Users\Karthik Admin\Documents\Fall2017\Embedded\LatestCode\embedded\uart_comms_base\firmware\src\system_config\default\framework"/>
+        <Include dnOrder="5" value="../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include"/>
+        <Include dnOrder="6" value="../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <Include dnOrder="7" value="../src/system_config/default"/>
         <Define dnOrder="8" value="__XC"/>
       </C32>
     </CompilerItems>
     <Libraries dnOrder="3">
-      <Library dnOrder="0" value="../../../../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX795F512L_peripherals.a"/>
+      <Library dnOrder="0" value="../../../../../../../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX795F512L_peripherals.a"/>
     </Libraries>
   </Manifest>
 </Configuration>
