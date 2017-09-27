@@ -15,7 +15,7 @@ s.listen(backlog)
 print("Waiting for a connection:")
 client, address = s.accept()
 print("Connected to WiFly:")
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+#s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 while True:
     msg = input("Enter Message: ")
