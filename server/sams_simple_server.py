@@ -1,6 +1,6 @@
 import socket
 
-host = '192.168.1.123'
+host = '192.168.1.122'
 port = 2000
 backlog = 5
 length = None
@@ -12,8 +12,8 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host,port))
 s.listen(backlog)
 
-file = "input.txt"
-f = open(file,'r')
+#file = "input.txt"
+#f = open(file,'r')
 
 print("Waiting for a connection:")
 client, address = s.accept()
@@ -41,4 +41,4 @@ while True:
     data = ""
     
 client.close()
-f.close()
+#f.close()

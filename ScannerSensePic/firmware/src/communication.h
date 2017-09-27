@@ -69,7 +69,7 @@ int prev_inc_seq = 0;
 //JSMN functions
 static const char *JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s);
-struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]);
+struct scanQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]);
 int getIntFromKey(jsmntok_t key); 
 
 

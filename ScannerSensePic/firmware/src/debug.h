@@ -6,14 +6,18 @@
 
 #define COMM_THREAD_RECVD		0x0
 #define SCAN_THREAD_RECVD        0x1
-#define DETECTION_THREAD_RECVD      0x2
 
 #define COMM_THREAD_WAIT		0x3
 #define SCAN_THREAD_WAIT         0x4
-#define DETECTION_THREAD_WAIT       0x5
 
 #define ISR_UART_RX				0x6
 #define ISR_UART_TX				0x7
+
+#define ADC_ISR_START           0x8
+#define ADC_ISR_END             0x9
+
+#define TMR_ISR_START           0x10
+#define TMR_ISR_END             0x11
 
 void halt(unsigned char outVal);    
     

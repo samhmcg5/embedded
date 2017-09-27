@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "communication.h"
 #include "communication_globals.h"
-#include "nav_globals.h"
+#include "scan_globals.h"
 #include "queue.h"
 
 // communication's state
@@ -58,9 +58,9 @@ int getIntFromKey(jsmntok_t key)
     return atoi(keyString);
 }
 
-struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
+struct scanQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
 {
-    struct navQueueData out;
+    struct scanQueueData out;
     
     JSON_STRING = rec;
     int r;
@@ -75,23 +75,16 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     if (seq != prev_inc_seq + 1) // ERROR
     {
         char buf[128];
-        sprintf(buf, STR_SEQUENCE_ERROR, outgoing_seq, prev_inc_seq, seq);
+        sprintf(buf, STR_SEQUENCE_ERROR, outgoing_seq, prev_inc_seq+1, seq);
         commSendMsgToUartQueue(buf);
     }
     prev_inc_seq = seq;
 
-    if(r == 9) // ACTION
+    if(r == 7) // incoming message is correct length 
     {
-        out.type = ACTION;
-        out.a = getIntFromKey(t[4]);
-        out.b = getIntFromKey(t[6]);
-        out.c = getIntFromKey(t[8]);
-    }
-    else if (r == 7) // TASK
-    {
-        out.type = TASK;
-        out.a = getIntFromKey(t[4]);
-        out.b =  getIntFromKey(t[6]);
+        out.type = INFO;
+        out.action = getIntFromKey(t[6]);
+        out.zone = getIntFromKey(t[4]);
     }
     else // ERROR
     {
@@ -141,8 +134,6 @@ void COMMUNICATION_Initialize(void)
     // create the q handle
     comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE]));//general purpose for all incoming
     uart_outgoing_q = xQueueCreate(UART_TX_QUEUE_SIZE, sizeof (unsigned char));
-
-    DRV_TMR0_Start();
 }
 
 void COMMUNICATION_Tasks(void) 
@@ -168,9 +159,9 @@ void COMMUNICATION_Tasks(void)
             if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
             {
                 dbgOutputLoc(COMM_THREAD_RECVD);
-                
-                struct  navQueueData out = parseJSON(rec);
-                sendMsgToNavQ(out);
+              
+                struct  scanQueueData out = parseJSON(rec);
+                sendMsgToScanQ(out);
             }
             break;
         }
