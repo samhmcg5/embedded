@@ -106,14 +106,10 @@ while True:
                         else:
                             srv.print_msg(FORMAT_ERR, "RED, GREEN, or BLUE fields do not exist!")
                     else:
-<<<<<<< HEAD
                     	srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
-                    
-||||||| merged common ancestors
+            
                     	srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
-=======
                         srv.print_msg(FORMAT_ERR, "ZONE field does not exist!")
->>>>>>> 9f1b06fddfd71bfe45048970fe2d7ec41d66b901
                     # send message back of current action (STOP or CONTINUE)
                     #scan_sense_rtrn_msg = srv.retrieve(seq_num, scan_snsg_col)
                     #temp_send = input("Send? ")

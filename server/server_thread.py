@@ -1,4 +1,5 @@
 import srv_msg_def as srv
+from pymongo import MongoClient
 from threading import Thread
 from collections import deque
 import json
@@ -18,10 +19,7 @@ class ServerThreadBase(Thread):
         self.port    = port
         self.ip_addr = ip_addr
         # connect to DB
-        self.mongo = None
-        #if srv.is_db_online() is not True:  
-        #     self.mongo = srv.connect_to_mongo()
-        #self.mongo_client = MongoClient()
+        self.mongo = srv.connect_to_mongo()
         # initialize some members
         self.client     = None
         self.address    = None
@@ -166,12 +164,33 @@ class ScanSenseThread(ServerThreadBase):
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
         self.name = "ScannerSense"
-        #self.col  = self.mongo_client[srv.DATABASE_NAME][srv.SCANNER_SENSING_COL_NAME]
+        self.col  = self.mongo[srv.DATABASE_NAME][srv.SCANNER_SENSING_COL_NAME]
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
-        # do whatever with the incoming data...
-        return
+        # handle scanner rover sensing message calls
+        if srv.SCAN_SENSE in json_obj:
+            scan_sense = json_obj[srv.SCAN_SENSE]
+            # update quota status
+            if srv.ZONE in scan_sense:
+                if scan_sense[srv.ZONE] is 0:
+                    self.client.send(('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1, "ACTION": 1 }').encode())
+                
+                if srv.RED and srv.GREEN and srv.BLUE in scan_sense:
+                    srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[srv.ZONE]) + ' }'), json_obj, self.col)
+
+                if json_obj[srv.SEQ_FIELD] <= 100 and json_obj[srv.SEQ_FIELD] >= 0:
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(1) + ' , "ACTION": 1 }').encode())
+
+                elif json_obj[srv.SEQ_FIELD] <= 200 and json_obj[srv.SEQ_FIELD] > 100:
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , "ACTION": 1 }').encode())
+
+                elif json_obj[srv.SEQ_FIELD] <= 300 and json_obj[srv.SEQ_FIELD] > 200:
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": 1 }').encode())
+
+                elif json_obj[srv.SEQ_FIELD] >= 301:
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1 , "ACTION": 1 }').encode())
+                    
 
 
 #################################
