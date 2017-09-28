@@ -162,6 +162,7 @@ class DelivSenseThread(ServerThreadBase):
                 srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 1}!')
             else:
                 srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 0}!')
+            self.seq_num += 1
         return
 
 
@@ -177,7 +178,10 @@ class ScanNavThread(ServerThreadBase):
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
-        # do whatever with the incoming data...
+        if srv.SCAN_NAV in json_obj:
+            if self.seq_num % 20 is 0:
+                srv.send_msg(self.client, '{ "SEQ": ' + str(self.seq_num) +', "ACTION": 1, "DIST": 3, "SPEED":25 }')
+            self.seq_num += 1
         return
 
 

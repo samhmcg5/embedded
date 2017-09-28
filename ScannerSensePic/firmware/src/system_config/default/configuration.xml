@@ -351,12 +351,13 @@
       <Template dnOrder="21">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">ADB2C6C755FA0626B53E64BE17275E86</Checksum>
+        <Checksum dnOrder="2">862407ED8F5653BD8AFE469D457249DC</Checksum>
       </Template>
       <Template dnOrder="22">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">991F57236F8FA7E41B87DF5E49F066B7</Checksum>
+        <Checksum dnOrder="2">04ED1BEB6CF5AC519CFC368C05F752F9</Checksum>
+        <ProjectFileChecksum dnOrder="3">5954D5293530809975268CCD63B75868</ProjectFileChecksum>
       </Template>
       <Template dnOrder="23">
         <Name dnOrder="0">rtos_hooks.c</Name>
