@@ -3,11 +3,9 @@ from pymongo import MongoClient
 from threading import Thread
 from collections import deque
 import json
-import time
 import defines_status_viewer as status
-import pickle
 from pymongo import MongoClient
-
+import re
 # for passing global data
 status_d = deque()
 
@@ -21,10 +19,6 @@ class ServerThreadBase(Thread):
         self.ip_addr = ip_addr
         # connect to DB
         self.mongo = srv.connect_to_mongo()
-        self.mongo = None
-        #if srv.is_db_online() is not True:  
-        #     self.mongo = srv.connect_to_mongo()
-        #self.mongo_client = MongoClient()
         self.mongo = MongoClient()
         # initialize some members
         self.client     = None
@@ -48,17 +42,18 @@ class ServerThreadBase(Thread):
             self.msg_length = len(buf)
             data = srv.recv_msg(self.client, self.msg_length)
             if not data:
-                raise ConnectionError('Client not connected! Reconnecting...')
+                raise ConnectionError('Client not connected, Reconnecting...')
             buf += data
 
             # if *HELLO* seen scrap the data
             if srv.init_msg(buf) is True:
                 buf = ""
                 break
-        msg = status.StatusMsg(self.name, "RECVD", "NONE", srv.get_msg(srv.RECV, buf))
+        buf = buf[:-1]
+        text = re.sub('\"', '', srv.get_msg(srv.RECV, buf))
+        msg = status.StatusMsg(self.name, "RECVD", "NONE", text)
         self.sendToStatusThread(msg)
         # remove delimeter to create JSON object
-        buf = buf[:-1] 
         return buf
 
     # start the connection to the client
@@ -75,7 +70,8 @@ class ServerThreadBase(Thread):
 
     # Main thread method
     def run(self):
-        msg = status.StatusMsg(self.name, "SERVER", "NONE", "on port %s"%self.port)
+        text = re.sub('\"', '', "on port %s"%self.port)
+        msg = status.StatusMsg(self.name, "SERVER", "NONE", text)
         self.sendToStatusThread(msg)
         # Main server processing
         while True:
@@ -98,13 +94,15 @@ class ServerThreadBase(Thread):
                         # handle the valid JSON object
                         self.handleJSON(json_obj)
                     else:
-                        msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", srv.ERROR_MSG_FORMAT)
+                        text = re.sub('\"', '', srv.ERROR_MSG_FORMAT)
+                        msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", text)
                         self.sendToStatusThread(msg)
                         #break
                 except (ValueError, ConnectionError, KeyboardInterrupt) as err:
                     self.s.close()
                     srv.clean_db()
-                    msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", "Caught Exception "+str(err))
+                    text = re.sub('\"', '', "Caught Exception "+str(err))
+                    msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", text)
                     self.sendToStatusThread(msg)
                     break
 
@@ -128,13 +126,37 @@ class DelivNavThread(ServerThreadBase):
         deliv_nav = json_obj[srv.DELIV_NAV]
         # update rover status
         if srv.STATUS and srv.MESSAGE in deliv_nav:
-            srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
+            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+            self.sendToStatusThread(msg)
+            text = srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "SUCCESS", "STATUS", text)
+            self.sendToStatusThread(msg)
+
         # update position
         elif srv.X and srv.Y in deliv_nav:
-            srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, self.col)
+            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+            self.sendToStatusThread(msg)
+            text = srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, self.col)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "SUCCESS", "LOC", text)
+            self.sendToStatusThread(msg)
+
         # update spped and direction
         elif srv.RIGHT_DIR and srv.LEFT_DIR and srv.RIGHT_SPEED and srv.LEFT_SPEED in deliv_nav:
-            srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, self.col)
+            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+            self.sendToStatusThread(msg)
+            text = srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, self.col)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "SUCCESS", "SPEED", text)
+            self.sendToStatusThread(msg)
+
         if srv.STATUS in deliv_nav:
             if deliv_nav[srv.STATUS] is 0:
                 # send message for next action (FWD, BACKWARD, etc)
@@ -159,9 +181,9 @@ class DelivSenseThread(ServerThreadBase):
         # do whatever with the incoming data...
         if 'IRDIST' in json_obj[srv.DELIV_SENSE] and json_obj[srv.DELIV_SENSE]['IRDIST'] >= 500:
             if self.recv_seq % 2 is 0:
-                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": "ERROR"}!')
+                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": "ACTION"}!')
             else:
-                srv.send_msg(self.client, '{"ACTION": 0}!')
+                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": "ACTION"}!')
             self.seq_num += 1
         return
 
@@ -180,7 +202,7 @@ class ScanNavThread(ServerThreadBase):
     def handleJSON(self, json_obj):
         if srv.SCAN_NAV in json_obj:
             if self.seq_num % 20 is 0:
-                srv.send_msg(self.client, '"SEQ": ' + str(self.seq_num) +', "ACTION": 1, "DIST": 3, "SPEED":25 ')
+                srv.send_msg(self.client, ' "SEQ": ' + str(self.seq_num) +', "ACTION": 1, "DIST": 3, "SPEED":25 ')
             self.seq_num += 1
         return
 
@@ -203,22 +225,30 @@ class ScanSenseThread(ServerThreadBase):
             # update quota status
             if srv.ZONE in scan_sense:
                 if scan_sense[srv.ZONE] is 0:
-                    self.client.send(('{ "SEQ": ' + str(self.seq_num) + ', 1 : 1, "ACTION": 1 }').encode())
+                    self.client.send(('{  }').encode())
                 
                 if srv.RED and srv.GREEN and srv.BLUE in scan_sense:
-                    srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[srv.ZONE]) + ' }'), json_obj, self.col)
+                    text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+                    text = re.sub('\"','',text)
+                    msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+                    self.sendToStatusThread(msg)
+
+                    text = srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[srv.ZONE]) + ' }'), json_obj, self.col)
+                    # text = re.sub('\"','',text)
+                    msg = status.StatusMsg(self.name, "SUCCESS", "COLOR", text)
+                    self.sendToStatusThread(msg)
 
                 if json_obj[srv.SEQ_FIELD] <= 100 and json_obj[srv.SEQ_FIELD] >= 0:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(1) + ' , "ACTION": 1 }').encode())
+                    self.client.send(str(' ').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 200 and json_obj[srv.SEQ_FIELD] > 100:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , "ACTION": 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , 1 }').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 300 and json_obj[srv.SEQ_FIELD] > 200:
-                    self.client.send(str('{ }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": -1 }').encode())
 
                 elif json_obj[srv.SEQ_FIELD] >= 301:
-                    self.client.send(str('{ "SEQ": -20, "ZONE": 1 , "ACTION": 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1 , "ACTION": 1 }').encode())
                     
 
 
@@ -250,17 +280,15 @@ class StatusConsoleThread(Thread):
         print("[StatusConsoleThread]: on port %s"%self.port)
 
         while True:
-            #self.initClient()
+            self.initClient()
             while True:
                 try:
                     recvd = status_d.popleft()
                     if self.verbose:
                         print(status.msgToString(recvd))
                     # format message into JSON
-                    # pickle the JSON
                     json_msg = status.STATUS_JSON%(recvd.origin, recvd.mtype, recvd.subj, recvd.text)
-                    #print(json_msg)
-                    #srv.send_msg(self.client, json_msg)
+                    srv.send_msg(self.client, json_msg)
                 except IndexError:
                     continue
             print("[StatusConsoleThread]: exiting...")
