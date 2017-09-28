@@ -55,7 +55,7 @@ def writeJSON(json_obj):
 def getColor(str):
     if str == 'ERROR':
         return Back.RED
-    if str == 'REQUEST':
+    if str == 'SUCCESS':
         return Back.GREEN
     else:
         return Back.RESET

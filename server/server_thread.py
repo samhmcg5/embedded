@@ -126,13 +126,37 @@ class DelivNavThread(ServerThreadBase):
         deliv_nav = json_obj[srv.DELIV_NAV]
         # update rover status
         if srv.STATUS and srv.MESSAGE in deliv_nav:
-            srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
+            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+            self.sendToStatusThread(msg)
+            text = srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "SUCCESS", "STATUS", text)
+            self.sendToStatusThread(msg)
+
         # update position
         elif srv.X and srv.Y in deliv_nav:
-            srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, self.col)
+            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+            self.sendToStatusThread(msg)
+            text = srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, self.col)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "SUCCESS", "LOC", text)
+            self.sendToStatusThread(msg)
+
         # update spped and direction
         elif srv.RIGHT_DIR and srv.LEFT_DIR and srv.RIGHT_SPEED and srv.LEFT_SPEED in deliv_nav:
-            srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, self.col)
+            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+            self.sendToStatusThread(msg)
+            text = srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, self.col)
+            text = re.sub('\"','',text)
+            msg = status.StatusMsg(self.name, "SUCCESS", "SPEED", text)
+            self.sendToStatusThread(msg)
+
         if srv.STATUS in deliv_nav:
             if deliv_nav[srv.STATUS] is 0:
                 # send message for next action (FWD, BACKWARD, etc)
@@ -204,7 +228,15 @@ class ScanSenseThread(ServerThreadBase):
                     self.client.send(('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1, "ACTION": 1 }').encode())
                 
                 if srv.RED and srv.GREEN and srv.BLUE in scan_sense:
-                    srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[srv.ZONE]) + ' }'), json_obj, self.col)
+                    text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+                    text = re.sub('\"','',text)
+                    msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+                    self.sendToStatusThread(msg)
+
+                    text = srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[srv.ZONE]) + ' }'), json_obj, self.col)
+                    # text = re.sub('\"','',text)
+                    msg = status.StatusMsg(self.name, "SUCCESS", "COLOR", text)
+                    self.sendToStatusThread(msg)
 
                 if json_obj[srv.SEQ_FIELD] <= 100 and json_obj[srv.SEQ_FIELD] >= 0:
                     self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(1) + ' , "ACTION": 1 }').encode())
