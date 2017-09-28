@@ -91,9 +91,6 @@ def main():
 
     while True:
         buf = readMessage(sock)
-        # un pickle ?
-        print(buf)
-        #print(buf)
         if isJSON(buf):
             json_obj = json.loads(buf)
             writeJSON(json_obj)

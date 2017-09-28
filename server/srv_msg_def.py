@@ -91,9 +91,9 @@ INFO_SRV_MSG_SENDING    = 'Sending message to client.'
 INFO_SRV_MSG_SENT       = 'Sent message to client.'
 
 # Standard error messages
-ERROR_SRV_CONN          = 'Client is not connected! Attempting to reconnect...'
-ERROR_MSG_FORMAT        = 'Message is not JSON object type!'
-ERROR_DB_CONN           = 'Database is not connected!'
+ERROR_SRV_CONN          = 'Client is not connected, Attempting to reconnect...'
+ERROR_MSG_FORMAT        = 'Message is not JSON object type'
+ERROR_DB_CONN           = 'Database is not connected'
 
 # Creates default scanner sensing db fields
 def create_default_server_msg_fields(col, name):

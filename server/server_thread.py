@@ -3,11 +3,9 @@ from pymongo import MongoClient
 from threading import Thread
 from collections import deque
 import json
-import time
 import defines_status_viewer as status
-import pickle
 from pymongo import MongoClient
-
+import re
 # for passing global data
 status_d = deque()
 
@@ -21,10 +19,6 @@ class ServerThreadBase(Thread):
         self.ip_addr = ip_addr
         # connect to DB
         self.mongo = srv.connect_to_mongo()
-        self.mongo = None
-        #if srv.is_db_online() is not True:  
-        #     self.mongo = srv.connect_to_mongo()
-        #self.mongo_client = MongoClient()
         self.mongo = MongoClient()
         # initialize some members
         self.client     = None
@@ -48,17 +42,18 @@ class ServerThreadBase(Thread):
             self.msg_length = len(buf)
             data = srv.recv_msg(self.client, self.msg_length)
             if not data:
-                raise ConnectionError('Client not connected! Reconnecting...')
+                raise ConnectionError('Client not connected, Reconnecting...')
             buf += data
 
             # if *HELLO* seen scrap the data
             if srv.init_msg(buf) is True:
                 buf = ""
                 break
-        msg = status.StatusMsg(self.name, "RECVD", "NONE", srv.get_msg(srv.RECV, buf))
+        buf = buf[:-1]
+        text = re.sub('\"', '', srv.get_msg(srv.RECV, buf))
+        msg = status.StatusMsg(self.name, "RECVD", "NONE", text)
         self.sendToStatusThread(msg)
         # remove delimeter to create JSON object
-        buf = buf[:-1] 
         return buf
 
     # start the connection to the client
@@ -75,7 +70,8 @@ class ServerThreadBase(Thread):
 
     # Main thread method
     def run(self):
-        msg = status.StatusMsg(self.name, "SERVER", "NONE", "on port %s"%self.port)
+        text = re.sub('\"', '', "on port %s"%self.port)
+        msg = status.StatusMsg(self.name, "SERVER", "NONE", text)
         self.sendToStatusThread(msg)
         # Main server processing
         while True:
@@ -98,13 +94,15 @@ class ServerThreadBase(Thread):
                         # handle the valid JSON object
                         self.handleJSON(json_obj)
                     else:
-                        msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", srv.ERROR_MSG_FORMAT)
+                        text = re.sub('\"', '', srv.ERROR_MSG_FORMAT)
+                        msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", text)
                         self.sendToStatusThread(msg)
                         #break
                 except (ValueError, ConnectionError, KeyboardInterrupt) as err:
                     self.s.close()
                     srv.clean_db()
-                    msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", "Caught Exception "+str(err))
+                    text = re.sub('\"', '', "Caught Exception "+str(err))
+                    msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", text)
                     self.sendToStatusThread(msg)
                     break
 
@@ -250,17 +248,15 @@ class StatusConsoleThread(Thread):
         print("[StatusConsoleThread]: on port %s"%self.port)
 
         while True:
-            #self.initClient()
+            self.initClient()
             while True:
                 try:
                     recvd = status_d.popleft()
                     if self.verbose:
                         print(status.msgToString(recvd))
                     # format message into JSON
-                    # pickle the JSON
                     json_msg = status.STATUS_JSON%(recvd.origin, recvd.mtype, recvd.subj, recvd.text)
-                    #print(json_msg)
-                    #srv.send_msg(self.client, json_msg)
+                    srv.send_msg(self.client, json_msg)
                 except IndexError:
                     continue
             print("[StatusConsoleThread]: exiting...")
