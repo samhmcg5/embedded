@@ -6,6 +6,7 @@ import json
 import time
 import defines_status_viewer as status
 import pickle
+from pymongo import MongoClient
 
 # for passing global data
 status_d = deque()
@@ -19,7 +20,16 @@ class ServerThreadBase(Thread):
         self.port    = port
         self.ip_addr = ip_addr
         # connect to DB
+<<<<<<< HEAD
         self.mongo = srv.connect_to_mongo()
+||||||| merged common ancestors
+        self.mongo = None
+        #if srv.is_db_online() is not True:  
+        #     self.mongo = srv.connect_to_mongo()
+        #self.mongo_client = MongoClient()
+=======
+        self.mongo = MongoClient()
+>>>>>>> 85f00296fc55e1d42f2f5d61b7999018ca1454b1
         # initialize some members
         self.client     = None
         self.address    = None
@@ -97,7 +107,7 @@ class ServerThreadBase(Thread):
                         #break
                 except (ValueError, ConnectionError, KeyboardInterrupt) as err:
                     self.s.close()
-                    #srv.clean_db()
+                    srv.clean_db()
                     msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", "Caught Exception "+str(err))
                     self.sendToStatusThread(msg)
                     break
@@ -112,15 +122,29 @@ class DelivNavThread(ServerThreadBase):
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
         self.name = "DeliveryNav"
-        #self.col  = self.mongo_client[srv.DATABASE_NAME][srv.DELIVERY_NAVIGATION_COL_NAME]
+        self.col  = self.mongo[srv.DATABASE_NAME][srv.DELIVERY_NAVIGATION_COL_NAME]
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
-        # if not srv.DELIV_NAV in json_obj:
-        #    return
-        # deliv_nav = json_obj[srv.DELIV_NAV]
-
+        if not srv.DELIV_NAV in json_obj:
+           return
+        deliv_nav = json_obj[srv.DELIV_NAV]
+        # update rover status
+        if srv.STATUS and srv.MESSAGE in deliv_nav:
+            srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
+        # update position
+        elif srv.X and srv.Y in deliv_nav:
+            srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, self.col)
+        # update spped and direction
+        elif srv.RIGHT_DIR and srv.LEFT_DIR and srv.RIGHT_SPEED and srv.LEFT_SPEED in deliv_nav:
+            srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, self.col)
+        if srv.STATUS in deliv_nav:
+            if deliv_nav[srv.STATUS] is 0:
+                # send message for next action (FWD, BACKWARD, etc)
+                deliv_nav_rtrn_msg = srv.retrieve(seq_num, self.col)
+                srv.send_msg(self.client, deliv_nav_rtrn_msg)
+                self.seq_num += 1
         return
 
 
@@ -137,6 +161,11 @@ class DelivSenseThread(ServerThreadBase):
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
+        if 'IRDIST' in json_obj[srv.DELIV_SENSE] and json_obj[srv.DELIV_SENSE]['IRDIST'] >= 500:
+            if self.recv_seq % 2 is 0:
+                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 1}!')
+            else:
+                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 0}!')
         return
 
 
