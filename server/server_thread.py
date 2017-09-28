@@ -20,16 +20,12 @@ class ServerThreadBase(Thread):
         self.port    = port
         self.ip_addr = ip_addr
         # connect to DB
-<<<<<<< HEAD
         self.mongo = srv.connect_to_mongo()
-||||||| merged common ancestors
         self.mongo = None
         #if srv.is_db_online() is not True:  
         #     self.mongo = srv.connect_to_mongo()
         #self.mongo_client = MongoClient()
-=======
         self.mongo = MongoClient()
->>>>>>> 85f00296fc55e1d42f2f5d61b7999018ca1454b1
         # initialize some members
         self.client     = None
         self.address    = None
@@ -142,8 +138,8 @@ class DelivNavThread(ServerThreadBase):
         if srv.STATUS in deliv_nav:
             if deliv_nav[srv.STATUS] is 0:
                 # send message for next action (FWD, BACKWARD, etc)
-                deliv_nav_rtrn_msg = srv.retrieve(seq_num, self.col)
-                srv.send_msg(self.client, deliv_nav_rtrn_msg)
+                #deliv_nav_rtrn_msg = srv.retrieve(self.seq_num, self.col)
+                srv.send_msg(self.client, srv.DELIV_NAV_DEFAULT_ACTION)
                 self.seq_num += 1
         return
 
