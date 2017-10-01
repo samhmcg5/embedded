@@ -125,15 +125,19 @@ class DelivNavThread(ServerThreadBase):
            return
         deliv_nav = json_obj[srv.DELIV_NAV]
         # update rover status
-        if srv.STATUS and srv.MESSAGE in deliv_nav:
-            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
-            text = re.sub('\"','',text)
-            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
-            self.sendToStatusThread(msg)
-            text = srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
-            text = re.sub('\"','',text)
-            msg = status.StatusMsg(self.name, "SUCCESS", "STATUS", text)
-            self.sendToStatusThread(msg)
+        if srv.STATUS in deliv_nav:
+            if deliv_nav[srv.STATUS] is 1:
+                msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", "Bad JSON Received by Pic")
+                self.sendToStatusThread(msg)
+            else:
+                text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+                text = re.sub('\"','',text)
+                msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+                self.sendToStatusThread(msg)
+                text = srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
+                text = re.sub('\"','',text)
+                msg = status.StatusMsg(self.name, "SUCCESS", "STATUS", text)
+                self.sendToStatusThread(msg)
 
         # update position
         elif srv.X and srv.Y in deliv_nav:
@@ -154,14 +158,16 @@ class DelivNavThread(ServerThreadBase):
             self.sendToStatusThread(msg)
             text = srv.store(json.loads('{ "DELIV_NAV.RIGHT_DIR": { "$exists": true } }'), json_obj, self.col)
             text = re.sub('\"','',text)
+            
             msg = status.StatusMsg(self.name, "SUCCESS", "SPEED", text)
             self.sendToStatusThread(msg)
+            srv.send_msg(self.client, "{ a: }")
 
         if srv.STATUS in deliv_nav:
             if deliv_nav[srv.STATUS] is 0:
                 # send message for next action (FWD, BACKWARD, etc)
                 #deliv_nav_rtrn_msg = srv.retrieve(self.seq_num, self.col)
-                srv.send_msg(self.client, srv.DELIV_NAV_DEFAULT_ACTION)
+                srv.send_msg(self.client, "{\"\"}")
                 self.seq_num += 1
         return
 
@@ -181,9 +187,9 @@ class DelivSenseThread(ServerThreadBase):
         # do whatever with the incoming data...
         if 'IRDIST' in json_obj[srv.DELIV_SENSE] and json_obj[srv.DELIV_SENSE]['IRDIST'] >= 500:
             if self.recv_seq % 2 is 0:
-                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 1}!')
+                srv.send_msg(self.client, '\"SEQ\": '+str(self.seq_num)+', "ACTION": "ACTION"!')
             else:
-                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 0}!')
+                srv.send_msg(self.client, '\"SEQ\": '+str(self.seq_num)+', "ACTION": "ACTION"!')
             self.seq_num += 1
         return
 
@@ -201,8 +207,8 @@ class ScanNavThread(ServerThreadBase):
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         if srv.SCAN_NAV in json_obj:
-            if self.seq_num % 20 is 0:
-                srv.send_msg(self.client, '{ "SEQ": ' + str(self.seq_num) +', "ACTION": 1, "DIST": 3, "SPEED":25 }')
+            if self.seq_num % 2 is 0:
+                srv.send_msg(self.client, "{ a }")
             self.seq_num += 1
         return
 
@@ -225,7 +231,7 @@ class ScanSenseThread(ServerThreadBase):
             # update quota status
             if srv.ZONE in scan_sense:
                 if scan_sense[srv.ZONE] is 0:
-                    self.client.send(('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1, "ACTION": 1 }').encode())
+                    self.client.send(('{  }').encode())
                 
                 if srv.RED and srv.GREEN and srv.BLUE in scan_sense:
                     text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
@@ -239,13 +245,13 @@ class ScanSenseThread(ServerThreadBase):
                     self.sendToStatusThread(msg)
 
                 if json_obj[srv.SEQ_FIELD] <= 100 and json_obj[srv.SEQ_FIELD] >= 0:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(1) + ' , "ACTION": 1 }').encode())
+                    self.client.send(str(' ').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 200 and json_obj[srv.SEQ_FIELD] > 100:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , "ACTION": 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , 1 }').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 300 and json_obj[srv.SEQ_FIELD] > 200:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": -1 }').encode())
 
                 elif json_obj[srv.SEQ_FIELD] >= 301:
                     self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1 , "ACTION": 1 }').encode())

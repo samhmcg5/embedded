@@ -7,7 +7,7 @@ import json
 import time
 import os
 
-from server_thread import *
+from server_threads import *
 
 """
 Don't do any printing from the threads besides StatusConsoleThread
@@ -19,7 +19,7 @@ IP_ADDR = '192.168.1.123'
 print("INITIALIZING TEAM14 SERVER @ 192.168.1.123")
 
 # Instantiate all the thread objects ( calls __init__() )
-statusThread    = StatusConsoleThread(2004, IP_ADDR, False)
+statusThread    = StatusConsoleThread(2004, IP_ADDR, True)
 delivNavThr     = DelivNavThread(2000,IP_ADDR)
 delivSenseThr   = DelivSenseThread(2001,IP_ADDR)
 scanNavThr      = ScanNavThread(2002,IP_ADDR)

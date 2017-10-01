@@ -181,9 +181,9 @@ class DelivSenseThread(ServerThreadBase):
         # do whatever with the incoming data...
         if 'IRDIST' in json_obj[srv.DELIV_SENSE] and json_obj[srv.DELIV_SENSE]['IRDIST'] >= 500:
             if self.recv_seq % 2 is 0:
-                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": "ACTION"}!')
+                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 1}!')
             else:
-                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": "ACTION"}!')
+                srv.send_msg(self.client, '{"SEQ": '+str(self.seq_num)+', "ACTION": 0}!')
             self.seq_num += 1
         return
 
@@ -202,7 +202,7 @@ class ScanNavThread(ServerThreadBase):
     def handleJSON(self, json_obj):
         if srv.SCAN_NAV in json_obj:
             if self.seq_num % 20 is 0:
-                srv.send_msg(self.client, ' "SEQ": ' + str(self.seq_num) +', "ACTION": 1, "DIST": 3, "SPEED":25 ')
+                srv.send_msg(self.client, '{ "SEQ": ' + str(self.seq_num) +', "ACTION": 1, "DIST": 3, "SPEED":25 }')
             self.seq_num += 1
         return
 
@@ -225,7 +225,7 @@ class ScanSenseThread(ServerThreadBase):
             # update quota status
             if srv.ZONE in scan_sense:
                 if scan_sense[srv.ZONE] is 0:
-                    self.client.send(('{  }').encode())
+                    self.client.send(('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1, "ACTION": 1 }').encode())
                 
                 if srv.RED and srv.GREEN and srv.BLUE in scan_sense:
                     text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
@@ -239,13 +239,13 @@ class ScanSenseThread(ServerThreadBase):
                     self.sendToStatusThread(msg)
 
                 if json_obj[srv.SEQ_FIELD] <= 100 and json_obj[srv.SEQ_FIELD] >= 0:
-                    self.client.send(str(' ').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(1) + ' , "ACTION": 1 }').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 200 and json_obj[srv.SEQ_FIELD] > 100:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , "ACTION": 1 }').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 300 and json_obj[srv.SEQ_FIELD] > 200:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": -1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": 1 }').encode())
 
                 elif json_obj[srv.SEQ_FIELD] >= 301:
                     self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1 , "ACTION": 1 }').encode())
@@ -277,18 +277,22 @@ class StatusConsoleThread(Thread):
 
     # override from base class
     def run(self):
-        print("[StatusConsoleThread]: on port %s"%self.port)
+        if self.verbose:
+            print("[StatusConsoleThread]: on port %s"%self.port)
+        else:
+            print("[StatusConsoleThread]: Running in verbose mode")
 
         while True:
-            self.initClient()
+            if not seld.verbose:
+                self.initClient()
             while True:
                 try:
                     recvd = status_d.popleft()
                     if self.verbose:
                         print(status.msgToString(recvd))
-                    # format message into JSON
-                    json_msg = status.STATUS_JSON%(recvd.origin, recvd.mtype, recvd.subj, recvd.text)
-                    srv.send_msg(self.client, json_msg)
+                    else:
+                        json_msg = status.STATUS_JSON%(recvd.origin, recvd.mtype, recvd.subj, recvd.text)
+                        srv.send_msg(self.client, json_msg)
                 except IndexError:
                     continue
             print("[StatusConsoleThread]: exiting...")

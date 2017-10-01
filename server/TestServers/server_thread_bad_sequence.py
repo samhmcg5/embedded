@@ -162,7 +162,6 @@ class DelivNavThread(ServerThreadBase):
                 # send message for next action (FWD, BACKWARD, etc)
                 #deliv_nav_rtrn_msg = srv.retrieve(self.seq_num, self.col)
                 srv.send_msg(self.client, srv.DELIV_NAV_DEFAULT_ACTION)
-                self.seq_num += 1
         return
 
 
