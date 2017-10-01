@@ -139,9 +139,12 @@ def is_json(json_str):
 
 # Stores a JSON formatted object in the database
 def store(criteria, json_obj, col):
-    #print(INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj))
+    print(INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj) + "\n")
+    sys.stdout.flush()
     res = col.replace_one(criteria, json_obj, True)
-    return INFO_DB_STORE_SUC
+    print(INFO_DB_STORE_SUC)
+    sys.stdout.flush()
+    return
 
 # Gets action message to respective pic
 def retrieve(seq_num, col):
