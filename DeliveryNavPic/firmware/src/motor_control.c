@@ -7,38 +7,43 @@ MOTOR_CONTROL_DATA motor_controlData;
 
 void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right)
 {
+    left->action = data.action;
+    left->speed = speeds[data.speed];
+    right->action = data.action;
+    right->speed = speeds[data.speed];
+    
     switch (data.action)
     {
         case FORWARD:
             left->dir = FORWARD;
-            left->dc = data.speed;
+            left->dc = getDCFromSpeed(speeds[data.speed]);
             left->dist = data.dist;
             right->dir = FORWARD;
-            right->dc = data.speed;
+            right->dc = getDCFromSpeed(speeds[data.speed]) - 10;
             right->dist = data.dist;
             break;
-        case BACKWARD:
-            left->dir = BACKWARD;
-            left->dc = data.speed;
+        case REVERSE:
+            left->dir = REVERSE;
+            left->dc = getDCFromSpeed(speeds[data.speed]);
             left->dist = data.dist;
-            right->dir = BACKWARD;
-            right->dc = data.speed;
+            right->dir = REVERSE;
+            right->dc = getDCFromSpeed(speeds[data.speed]) - 10;
             right->dist = data.dist;
             break;  
         case TURN_LEFT:
-            left->dir = BACKWARD;
-            left->dc = data.speed;
+            left->dir = REVERSE;
+            left->dc = getDCFromSpeed(speeds[data.speed]);
             left->dist = data.dist;
             right->dir = FORWARD;
-            right->dc = data.speed;
+            right->dc = getDCFromSpeed(speeds[data.speed]);
             right->dist = data.dist;
             break;
         case TURN_RIGHT:
             left->dir = FORWARD;
-            left->dc = data.speed;
+            left->dc = getDCFromSpeed(speeds[data.speed]);
             left->dist = data.dist;
-            right->dir = BACKWARD;
-            right->dc = data.speed;
+            right->dir = REVERSE;
+            right->dc = getDCFromSpeed(speeds[data.speed]);
             right->dist = data.dist;
             break;
         case STOP:
@@ -127,6 +132,21 @@ unsigned char getMotorL_Dir()
     return motor_controlData.dirL;
 }
 
+unsigned char getMotorAction()
+{
+    return motor_controlData.action;
+}
+
+unsigned char getSpeedSettingR()
+{
+    return motor_controlData.speedR;
+}
+
+unsigned char getSpeedSettingL()
+{
+    return motor_controlData.speedL;
+}
+
 void setMotorR_Fwd()
 {
     LATCCLR  = MOTOR_RIGHT_DIR_PIN;
@@ -144,7 +164,7 @@ void setMotorR_Bck()
     LATCCLR  = MOTOR_RIGHT_DIR_PIN;
     LATCSET  = MOTOR_RIGHT_DIR_PIN;
     
-    motor_controlData.dirR = BACKWARD;
+    motor_controlData.dirR = REVERSE;
 }
 
 void setMotorL_Bck()
@@ -152,7 +172,7 @@ void setMotorL_Bck()
     LATGCLR  = MOTOR_LEFT_DIR_PIN;
     LATGSET  = MOTOR_LEFT_DIR_PIN;
     
-    motor_controlData.dirL = BACKWARD;
+    motor_controlData.dirL = REVERSE;
 }
 
 void sendMsgToMotorQ(struct motorQueueData msg)
@@ -162,40 +182,12 @@ void sendMsgToMotorQ(struct motorQueueData msg)
 
 void sendMsgToMotor_R(struct pwmQueueData msg)
 {
-    dbgOutputLoc(MOTOR_THR_SEND_TO_Q_R);
-    
-    if (getMotorR_DC() == 0)
-    {
-        setMotorR_DC(msg.dc);
-        goalR = msg.dist * 60;
-        if (msg.dir == FORWARD)
-            setMotorR_Fwd();
-        else
-            setMotorR_Bck();   
-    }
-    else
-    {
      xQueueSendToBack(right_q, &msg, portMAX_DELAY);
-    }
 }
 
 void sendMsgToMotor_L(struct pwmQueueData msg)
 {
-    dbgOutputLoc(MOTOR_THR_SEND_TO_Q_L);
-
-    if (getMotorL_DC() == 0)
-    {
-        setMotorL_DC(msg.dc);
-        goalL = msg.dist * 60;
-        if (msg.dir == FORWARD)
-            setMotorL_Fwd();
-        else
-            setMotorL_Bck();   
-    }
-    else
-    {
      xQueueSendToBack(left_q, &msg, portMAX_DELAY);
-    }
 }
 
 void motorR_recvQInISR(struct pwmQueueData* msg) 
@@ -218,9 +210,66 @@ bool leftQIsEmpty()
     return xQueueIsQueueEmptyFromISR(left_q);
 }
 
+void readFromQandSetPins(unsigned char motor)
+{
+    struct pwmQueueData data;
+    switch (motor)
+    {
+    case LEFT:
+        motorL_recvQInISR(&data);
+        // set motor motion stuff
+        setMotorL_DC(data.dc);
+        motor_controlData.action = data.action;
+        motor_controlData.speedL = data.speed;
+        goalL = data.dist * TICKS_PER_CM;
+        if (data.dir == FORWARD) 
+            setMotorL_Fwd(); 
+        else
+            setMotorL_Bck(); 
+        break;
+    case RIGHT:
+        motorR_recvQInISR(&data);
+        setMotorR_DC(data.dc);
+        motor_controlData.action = data.action;
+        motor_controlData.speedR = data.speed;
+        goalR = data.dist * TICKS_PER_CM;
+        if (data.dir == FORWARD)
+            setMotorR_Fwd();
+        else
+            setMotorR_Bck();
+        break;
+    default:
+        break;
+    }
+}
+
+// given ticks per second, return an estimated starting duty cycle
+unsigned char getDCFromSpeed(unsigned char speed)
+{
+    switch (speed)
+    {
+    case SPEED_0:
+        return 0;
+    case SPEED_1:
+        return 15;
+    case SPEED_2:
+        return 20;
+    case SPEED_3:
+        return 30;
+    case SPEED_4:
+        return 50;
+    case SPEED_5:
+        return 95;
+    default:
+        return 0;
+        break;
+    }
+}
+
 void MOTOR_CONTROL_Initialize ( void )
 {
     motor_controlData.state = MOTOR_CONTROL_STATE_INIT;
+    motor_controlData.action = STOP;
     // incoming queue
     motor_q = xQueueCreate(32, sizeof (struct motorQueueData));
     right_q = xQueueCreate(32, sizeof (struct pwmQueueData));
@@ -258,6 +307,7 @@ void MOTOR_CONTROL_Tasks ( void )
                 dbgOutputLoc(MOTOR_THREAD_RECVD);
                 
                 struct pwmQueueData left, right;
+                
                 generateActionItems(rec, &left, &right);
                 
                 sendMsgToMotor_L(left);

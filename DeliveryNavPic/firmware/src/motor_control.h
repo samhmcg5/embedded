@@ -41,8 +41,11 @@ typedef struct
     MOTOR_CONTROL_STATES state;
     unsigned char dcL;
     unsigned char dcR;
+    unsigned char speedR;
+    unsigned char speedL;
     unsigned char dirL;
     unsigned char dirR;
+    unsigned char action;
 } MOTOR_CONTROL_DATA;
 
 void MOTOR_CONTROL_Initialize ( void );
@@ -74,5 +77,9 @@ void setMotorR_DC(unsigned char dc);
 void setMotorL_DC(unsigned char dc);
 
 void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right);
+
+void readFromQandSetPins(unsigned char motor);
+
+unsigned char getDCFromSpeed(unsigned char speed);
 
 #endif /* _MOTOR_CONTROL_H */
