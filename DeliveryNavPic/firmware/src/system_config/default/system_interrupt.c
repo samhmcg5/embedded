@@ -101,24 +101,17 @@ void IntHandlerDrvTmrInstance2(void)
 //    if (distL < goalL && distR < goalR)
     if (getMotorL_DC() != 0 && getMotorR_DC() != 0)
     {
-        // use the left motor as the 'master motor' and right as the slave
-        float err = ticksL - ticksR;
-        float kp = 0.0;
+        unsigned char kp = calculateKP(getSpeedSettingL(), getMotorL_Dir());
+        unsigned char offset = (ticksL - ticksR) * kp;
         
-        if (getMotorAction() == FORWARD)
-            kp = 2.5;
-        else if (getMotorAction() == REVERSE)
-            kp = 3.5;
-        
-        float offset = kp*err;
-        short int new_dc = getMotorR_DC() + (int)offset;
+        short int new_dc = getMotorR_DC() + (short int)offset;
         
         setMotorR_DC( new_dc );
     }
     
     struct navQueueData data;
     // get speed data, rate = 1 Hz
-    if (isr_count % 20 == 0 && !stopped)
+    if (isr_count % 10 == 0 && !stopped)
     {
         data.type = SPEEDS;
         data.a = getMotorR_Dir();
@@ -132,7 +125,7 @@ void IntHandlerDrvTmrInstance2(void)
         total_ticksR = 0;
     }
     // rate = 0.5 Hz
-    if (isr_count % 40 == 0)
+    if (isr_count % 20 == 0)
     {
         // TODO
         data.type = POSITION;

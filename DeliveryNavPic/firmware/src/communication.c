@@ -2,6 +2,7 @@
 #include "communication.h"
 #include "communication_globals.h"
 #include "nav_globals.h"
+#include "motor_globals.h"
 #include "queue.h"
 
 // communication's state

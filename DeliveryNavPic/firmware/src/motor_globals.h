@@ -8,7 +8,7 @@
 #define TURN_RIGHT  3
 #define STOP        4
 
-#define TICKS_PER_CM    78
+#define TICKS_PER_CM    74
 
 // targets ticks per tenth second
 #define SPEED_0         0      // dc = 0
@@ -19,6 +19,8 @@
 #define SPEED_5         50      // dc = 95
 
 unsigned char speeds[] = {SPEED_0, SPEED_1, SPEED_2, SPEED_3, SPEED_4, SPEED_5};
+
+unsigned char calculateKP(unsigned char speed, unsigned char dir);
 
 // for motor selection
 #define LEFT  0

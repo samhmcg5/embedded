@@ -19,7 +19,7 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             left->dc = getDCFromSpeed(speeds[data.speed]);
             left->dist = data.dist;
             right->dir = FORWARD;
-            right->dc = getDCFromSpeed(speeds[data.speed]) - 10;
+            right->dc = getDCFromSpeed(speeds[data.speed]);
             right->dist = data.dist;
             break;
         case REVERSE:
@@ -27,7 +27,7 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
             left->dc = getDCFromSpeed(speeds[data.speed]);
             left->dist = data.dist;
             right->dir = REVERSE;
-            right->dc = getDCFromSpeed(speeds[data.speed]) - 10;
+            right->dc = getDCFromSpeed(speeds[data.speed]);
             right->dist = data.dist;
             break;  
         case TURN_LEFT:
@@ -248,21 +248,27 @@ unsigned char getDCFromSpeed(unsigned char speed)
 {
     switch (speed)
     {
-    case SPEED_0:
-        return 0;
-    case SPEED_1:
-        return 15;
-    case SPEED_2:
-        return 20;
-    case SPEED_3:
-        return 30;
-    case SPEED_4:
-        return 50;
-    case SPEED_5:
-        return 95;
-    default:
-        return 0;
-        break;
+        case SPEED_0:   {   return 0;   }
+        case SPEED_1:   {   return 15;  }
+        case SPEED_2:   {   return 20;  }
+        case SPEED_3:   {   return 30;  }
+        case SPEED_4:   {   return 50;  }
+        case SPEED_5:   {   return 95;  }
+        default:        {   return 0;   }
+    }
+}
+
+unsigned char calculateKP(unsigned char speed, unsigned char dir)
+{
+    switch (speed)
+    {
+        case SPEED_0:   {   return 0;  }
+        case SPEED_1:   {   return 1;  }
+        case SPEED_2:   {   return 2;  }
+        case SPEED_3:   {   return 4;  }
+        case SPEED_4:   {   return 3;  }
+        case SPEED_5:   {   return 4;  }
+        default:        {   return 1;  }
     }
 }
 
