@@ -81,6 +81,9 @@ void SCANNER_Tasks ( void )
                 green = 0;
                 blue = 0;
                 scannerData.state = SCANNER_STATE_SCANNING;
+                char buf[64];
+                sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, zone, red, green, blue);    
+                commSendMsgToUartQueue(buf);
                 DRV_TMR0_Start();
             }
             break;
@@ -88,7 +91,7 @@ void SCANNER_Tasks ( void )
 
         case SCANNER_STATE_SCANNING:
         {
-            dbgOutputLoc(SCAN_THREAD_WAIT);    
+            dbgOutputLoc(SCAN_THREAD_WAIT);
           
             struct scanQueueData rec;
             if(xQueueReceive(scan_q, &rec, portMAX_DELAY))

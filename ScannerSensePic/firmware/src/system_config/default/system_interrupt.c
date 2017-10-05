@@ -6,6 +6,8 @@
 #define ADC_NUM_SAMPLES     16
 #define SERVER_TIMEOUT      8
 
+unsigned int isr_count = 0;
+
 void IntHandlerDrvUsartInstance0(void)
 {
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE)) 
@@ -74,10 +76,16 @@ void IntHandlerDrvAdc(void)
 
 void IntHandlerDrvTmrInstance0(void)
 {
+    isr_count++;
     dbgOutputLoc(TMR_ISR_START);
     struct scanQueueData data;
-    data.type = TMR;
-    sendMsgToScanQFromISR(data);
+    if(isr_count % 20 == 0)
+    {
+        data.type = TMR;
+        sendMsgToScanQFromISR(data);
+        isr_count = 0;
+    }
     dbgOutputLoc(TMR_ISR_END);
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
+    dbgOutputLoc(TMR_ISR_END);
 }
