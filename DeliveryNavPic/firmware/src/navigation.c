@@ -87,7 +87,7 @@ void NAVIGATION_Tasks ( void )
         case NAVIGATION_STATE_SERVICE_TASKS:
         {
             dbgOutputLoc(NAV_THREAD_WAIT);
-            
+
             struct navQueueData rec;
             if(xQueueReceive(nav_q, &rec, portMAX_DELAY))
             {

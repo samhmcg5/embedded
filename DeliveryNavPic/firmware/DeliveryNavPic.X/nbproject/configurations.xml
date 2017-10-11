@@ -151,6 +151,7 @@
         </logicalFolder>
         <logicalFolder name="f3" displayName="motor" projectFiles="true">
           <itemPath>../src/motor_control.c</itemPath>
+          <itemPath>../src/motor_isr_fxns.c</itemPath>
         </logicalFolder>
         <logicalFolder name="f4" displayName="nav" projectFiles="true">
           <itemPath>../src/navigation.c</itemPath>

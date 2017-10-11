@@ -1,0 +1,591 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tick",
+				"ticksL"
+			],
+			[
+				"get",
+				"getMotorR_DC"
+			],
+			[
+				"reg",
+				"reg_Q"
+			],
+			[
+				"re",
+				"reg_Q"
+			],
+			[
+				"nex",
+				"next_Q"
+			],
+			[
+				"reg_",
+				"reg_R"
+			],
+			[
+				"ne",
+				"next_R"
+			],
+			[
+				"next",
+				"next_R"
+			],
+			[
+				"next_",
+				"next_R"
+			],
+			[
+				"C",
+				"count"
+			],
+			[
+				"sD",
+				"sDIV"
+			],
+			[
+				"s",
+				"sDONE"
+			],
+			[
+				"end",
+				"endcase"
+			],
+			[
+				"del",
+				"deliv_nav"
+			],
+			[
+				"seq",
+				"seq_num"
+			],
+			[
+				"DE",
+				"DELIV_NAV"
+			],
+			[
+				"json",
+				"json_obj"
+			],
+			[
+				"mongo",
+				"mongo_client"
+			],
+			[
+				"init",
+				"initClient"
+			],
+			[
+				"ORI",
+				"ORIG_SCANSENSE"
+			],
+			[
+				"Del",
+				"DelivSenseThread"
+			],
+			[
+				"Sca",
+				"ScanNavThread"
+			],
+			[
+				"is",
+				"isJSON"
+			],
+			[
+				"read",
+				"readMessage"
+			],
+			[
+				"stat",
+				"status"
+			],
+			[
+				"nav",
+				"navigationData"
+			],
+			[
+				"motor",
+				"motor_q"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "firmware/src/system_config/default/system_interrupt.c",
+			"settings":
+			{
+				"buffer_size": 3800,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/motor_isr_fxns.c",
+			"settings":
+			{
+				"buffer_size": 829,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/motor_control.c",
+			"settings":
+			{
+				"buffer_size": 6874,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/motor_globals.h",
+			"settings":
+			{
+				"buffer_size": 1825,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 490.0,
+		"last_filter": "Package Control: ",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 609.0
+	},
+	"console":
+	{
+		"height": 171.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src"
+	],
+	"file_history":
+	[
+		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case2.obj",
+		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case2.s",
+		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case3.s",
+		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case1.s",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_control.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.c",
+		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case1.obj",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_isr_fxns.c",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/divisor.tv",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/divider/div.c",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/divider.v",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/dividertb.v",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/divider_old.v",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/transcript",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/div.v",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/divider/div.v",
+		"/C/Users/Samuel McGhee/Desktop/test.txt",
+		"/C/Program Files/Sublime Text 3/sublime_text.exe",
+		"/C/Program Files/Sublime Text 3/Packages/C++.sublime-package",
+		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/hw4.pdf",
+		"/C/cygwin64/home/sam/embedded/server/TestServers/input.txt",
+		"/C/ti/msp430_gcc/version.properties",
+		"/C/cygwin64/home/sam/embedded/server/status_viewer.py",
+		"/C/cygwin64/home/sam/embedded/server/TestServers/client.py",
+		"/C/Users/Samuel McGhee/Desktop/pledges.csv",
+		"/C/cygwin64/home/sam/embedded/server/srv_msg_def.py",
+		"/C/cygwin64/home/sam/embedded/server/server_threads.py",
+		"/C/cygwin64/home/sam/embedded/server/server_defines.py",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/software/transpose/transpose.lst",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/hardware/msp430de1soc/msp430/transpose.v",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/software/transpose/main.c",
+		"/C/Users/Samuel McGhee/Downloads/add6_b.asm",
+		"/C/Users/Samuel McGhee/Google Drive/NetApps/Project1/keys.txt",
+		"/C/Users/Samuel McGhee/Google Drive/NetApps/Project1/gTTS-1.2.2/test.py",
+		"/C/Users/Samuel McGhee/Google Drive/NetApps/Project1/test.py",
+		"/C/cygwin64/home/sam/embedded/server/server_main.py",
+		"/C/cygwin64/home/sam/embedded/server/defines_status_viewer.py",
+		"/C/cygwin64/home/sam/embedded/server/server_thread.py",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/loader/connect.tcl",
+		"/C/cygwin64/home/sam/harware/lecture08-092117-code/msp430de/hardware/msp430de1soc/msp430/mymul.v",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/hardware/msp430de1soc/msp430/toplevel.v",
+		"/C/cygwin64/home/sam/harware/lecture08-092117-code/msp430de/software/mymuldemo/main.c",
+		"/C/cygwin64/home/sam/harware/lecture08-092117-code/msp430de/hardware/msp430de1soc/msp430de1soc.qsf",
+		"/C/cygwin64/home/sam/harware/lecture08-092117-code/msp430de/hardware/msp430de1soc/msp430/toplevel.v",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/hardware/msp430de1soc/msp430de1soc.qsf",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/transpose.v",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/hardware/msp430de1soc/msp430/omsp_multiplier.v",
+		"/C/cygwin64/home/sam/harware/hw3-ece4530-f17-samhmcg5/msp430de/software/Makefile",
+		"/C/Users/Samuel McGhee/Downloads/function2.asm",
+		"/C/Users/Samuel McGhee/Downloads/add6_samhmcg5.asm",
+		"/C/Users/Samuel McGhee/Downloads/add3.asm",
+		"/C/Users/Samuel McGhee/Downloads/function.asm",
+		"/C/cygwin64/home/sam/embedded/server/error_test.bat",
+		"/C/cygwin64/home/sam/embedded/server/server_thread_bad_sequence.py",
+		"/C/cygwin64/home/sam/embedded/server/server_thread_bad_json.py",
+		"/C/cygwin64/home/sam/embedded/server/threaded_server_bad_json.py",
+		"/C/cygwin64/home/sam/embedded/server/server.py",
+		"/C/cygwin64/home/sam/embedded/server/cp_thr.py",
+		"/C/cygwin64/home/sam/embedded/server/test_status_viewer.py",
+		"/C/cygwin64/home/sam/embedded/server/threaded_server.py",
+		"/C/cygwin64/home/sam/embedded/server/client.py",
+		"/C/Users/Samuel McGhee/to_embedded.bat",
+		"/C/cygwin64/home/sam/embedded/server/threading_example.py",
+		"/C/cygwin64/home/sam/embedded/server/edit_status_viewer.py",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/system_config/default/system_interrupt.c",
+		"/C/cygwin64/home/sam/embedded/server/sams_simple_server.py",
+		"/C/cygwin64/home/sam/embedded/server/color_console.py",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/nav_globals.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication_globals.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_control.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/sam.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_globals.h",
+		"/C/cygwin64/home/sam/embedded/server/server_test.py",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/debug.h",
+		"/C/cygwin64/home/sam/embedded/pwm_registers/firmware/src/app.h",
+		"/C/cygwin64/home/sam/embedded/pwm_registers/firmware/src/app.c",
+		"/C/Users/Samuel McGhee/Downloads/embedded-uart_wifly/embedded-uart_wifly/event_driven/firmware/src/communication.h",
+		"/C/Users/Samuel McGhee/Google Drive/Archive/2 - Spring2015/ECE1574/Project1/ResistorMain.cpp",
+		"/C/Users/Samuel McGhee/Google Drive/Archive/2 - Spring2015/ECE1574/Project1/resistorBands.h",
+		"/C/Users/Samuel McGhee/Google Drive/Archive/2 - Spring2015/ECE1574/Project1/resistorBands.cpp",
+		"/C/Users/Samuel McGhee/Google Drive/NetApps/ExampleCode/Sockets/tcp_echo_client.py",
+		"/C/Users/Samuel McGhee/Google Drive/NetApps/ExampleCode/Sockets/udp_echo_client.py",
+		"/C/Users/Samuel McGhee/Google Drive/NetApps/ExampleCode/Sockets/tcp_echo_server.py",
+		"/C/Users/Samuel McGhee/Google Drive/Embedded/pwm_test/firmware/src/app.c",
+		"/C/microchip/harmony/v2_04/framework/peripheral/oc/processor/oc_p32mx795f512l.h",
+		"/C/microchip/harmony/v2_04/framework/peripheral/oc/plib_oc.h",
+		"/C/microchip/harmony/v2_04/framework/peripheral/oc/templates/oc_EnableControl_Default.h",
+		"/C/microchip/harmony/v2_04/framework/peripheral/peripheral_common.h",
+		"/C/cygwin64/home/sam/harware/hw2-ece4530-f17-samhmcg5/msp430de/software/homework2sw/main.c",
+		"/C/cygwin64/home/sam/harware/hw2-ece4530-f17-samhmcg5/readme.md",
+		"/C/microchip/harmony/v2_04/framework/peripheral/peripheral_common_32bit.h",
+		"/C/microchip/harmony/v2_04/framework/peripheral/oc/processor/oc_processor.h",
+		"/C/microchip/harmony/v2_04/framework/peripheral/oc/templates/oc_BufferValue_32Bit_Variant.h",
+		"/C/microchip/harmony/v2_04/framework/driver/oc/drv_oc.h",
+		"/C/microchip/harmony/v2_04/framework/peripheral/oc/templates/oc_CompareModeSelect_Default.h",
+		"/C/Users/Samuel McGhee/Downloads/chipKit Motor Shield - IO Software Library - chipKIT-MotorShield-library/MotorShield library/keywords.txt",
+		"/C/Users/Samuel McGhee/Downloads/chipKit Motor Shield - IO Software Library - chipKIT-MotorShield-library/MotorShield library/MotorShield.cpp",
+		"/C/cygwin64/home/sam/embedded/uart_wifly_testing/firmware/src/communication.h",
+		"/C/cygwin64/home/sam/embedded/uart_wifly_testing/firmware/src/app.c",
+		"/C/cygwin64/home/sam/embedded/uart_wifly_testing/firmware/src/debug.h",
+		"/C/cygwin64/home/sam/embedded/uart_wifly_testing/firmware/src/debug.c",
+		"/C/cygwin64/home/sam/embedded/uart_wifly_testing/firmware/src/communication.c",
+		"/C/cygwin64/home/sam/harware/hw1-ece4530-f17-samhmcg5/openmsp430/core/sim/rtl_sim/src-c/portcnt/main.c",
+		"/C/cygwin64/home/sam/harware/hw1-ece4530-f17-samhmcg5/openmsp430/core/sim/rtl_sim/src-c/portcnt/portcnt.lst",
+		"/C/cygwin64/home/sam/harware/hw1-ece4530-f17-samhmcg5/openmsp430/core/sim/rtl_sim/src-c/portcnt/portcnt.v",
+		"/C/Users/Samuel McGhee/Downloads/External+ADC/External ADC/external adc.c",
+		"/C/cygwin64/home/sam/embedded/embedded/basic_uart/firmware/src/app.h",
+		"/C/cygwin64/home/sam/embedded/embedded/basic_uart/firmware/src/app.c",
+		"/C/cygwin64/home/sam/harware/hw1-ece4530-f17-samhmcg5/openmsp430/core/bench/verilog/tb_openMSP430.v",
+		"/C/cygwin64/home/sam/harware/hw1-ece4530-f17-samhmcg5/openmsp430/core/rtl/verilog/omsp_register_file.v",
+		"/C/Users/Samuel McGhee/Google Drive/Archive/6 - Spring 2017/Digital Design I/Homework/Hw6/tb_sn74163.v",
+		"/C/cygwin64/home/sam/harware/hw1-ece4530-f17-samhmcg5/openmsp430/core/sim/rtl_sim/src-c/sandbox/sandbox.v",
+		"/C/cygwin64/home/sam/harware/lecture04-090717-code/msp430de/hardware/msp430de1soc/msp430/toplevel.v",
+		"/C/cygwin64/home/sam/embedded/embedded/basic_uart/firmware/basic_uart.X/Makefile",
+		"/C/Users/Samuel McGhee/Google Drive/NetApps/TestProject/main.py",
+		"/C/Users/Samuel McGhee/Google Drive/Archive/4 - Spring2016/Microcontroller/Part2/Lab4/Lab4.X/main.c",
+		"/C/Users/Samuel McGhee/Google Drive/Archive/4 - Spring2016/Microcontroller/Part1/Lab2/mcghee_Lab2.X/main.c",
+		"/C/Users/Samuel McGhee/Documents/BOLT/bms_can.txt",
+		"/C/Users/Samuel McGhee/Documents/BOLT/bms_messages.txt",
+		"/C/Users/Samuel McGhee/Downloads/BOLT3.dbc",
+		"/C/Users/Samuel McGhee/Desktop/ros_gui_template_backup/src/data_node.cpp",
+		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/include/dash_gui.h",
+		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/src/dash_gui.cpp",
+		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/CMakeLists.txt",
+		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/readme.txt"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "firmware/src/system_config/default/system_interrupt.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3800,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2082,
+								2082
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1320.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "firmware/src/motor_isr_fxns.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 829,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								484,
+								484
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 36.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "firmware/src/motor_control.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6874,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1764,
+								1764
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3660.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "firmware/src/motor_globals.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1825,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								579,
+								579
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 35.0
+	},
+	"input":
+	{
+		"height": 52.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 355.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "DelivNav.sublime-project",
+	"replace":
+	{
+		"height": 65.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 225.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
