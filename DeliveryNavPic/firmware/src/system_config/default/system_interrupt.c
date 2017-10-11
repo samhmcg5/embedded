@@ -81,7 +81,8 @@ void IntHandlerDrvTmrInstance2(void)
     distR        += ticksR;
 
     /* Are Both Motors Stopped ? */
-    bool stopped = getMotorL_DC() == 0 && getMotorR_DC() == 0;
+    bool stopped  = getMotorL_DC() == 0 && getMotorR_DC() == 0;
+    bool fwdORrev = getMotorL_Dir() == getMotorR_Dir();
 
     /* If we have reached the goal of ticks to travel ...  for either motor */
     if (distL >= goalL || distR >= goalR || stopped)

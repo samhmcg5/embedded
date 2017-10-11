@@ -8,15 +8,10 @@
 #define TURN_RIGHT  3
 #define STOP        4
 
-#define TICKS_PER_CM    74
+#define TICKS_PER_CM        76
+#define TP_DEGREE_L         7.25
+#define TP_DEGREE_R         7.27
 
-// targets ticks per tenth second
-// #define SPEED_0         0       // dc = 0
-// #define SPEED_1         15      // dc = 15
-// #define SPEED_2         32      // dc = 20
-// #define SPEED_3         40      // dc = 30
-// #define SPEED_4         45      // dc = 50
-// #define SPEED_5         50      // dc = 95
 #define SPEED_0         0
 #define SPEED_1         470
 #define SPEED_2         625
@@ -31,7 +26,7 @@ unsigned int speeds[] = {SPEED_0, SPEED_1, SPEED_2, SPEED_3, SPEED_4, SPEED_5};
 #define RIGHT 1
 
 // for error correction
-#define KP   7
+#define KP   5
 #define KI   20
 int integral = 0;
 
@@ -58,7 +53,7 @@ unsigned int orientation = 0;
 struct motorQueueData
 {
     char action;
-    char dist;
+    unsigned int dist;
     char speed;
 };
 

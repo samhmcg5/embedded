@@ -31,18 +31,22 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
         case TURN_LEFT:
             left->dir   = REVERSE;
             left->dc    = speeds[data.speed];
-            left->dist  = data.dist;
+            left->dist  = data.dist * TP_DEGREE_L;
+            // left->dist  += (left->dist / 90); // add a degree per 90 degrees turning
             right->dir  = FORWARD;
             right->dc   = speeds[data.speed];
-            right->dist = data.dist;
+            right->dist = data.dist * TP_DEGREE_L;
+            // right->dist += (right->dist / 90);
             break;
         case TURN_RIGHT:
             left->dir   = FORWARD;
             left->dc    = speeds[data.speed];
-            left->dist  = data.dist;
+            left->dist  = data.dist * TP_DEGREE_R;
+            // left->dist  += (left->dist / 90);
             right->dir  = REVERSE;
             right->dc   = speeds[data.speed];
-            right->dist = data.dist;
+            right->dist = data.dist * TP_DEGREE_R;
+            // right->dist  += (right->dist / 90);
             break;
         case STOP:
             left->dir   = 0;
