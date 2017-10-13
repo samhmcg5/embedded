@@ -7,6 +7,8 @@
 // send to UART, coming from motor thread
 #define SPEEDS      2
 #define POSITION    3
+// process data
+#define POS_UPDATE  4
 
 // data inside Nav's incoming queue
 struct navQueueData
@@ -23,6 +25,19 @@ QueueHandle_t nav_q;
 
 void sendMsgToNavQ(struct navQueueData msg);
 void sendMsgToNavQFromISR(struct navQueueData msg);
+
+/*
+*** initially oriented in x direction = 0 degrees
+    |
+<--- ---> x
+    |
+*/
+unsigned int tick_ref  = 0;
+float posX = 0;
+float posY = 0;
+int orientation = 0;
+unsigned char prev_action = 0xFF;
+
 
 #endif	/* NAV_GLOBALS_H */
 

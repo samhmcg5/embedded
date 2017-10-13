@@ -7,7 +7,6 @@
 #include "nav_globals.h"
 
 char isr_count = 0;
-char prev_action = 0;
 
 void IntHandlerDrvUsartInstance0(void)
 {
@@ -73,23 +72,55 @@ void IntHandlerDrvTmrInstance2(void)
     DRV_TMR0_CounterClear();
     DRV_TMR1_CounterClear();
 
-    total_ticksL += ticksL;
-    total_ticksR += ticksR;
-
     /* increment the distnace traveled per motor in ticks*/
     distL        += ticksL;
     distR        += ticksR;
+    total_ticksL += ticksL;
+    total_ticksR += ticksR;
 
     /* Are Both Motors Stopped ? */
     bool stopped  = getMotorL_DC() == 0 && getMotorR_DC() == 0;
     bool fwdORrev = getMotorL_Dir() == getMotorR_Dir();
+    bool LorR     = getMotorL_Dir() != getMotorR_Dir();
+
+    /* Outgoing Message Construction */
+    struct navQueueData data;
+    if (fwdORrev && distL >= TICKS_PER_CM && getMotorL_DC() != 0)
+    {
+        unsigned int cm = (distL / TICKS_PER_CM) - prev_cm;
+        prev_cm = distL / TICKS_PER_CM;
+
+        data.type = POS_UPDATE;
+        data.a = cm;
+        data.b = getMotorAction();
+        sendMsgToNavQFromISR(data);
+    }
+    else if (getMotorAction() == TURN_LEFT && distL >= TP_DEGREE_L && getMotorL_DC != 0)
+    {
+        unsigned int deg = (distL / TP_DEGREE_L) - prev_cm;
+        prev_cm = distL / TP_DEGREE_L;
+        data.type = POS_UPDATE;
+        data.a = deg;
+        data.b = getMotorAction();
+        sendMsgToNavQFromISR(data);
+    }
+    else if (getMotorAction() == TURN_RIGHT && distL >= TP_DEGREE_R && getMotorL_DC != 0)
+    {
+        unsigned int deg = (distL / TP_DEGREE_R) - prev_cm;
+        prev_cm = distL / TP_DEGREE_R;
+        data.type = POS_UPDATE;
+        data.a = deg;
+        data.b = getMotorAction();
+        sendMsgToNavQFromISR(data);
+    }
 
     /* If we have reached the goal of ticks to travel ...  for either motor */
     if (distL >= goalL || distR >= goalR || stopped)
     {
         integral = 0;
-        distL = 0;
-        distR = 0;
+        distL    = 0;
+        distR    = 0;
+        prev_cm  = 0;
 
         if (!leftQIsEmpty())
             readFromQandSetPins(LEFT);
@@ -103,48 +134,42 @@ void IntHandlerDrvTmrInstance2(void)
     }
 
     /* If we are moving, try to correct the motion */
-    if ( getMotorL_DC() != 0 && getMotorR_DC() != 0 )
+    // if ( getMotorL_DC() != 0 && getMotorR_DC() != 0 )
+    if ( getMotorL_DC() != 0 )
     {
         // int offset = ( ticksL - ticksR ) * kp - 5;
         int error = ( ticksL - ticksR );
         integral  = integral + error;
-
         unsigned int new_dc = getMotorR_DC() + (error * KP) + (integral * KI) - (getMotorR_DC() / 75);
 
         if (new_dc > getMotorL_DC())
             new_dc = getMotorL_DC();
-
         setMotorR_DC( new_dc );
     }
 
-    /* Outgoing Message Construction */
-    struct navQueueData data;
     // get speed data, rate = 1 Hz
-    if (isr_count % 10 == 0 && !stopped)
+    if (isr_count % 10 == 0)
     {
+        // speed
         data.type = SPEEDS;
         data.a = getMotorR_Dir();
         data.b = getMotorL_Dir();
         data.c = total_ticksR;
         data.d = total_ticksL;
-
         sendMsgToNavQFromISR(data);
+
+        // // position
+        data.type = POSITION;
+        data.a = posX; // x
+        data.b = posY; // y
+        data.c = orientation;
+        sendMsgToNavQFromISR(data);
+
+        isr_count = 0;
 
         total_ticksL = 0;
         total_ticksR = 0;
     }
-    // rate = 0.5 Hz
-    if (isr_count % 20 == 0)
-    {
-        // TODO
-        data.type = POSITION;
-        data.a = 0; // x
-        data.b = 0; // y
-        sendMsgToNavQFromISR(data);
 
-        isr_count = 0;
-    }
-
-    prev_action = getMotorAction();
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
 }

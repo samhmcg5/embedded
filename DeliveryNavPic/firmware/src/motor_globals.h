@@ -33,21 +33,11 @@ int integral = 0;
 // for motion control
 unsigned int distR = 0; // measured in ticks
 unsigned int distL = 0;
-unsigned int total_ticksL = 0;
-unsigned int total_ticksR = 0;
 unsigned int goalL = 0;
 unsigned int goalR = 0;
-
-/*
-*** initially oriented in x direction = 0 degrees
-    |
-<--- ---> x
-    |
-*/
-unsigned char cm  = 0;
-unsigned int posX = 0;
-unsigned int posY = 0;
-unsigned int orientation = 0;
+unsigned int total_ticksL = 0;
+unsigned int total_ticksR = 0;
+unsigned int prev_cm = 0;
 
 // data inside Nav's incoming queue
 struct motorQueueData

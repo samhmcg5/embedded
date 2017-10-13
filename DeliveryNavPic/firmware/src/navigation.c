@@ -14,6 +14,55 @@ void sendMsgToNavQFromISR(struct navQueueData msg)
     xQueueSendToBackFromISR(nav_q, &msg, NULL);
 }
 
+void updateLocation(unsigned int cm, unsigned char action)
+{
+    switch(action)
+    {
+        case FORWARD:
+        {
+            float delta_x = cm * cos(convert * orientation);
+            float delta_y = cm * sin(convert * orientation);
+
+            posX += delta_x;
+            posY += delta_y;
+            break;
+        }
+        case REVERSE:
+        {
+            float delta_x = cm * cos(convert * orientation);
+            float delta_y = cm * sin(convert * orientation);
+
+            posX -= (int)delta_x;
+            posY -= (int)delta_y;
+            break;
+        }
+        case TURN_LEFT:
+        {
+            orientation += cm;
+            break;
+        }
+        case TURN_RIGHT:
+        {
+            orientation -= cm;
+            break;
+        }
+        case STOP:
+        {
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    // check the range of the orientation
+    while (orientation > 360)
+        orientation -= 360;
+    while (orientation < 0)
+        orientation = 360 + orientation;
+}
+
 void handleIncomingMsg(struct navQueueData data)
 {
     switch (data.type)
@@ -35,7 +84,7 @@ void handleIncomingMsg(struct navQueueData data)
         case POSITION:
         {
             char buf[64];
-            sprintf(buf, STR_UPDATE_POS, outgoing_seq, data.a, data.b);
+            sprintf(buf, STR_UPDATE_POS, outgoing_seq, data.a, data.b, data.c);
             commSendMsgToUartQueue(buf);
             break;
         }
@@ -54,6 +103,11 @@ void handleIncomingMsg(struct navQueueData data)
             {
                 navigationData.status = moving;
             }
+            break;
+        }
+        case POS_UPDATE:
+        {
+            updateLocation(data.a, data.b);
             break;
         }
         default:

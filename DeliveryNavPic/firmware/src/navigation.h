@@ -6,10 +6,15 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "system_config.h"
 #include "system_definitions.h"
 #include "nav_globals.h"
 #include "queue.h"
+
+#define PI 3.14159265
+
+double convert = PI / 180.0;
 
 typedef enum
 {
@@ -34,6 +39,8 @@ void NAVIGATION_Initialize ( void );
 void NAVIGATION_Tasks( void );
 
 void handleIncomingMsg(struct navQueueData data);
+
+void updateLocation(unsigned int cm, unsigned char action);
 
 
 #endif /* _NAVIGATION_H */

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"getMo",
+				"getMotorR_Dir"
+			],
+			[
 				"tick",
 				"ticksL"
 			],
@@ -116,28 +120,10 @@
 	"buffers":
 	[
 		{
-			"file": "firmware/src/system_config/default/system_interrupt.c",
-			"settings":
-			{
-				"buffer_size": 3800,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "firmware/src/motor_isr_fxns.c",
-			"settings":
-			{
-				"buffer_size": 829,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "firmware/src/motor_control.c",
 			"settings":
 			{
-				"buffer_size": 6874,
+				"buffer_size": 7198,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -146,7 +132,16 @@
 			"file": "firmware/src/motor_globals.h",
 			"settings":
 			{
-				"buffer_size": 1825,
+				"buffer_size": 1593,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/system_config/default/system_interrupt.c",
+			"settings":
+			{
+				"buffer_size": 3857,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -216,14 +211,17 @@
 	],
 	"file_history":
 	[
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/main.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/nav_globals.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_isr_fxns.c",
 		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case2.obj",
 		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case2.s",
 		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case3.s",
 		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case1.s",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_control.h",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.c",
 		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case1.obj",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_isr_fxns.c",
 		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/divisor.tv",
 		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/divider/div.c",
 		"/C/cygwin64/home/sam/hardware/hw4-ece4530-f17-samhmcg5/dividerhw1/divider.v",
@@ -283,8 +281,6 @@
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/system_config/default/system_interrupt.c",
 		"/C/cygwin64/home/sam/embedded/server/sams_simple_server.py",
 		"/C/cygwin64/home/sam/embedded/server/color_console.py",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.c",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/nav_globals.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication_globals.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_control.c",
@@ -342,8 +338,7 @@
 		"/C/Users/Samuel McGhee/Desktop/ros_gui_template_backup/src/data_node.cpp",
 		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/include/dash_gui.h",
 		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/src/dash_gui.cpp",
-		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/CMakeLists.txt",
-		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/readme.txt"
+		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/CMakeLists.txt"
 	],
 	"find":
 	{
@@ -378,24 +373,24 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "firmware/src/system_config/default/system_interrupt.c",
+					"file": "firmware/src/motor_control.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3800,
+						"buffer_size": 7198,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2082,
-								2082
+								1578,
+								1578
 							]
 						],
 						"settings":
@@ -405,87 +400,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1320.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "firmware/src/motor_isr_fxns.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 829,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								484,
-								484
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 36.0,
+						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "firmware/src/motor_control.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6874,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1764,
-								1764
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3660.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
+					"buffer": 1,
 					"file": "firmware/src/motor_globals.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1825,
+						"buffer_size": 1593,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								579,
-								579
+								99,
+								99
 							]
 						],
 						"settings":
@@ -497,6 +432,36 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "firmware/src/system_config/default/system_interrupt.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3857,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3135,
+								3147
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
