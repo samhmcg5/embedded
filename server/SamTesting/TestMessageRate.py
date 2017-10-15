@@ -2,9 +2,11 @@ import socket
 import time
 import sys
 import json
+import re
 
 #fin = "input.txt"
 
+# start the stopwatch
 time.clock()
 
 # time in s between messages
@@ -60,25 +62,33 @@ while time.clock() <= 45.0:
         buf += data
 
     buf = buf[:-1]
+    if "*HELLO*" in buf:
+        buf = re.sub("\*HELLO\*","" , buf)
 
-    if "STATUS" in buf:
-        IDlE_TIME = time.time()
-        diff = IDlE_TIME- PREV_IDLE_TIME
-        print("%f\t%s" % (diff, buf))
-        PREV_IDLE_TIME = IDlE_TIME
-        total_idle += diff
-        num_idle += 1
-    elif "X" in buf:
-        LOC_TIME = time.time()
-        diff = LOC_TIME - PREV_LOC_TIME
-        print("%f\t%s" % (diff, buf))
-        PREV_LOC_TIME = LOC_TIME
-        total_loc += diff
-        num_loc += 1
-    elif "ERROR" in buf:
-        errors += 1
-    else:
-        print(buf)
+    try:
+        json_obj = json.loads(buf)
+
+        if "STATUS" in buf:
+            IDlE_TIME = time.time()
+            diff = IDlE_TIME- PREV_IDLE_TIME
+            print("%f\t%s" % (diff, buf))
+            PREV_IDLE_TIME = IDlE_TIME
+            total_idle += diff
+            num_idle += 1
+        elif "X" in buf:
+            LOC_TIME = time.time()
+            diff = LOC_TIME - PREV_LOC_TIME
+            print("%f\t%s" % (diff, buf))
+            PREV_LOC_TIME = LOC_TIME
+            total_loc += diff
+            num_loc += 1
+        elif "ERROR" in buf:
+            print("%d\t\t%s" %(errors, buf))
+            errors += 1
+        else:
+            print(buf)
+    except ValueError:
+        print("Unable to parse JSON")
 
     data = ""
     buf  = ""
@@ -92,4 +102,4 @@ avg_idle = total_idle / num_idle
 avg_loc  = total_loc / num_loc
 print("Average time per STATUS message = %f" % avg_idle)
 print("Average time per LOCATION message = %f" % avg_loc)
-print("ERROR messages received = %f" % errors)
+print("ERROR messages received = %d" % errors)
