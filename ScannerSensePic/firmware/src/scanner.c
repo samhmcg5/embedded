@@ -20,17 +20,18 @@ void handleIncomingMsg(struct scanQueueData data)
         case INFO:
         {
             zone = data.zone;
-            if (data.action == 0)
+            if (data.action == 0) // STOP
             {
                 DRV_ADC_Stop();
                 DRV_TMR0_Stop();
             }
-            else
+            else if (data.action == 1) // START
             {
                 DRV_ADC_Open();
                 DRV_ADC_Start();
                 DRV_TMR0_Start();
             }
+            // else CONTINUE
             break;
         }
         case ADC:

@@ -1,0 +1,605 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sca",
+				"scan_sense_port"
+			],
+			[
+				"sr",
+				"srvf"
+			],
+			[
+				"TestServer",
+				"TestServerCalls"
+			],
+			[
+				"loa",
+				"loadTestsFromTestCase"
+			],
+			[
+				"asser",
+				"assertEquals"
+			],
+			[
+				"assert",
+				"assertIsNotNone"
+			],
+			[
+				"socke",
+				"socket_init"
+			],
+			[
+				"sock",
+				"socket_init"
+			],
+			[
+				"assertI",
+				"assertIsNotNone"
+			],
+			[
+				"scan",
+				"scan_sense_port"
+			],
+			[
+				"Connect",
+				"ConnectionError"
+			],
+			[
+				"is",
+				"isSRVOnline"
+			],
+			[
+				"client",
+				"client_addr"
+			],
+			[
+				"db",
+				"dbonline"
+			],
+			[
+				"json",
+				"jsonobj"
+			],
+			[
+				"del",
+				"deliv_nav"
+			],
+			[
+				"conn",
+				"connect"
+			],
+			[
+				"Conn",
+				"ConnectionFailure"
+			],
+			[
+				"mongo",
+				"mongoclient"
+			],
+			[
+				"sc",
+				"scan_nav_col"
+			],
+			[
+				"ERROR",
+				"ERROR_DB_JSON"
+			],
+			[
+				"INF",
+				"INFO_DB_RETR_ATT"
+			],
+			[
+				"INFO",
+				"INFO_DB_STORE_SUC"
+			],
+			[
+				"delv",
+				"deliv_sense"
+			],
+			[
+				"store",
+				"store_default_fields"
+			],
+			[
+				"SCAN",
+				"SCAN_NAV_DEFAULT_ACTION"
+			],
+			[
+				"DEL",
+				"DELIV_NAV_DEFAULT_ACTION"
+			],
+			[
+				"DELI",
+				"DELIV_NAV_DEFAULT_PATH"
+			],
+			[
+				"SCA",
+				"SCAN_SENSE_DEFAULT_ZONE_1_CURR"
+			],
+			[
+				"Connec",
+				"ConnectionError"
+			],
+			[
+				"deliv",
+				"deliv_nav"
+			],
+			[
+				"file",
+				"fileCount"
+			],
+			[
+				"has",
+				"hastweet"
+			],
+			[
+				"stream",
+				"streamListener"
+			],
+			[
+				"bas",
+				"baseurl"
+			],
+			[
+				"clie",
+				"clientport"
+			],
+			[
+				"s",
+				"socket"
+			],
+			[
+				"scan_na",
+				"scan_nav_rtrn_msg"
+			],
+			[
+				"deliv_na",
+				"deliv_nav_col"
+			],
+			[
+				"send",
+				"send_msg"
+			],
+			[
+				"SERVER",
+				"SERVER_ONLINE"
+			],
+			[
+				"SR",
+				"INFO_SRV_MSG_SENDING"
+			],
+			[
+				"SERV",
+				"SERVER_ONLINE"
+			],
+			[
+				"Con",
+				"ConnectionError"
+			],
+			[
+				"js",
+				"json_rtrn_obj"
+			],
+			[
+				"print",
+				"print_msg"
+			],
+			[
+				"deli",
+				"deliv_nav_rtrn_msg"
+			],
+			[
+				"seq",
+				"seq_num"
+			],
+			[
+				"crae",
+				"create_default_server_msg_fields"
+			],
+			[
+				"SC",
+				"SCANNER_SENSING_COL_NAME"
+			],
+			[
+				"create",
+				"create_default_server_msg_fields"
+			],
+			[
+				"list",
+				"list"
+			],
+			[
+				"DELIV_NA",
+				"DELIV_NAV_DEFAULT_PATH"
+			],
+			[
+				"DE",
+				"DELIVERY_SENSING_COL_NAME"
+			],
+			[
+				"SCAN_NA",
+				"SCAN_NAV_DEFAULT_ACTION"
+			],
+			[
+				"DELIV_",
+				"DELIVERY_SENSE"
+			],
+			[
+				"DELIV_S",
+				"DELIVERY_SENSING"
+			],
+			[
+				"DELIV",
+				"DELIV_NAV_STATUS_1"
+			],
+			[
+				"de",
+				"deliv_nav_col"
+			],
+			[
+				"SCANN",
+				"SCANNER_NAVIGATION_COL_NAME"
+			],
+			[
+				"msg",
+				"msg_num"
+			],
+			[
+				"ZON",
+				"ZONE1_DEFAULT_2"
+			],
+			[
+				"ZONE",
+				"ZONE1_DEFAULT_1"
+			],
+			[
+				"DA",
+				"DATABASE_NAME"
+			],
+			[
+				"INFO_DB_STOR",
+				"INFO_DB_STORE_SUC"
+			],
+			[
+				"SEQ",
+				"SEQ_FIELD"
+			],
+			[
+				"is_",
+				"is_db_online"
+			],
+			[
+				"ERRRO",
+				"ERROR_MSG_FORMAT"
+			],
+			[
+				"SE",
+				"SEQ_FIELD"
+			],
+			[
+				"test",
+				"testCollection"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/countdownp.py",
+			"settings":
+			{
+				"buffer_size": 673,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Testing/db.py",
+			"settings":
+			{
+				"buffer_size": 287,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Testing/database.py",
+			"settings":
+			{
+				"buffer_size": 4573,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing"
+	],
+	"file_history":
+	[
+		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/receive.py",
+		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/prime.py",
+		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/send.py",
+		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/endian.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/client_tests.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_fields.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/system_test.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_main.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/temp_keys.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_threads.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_defs.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database_fields.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/srv_msg_def.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database_messages.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/status_viewer.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/defines_status_viewer.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/srv_msg_def.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/client_defs.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/clientKeys.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/server_defs.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/serverKeys.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/wolfram.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/keys.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/server_defs.py.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/threaded_server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_thread.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/threaded_server_bad_json.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/error_test.bat",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/sams_simple_server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/tcp_echo_client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_test.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/MilestoneTwo/mongodb_connection.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Notes/echo_client_exception.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Notes/udp_echo_client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Notes/tcp_echo_client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/MilestoneTwo/echo_server_exception.py"
+	],
+	"find":
+	{
+		"height": 59.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/countdownp.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 673,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Testing/db.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 287,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								287,
+								287
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Testing/database.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4573,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								76,
+								45
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4446.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 59.0
+	},
+	"input":
+	{
+		"height": 89.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "srv_msg_def.sublime-project",
+	"replace":
+	{
+		"height": 108.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 375.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -1,24 +1,38 @@
 import unittest
+# Server defs
 import server_defs as defs
-#import server_threads as threads
+import json
+# Database
 import database as db
 import database_fields as dbf
+# Server
+import server as srv
+import server_fields as srvf
+# Client
+import client as cli
 
 # TODO
 # Come up with more good and bad json examples
 json_good = '{ "json": 0 }'
 json_bad = '{ not json: 0 }'
 
+# Store and Retrieve json objs
+scan_sense_store_str = '{ "SEQ": 1, "SCAN_SENSE":{ "ZONE": 2, "RED": 1, "GREEN": 2, "BLUE": 3 } }'
+
 # Switch to test database connectivity functionality
 DBONLINE = True
 
 # Server definition tests
+# PASSED
+# TODO (NONOPERATIONAL && NOT PASSED)
+# Checksum
+# Sequence
+# Message Rates
 class TestServerDefs(unittest.TestCase):
 
 	def test_isjson(self):
 		self.assertTrue(defs.isjson(json_good))
-		self.assertFalse(defs.isjson(json_bad))
-
+		self.assertFalse(defs.isjson(json_bad))		
 
 # Database setup
 class SimpleDatabaseTestCase(unittest.TestCase):
@@ -27,8 +41,10 @@ class SimpleDatabaseTestCase(unittest.TestCase):
 		self.db = db.Database()
 
 # Database tests
+# PASSED
 class TestDatabaseCalls(SimpleDatabaseTestCase):
 
+	# Test database class initialization
 	def test_init(self):
 		self.assertIsInstance(self.db, type(db.Database()))
 		self.assertEquals(self.db.host, dbf.localhost)
@@ -48,7 +64,7 @@ class TestDatabaseCalls(SimpleDatabaseTestCase):
 		self.assertIsNone(self.db.scan_nav_col)
 		self.assertIsNone(self.db.scan_sense_col)
 
-	# Tests database initialization
+	# Tests database initialization and clean
 	@unittest.skipIf(DBONLINE is False, "db is offline, only test when up")
 	def test_db_init(self):
 		self.db.connect()
@@ -97,11 +113,36 @@ class TestDatabaseCalls(SimpleDatabaseTestCase):
 		self.assertIsNone(self.db.scan_nav_col)
 		self.assertIsNone(self.db.scan_sense_col)
 
-	# TODO
-	#def test_store(self):
+	# Test store and retrieve functionality of database
+	@unittest.skipIf(DBONLINE is False, "db is offline, only test when up")	
+	def test_store_and_retrieve(self):
+		self.db.connect()
+		self.db.db_init()
+		jsonobj = json.loads(scan_sense_store_str)
 		
-	# TODO		
-	#def test_retrieve(self):
+		seq = jsonobj['SEQ']
+		zone = jsonobj['SCAN_SENSE']['ZONE']
+		red = jsonobj['SCAN_SENSE']['RED']
+		green = jsonobj['SCAN_SENSE']['GREEN']
+		blue = jsonobj['SCAN_SENSE']['BLUE']
+
+		self.assertEquals(seq, 1)
+		self.assertEquals(zone, 2)
+		self.assertEquals(red, 1)
+		self.assertEquals(green, 2)
+		self.assertEquals(blue, 3)
+
+		res = self.db.store(self.db.scan_sense_col, '{ "SCAN_SENSE.ZONE": ' + str(zone) + '}', jsonobj, dbf.scan_sense)
+		self.assertTrue(res) # result successfully stored
+		doc = self.db.retrieve(self.db.scan_sense_col, '{ "SCAN_SENSE.ZONE": { "$exists": true, "$eq": ' + str(zone) + '} }', dbf.scan_sense)
+		
+		self.assertEquals(doc['SEQ'], seq)
+		self.assertEquals(doc['SCAN_SENSE']['ZONE'], zone)
+		self.assertEquals(doc['SCAN_SENSE']['RED'], red)
+		self.assertEquals(doc['SCAN_SENSE']['GREEN'], green)
+		self.assertEquals(doc['SCAN_SENSE']['BLUE'], blue)
+
+		self.db.clean()
 	
 	# Test if database instance properly connects
 	@unittest.skipIf(DBONLINE is False, "db is offline, only test when up")	
@@ -131,13 +172,106 @@ class TestDatabaseCalls(SimpleDatabaseTestCase):
 		self.db.disconnect()
 		self.assertFalse(self.db.isDBOnline())
 
+# Server setup
+class SimpleServerTestCase(unittest.TestCase):
+	
+	def setUp(self):
+		self.srv = srv.Server(srvf.IP_ADDR, srvf.scan_sense_port)
+		self.cli = cli.Client(srvf.IP_ADDR, srvf.scan_sense_port)
+
+class TestServerCalls(SimpleServerTestCase):
+
+	def test_init(self):
+		self.assertIsInstance(self.srv, type(srv.Server(srvf.IP_ADDR, srvf.scan_sense_port)))
+		self.assertIsInstance(self.cli, type(cli.Client(srvf.IP_ADDR, srvf.scan_sense_port)))
+		self.assertIsInstance(self.srv.db, type(db.Database()))
+
+		self.assertEquals(self.srv.addr, srvf.IP_ADDR)
+		self.assertEquals(self.srv.port, srvf.scan_sense_port)
+		self.assertEquals(self.srv.size, 1)
+		self.assertEquals(self.srv.backlog, 1)
+
+		self.assertIsNone(self.srv.client)
+		self.assertIsNone(self.srv.client_addr)
+
+		self.assertIsNone(self.srv.socket)
+		self.assertFalse(self.srv.srvonline)
+		self.srv.reset()
+
+	def test_socket_init(self):
+		self.srv.socket_init()
+		self.assertIsNotNone(self.srv.socket)
+		self.srv.reset()
+
+	def test_start(self):
+		self.srv.socket_init()
+		self.srv.start()
+		self.assertTrue(True)
+		self.srv.reset()
+
+	# Tests connect, isSRVOnline, and disconnect
+	def test_connect(self):
+		self.srv.socket_init()
+		#self.cli.socket_init()
+		self.srv.start()
+		
+		self.assertFalse(self.srv.isSRVOnline())
+
+		self.srv.connect()
+		#self.cli.connect() # Client is connected
+
+		self.assertIsNotNone(client)
+		self.assertIsNotNone(client_addr)
+		self.assertTrue(self.srv.isSRVOnline())
+
+		self.srv.disconnect()
+		self.assertFalse(self.srv.isSRVOnline())
+		self.srv.reset()
+
+	# def test_sendmsg(self):
+	# 	self.srv.socket_init()
+	# 	self.cli.socket_init()
+	# 	self.srv.start()
+	# 	self.srv.connect()
+	# 	self.cli.connect()
+
+	# 	self.srv.sendmsg("Hello!")
+	# 	buf = ""
+	# 	while '!' not in buf:
+	# 		buf += self.cli.recvmsg()
+
+	# 	self.assertEquals(buf, "Hello!")
+	# 	buf = ""
+
+	# 	self.srv.disconnect()
+	# 	self.srv.reset()
+
+	# def test_recvmsg(self):
+	# 	self.srv.socket_init()
+	# 	self.cli.socket_init()
+	# 	self.srv.start()
+	# 	self.srv.connect()
+	# 	self.cli.connect()
+
+	# 	self.cli.sendmsg("Hello!")
+	# 	buf = ""
+	# 	while '!' not in buf:
+	# 		buf += self.srv.recvmsg()
+
+	# 	self.assertEquals(buf, "Hello!")
+	# 	buf = ""
+
+	# 	self.srv.disconnect()
+	# 	self.srv.reset()
 
 if __name__ == '__main__':
 	suite = unittest.TestSuite()
 	# Server Definition Tests
 	suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestServerDefs))
 	# Database Tests
-	suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestDatabaseCalls))	
+	suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestDatabaseCalls))
+	# Server Tests
+	suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestServerCalls))	
 	
 	# Run Tests
 	unittest.TextTestRunner(verbosity=2).run(suite)
