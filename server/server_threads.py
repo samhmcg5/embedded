@@ -224,31 +224,35 @@ class ScanSenseThread(ServerThreadBase):
             scan_sense = json_obj[srv.SCAN_SENSE]
             # update quota status
             if srv.ZONE in scan_sense:
+                self.seq_num += 1
+                print(self.seq_num)
                 if scan_sense[srv.ZONE] is 0:
-                    self.client.send(('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1, "ACTION": 1 }').encode())
+                    self.client.send(('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1, "ACTION": 1 }!').encode())
                 
                 if srv.RED and srv.GREEN and srv.BLUE in scan_sense:
-                    text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
-                    text = re.sub('\"','',text)
-                    msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
-                    self.sendToStatusThread(msg)
-
-                    text = srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[srv.ZONE]) + ' }'), json_obj, self.col)
+                    placeholder = 69
+                    # text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
                     # text = re.sub('\"','',text)
-                    msg = status.StatusMsg(self.name, "SUCCESS", "COLOR", text)
-                    self.sendToStatusThread(msg)
+                    # msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+                    # self.sendToStatusThread(msg)
 
-                if json_obj[srv.SEQ_FIELD] <= 100 and json_obj[srv.SEQ_FIELD] >= 0:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(1) + ' , "ACTION": 1 }').encode())
+                    # text = srv.store(json.loads('{ "SCAN_SENSE.ZONE": ' + str(scan_sense[srv.ZONE]) + ' }'), json_obj, self.col)
+                    # # text = re.sub('\"','',text)
+                    # msg = status.StatusMsg(self.name, "SUCCESS", "COLOR", text)
+                    # self.sendToStatusThread(msg)
+
+                if json_obj[srv.SEQ_FIELD] <= 100 and json_obj[srv.SEQ_FIELD] > 0:
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(1) + ' , "ACTION": 2 }!').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 200 and json_obj[srv.SEQ_FIELD] > 100:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , "ACTION": 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(2) + ' , "ACTION": 2 }!').encode())
 
                 elif json_obj[srv.SEQ_FIELD] <= 300 and json_obj[srv.SEQ_FIELD] > 200:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": ' +  str(3) + ' , "ACTION": 2 }!').encode())
 
                 elif json_obj[srv.SEQ_FIELD] >= 301:
-                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1 , "ACTION": 1 }').encode())
+                    self.client.send(str('{ "SEQ": ' + str(self.seq_num) + ', "ZONE": 1 , "ACTION": 0 }!').encode())
+        return
                     
 
 
@@ -283,7 +287,7 @@ class StatusConsoleThread(Thread):
             print("[StatusConsoleThread]: Running in verbose mode")
 
         while True:
-            if not seld.verbose:
+            if not self.verbose:
                 self.initClient()
             while True:
                 try:

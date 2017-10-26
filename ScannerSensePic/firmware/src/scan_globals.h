@@ -13,6 +13,7 @@ struct scanQueueData
     unsigned int action;
     unsigned int zone;
     unsigned int color;
+    unsigned int dist;
 };
 
 // incoming scan queue
@@ -21,6 +22,8 @@ QueueHandle_t scan_q;
 void sendMsgToScanQ(struct scanQueueData msg);
 
 void sendMsgToScanQFromISR(struct scanQueueData msg);
+
+double voltsToCm(double volts);
 
 #endif	/* SCAN_GLOBALS_H */
 

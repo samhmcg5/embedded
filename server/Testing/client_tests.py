@@ -13,15 +13,26 @@ def getargs(argv):
 def main():
 	args = getargs(sys.argv)
 	if "-c" in args:
-		print("Here")
+		print("Test connect ...")
 		test_connect()
-	#elif "-s" in args:
-		#test_sendmsg()
+	elif "-s" in args:
+		print("Test send recv msg ...")
+		test_send_recv_msg()
 
 def test_connect():
 	cli = Client(srvf.IP_ADDR, srvf.scan_sense_port)
 	cli.socket_init()
 	cli.connect()
+
+def test_send_recv_msg():
+	cli = Client(srvf.IP_ADDR, srvf.scan_sense_port)
+	cli.socket_init()
+	cli.connect()
+	buf = ""
+	while '!' not in buf:
+		buf += cli.recvmsg()
+	print(buf)
+	cli.sendmsg(buf)
 
 if __name__ == '__main__':
 	main()

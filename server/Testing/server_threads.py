@@ -1,11 +1,11 @@
-import srv_msg_def as srv
-from pymongo import MongoClient
 from threading import Thread
 from collections import deque
-import json
 import defines_status_viewer as status
-from pymongo import MongoClient
 import re
+from server import *
+from database_fields import *
+from server_fields import *
+import server_defs as defs
 # for passing global data
 status_d = deque()
 
@@ -15,16 +15,8 @@ status_d = deque()
 class ServerThreadBase(Thread):
     # constructor
     def __init__(self, port, ip_addr):
-        self.port    = port
-        self.ip_addr = ip_addr
-        # connect to DB
-        self.mongo = srv.connect_to_mongo()
-        self.mongo = MongoClient()
-        # initialize some members
-        self.client     = None
-        self.address    = None
-        self.s          = None
-        self.msg_length = None
+        # Instantiate server instance
+        self.srv = Server(ip_addr, port)
         self.seq_num    = 1     # sequence to send
         self.recv_seq   = 0     # last sequence received
         # call the Thread class init
@@ -38,29 +30,27 @@ class ServerThreadBase(Thread):
     def readFromClient(self):
         buf = ""
         # read data until we see the '!' delimeter
-        while srv.DELIM not in buf:
-            self.msg_length = len(buf)
-            data = srv.recv_msg(self.client, self.msg_length)
-            if not data:
-                raise ConnectionError('Client not connected, Reconnecting...')
-            buf += data
-
+        while delim not in buf:
+            try:
+                buf += self.srv.recvmsg()
+            except ConnectionError as err:
+                raise ConnectionError(err)
             # if *HELLO* seen scrap the data
-            if srv.init_msg(buf) is True:
+            if buf is WIFLY_INIT_MSG:
                 buf = ""
                 break
+
         buf = buf[:-1]
-        text = re.sub('\"', '', srv.get_msg(srv.RECV, buf))
-        msg = status.StatusMsg(self.name, "RECVD", "NONE", text)
+        msg = status.StatusMsg(self.name, "RECVD", "NONE", "Received msg: %s" % buf)
         self.sendToStatusThread(msg)
         return buf
 
     # start the connection to the client
     def initClient(self):
         self.seq_num = 1
-        if srv.is_srv_online() is not True:  
-            self.s = srv.start_server(self.ip_addr, self.port)
-            self.client, self.address = srv.client_connect(self.s)
+        self.srv.socket_init()
+        self.srv.start()
+        self.srv.connect()
 
     # OVERRIDE ME !!!!!
     def handleJSON(self, json_obj):
@@ -69,7 +59,8 @@ class ServerThreadBase(Thread):
 
     # Main thread method
     def run(self):
-        text = re.sub('\"', '', "on port %s"%self.port)
+        self.srv.db_init()
+        text = re.sub('\"', '', "on port %s" % self.srv.port)
         msg = status.StatusMsg(self.name, "SERVER", "NONE", text)
         self.sendToStatusThread(msg)
         # Main server processing
@@ -88,19 +79,18 @@ class ServerThreadBase(Thread):
                     buf = self.readFromClient()
                     json_obj = None
                     # Attempt to parse the JSON
-                    if srv.is_json(buf):
+                    if defs.isjson(buf):
                         json_obj = json.loads(buf)
                         # handle the valid JSON object
                         self.handleJSON(json_obj)
                     else:
-                        text = re.sub('\"', '', srv.ERROR_MSG_FORMAT)
-                        msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", text)
+                        msg = status.StatusMsg(self.name, "ERROR", "BAD_JSON", "Message is not json object type")
                         self.sendToStatusThread(msg)
-                        #break
+
                 except (ValueError, ConnectionError, KeyboardInterrupt) as err:
-                    self.s.close()
-                    srv.clean_db()
-                    text = re.sub('\"', '', "Caught Exception "+str(err))
+                    self.srv.reset()
+                    self.srv.db.clean_db()
+                    text = re.sub('\"', '', "Caught Exception " + str(err))
                     msg = status.StatusMsg(self.name, "ERROR", "EXCEPTION", text)
                     self.sendToStatusThread(msg)
                     break
@@ -114,22 +104,20 @@ class DelivNavThread(ServerThreadBase):
     # class constructor
     def __init__(self, port, ip_addr):
         ServerThreadBase.__init__(self, port, ip_addr)
-        self.name = "DeliveryNav"
-        self.col  = self.mongo[srv.DATABASE_NAME][srv.DELIVERY_NAVIGATION_COL_NAME]
 
     # overridden from base, put Mongo Logic here
     def handleJSON(self, json_obj):
         # do whatever with the incoming data...
-        if not srv.DELIV_NAV in json_obj:
+        if not DELIV_NAV in json_obj:
            return
-        deliv_nav = json_obj[srv.DELIV_NAV]
+        deliv_nav = json_obj[DELIV_NAV]
         # update rover status
-        if srv.STATUS and srv.MESSAGE in deliv_nav:
-            text = srv.INFO_DB_STORE_ATT + " Data being stored: " + json.dumps(json_obj)
+        if STATUS and MESSAGE in deliv_nav:
+            text = "Data being stored: " + json.dumps(json_obj)
             text = re.sub('\"','',text)
-            msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
+            msg = status.StatusMsg(self.srv.db.deliv_nav, "STORE", "COLOR", text)
             self.sendToStatusThread(msg)
-            text = srv.store(json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.col)
+            text = self.srv.store(self.srv.db.deliv_nav_col, json.loads('{ "DELIV_NAV.STATUS": { "$exists": true } }'), json_obj, self.srv.db.deliv_nav)
             text = re.sub('\"','',text)
             msg = status.StatusMsg(self.name, "SUCCESS", "STATUS", text)
             self.sendToStatusThread(msg)
@@ -140,7 +128,7 @@ class DelivNavThread(ServerThreadBase):
             text = re.sub('\"','',text)
             msg = status.StatusMsg(self.name, "STORE", "COLOR", text)
             self.sendToStatusThread(msg)
-            text = srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj, self.col)
+            text = self.srv.store(json.loads('{ "DELIV_NAV.X": { "$exists": true } }'), json_obj)
             text = re.sub('\"','',text)
             msg = status.StatusMsg(self.name, "SUCCESS", "LOC", text)
             self.sendToStatusThread(msg)

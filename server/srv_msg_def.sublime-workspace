@@ -4,6 +4,66 @@
 		"selected_items":
 		[
 			[
+				"total",
+				"total_err"
+			],
+			[
+				"dist",
+				"dist_err_count"
+			],
+			[
+				"tota",
+				"total_err"
+			],
+			[
+				"dis",
+				"dist_err_count"
+			],
+			[
+				"expec",
+				"expected_distance"
+			],
+			[
+				"zone",
+				"zone_err_count"
+			],
+			[
+				"expected",
+				"expected_zone"
+			],
+			[
+				"json",
+				"json_obj"
+			],
+			[
+				"msg",
+				"msg_count"
+			],
+			[
+				"form",
+				"format_err_count"
+			],
+			[
+				"rate",
+				"rate_err_count"
+			],
+			[
+				"exce",
+				"expected_rate"
+			],
+			[
+				"clei",
+				"client_addr"
+			],
+			[
+				"deli",
+				"deliv_nav"
+			],
+			[
+				"sen",
+				"sendToStatusThread"
+			],
+			[
 				"sca",
 				"scan_sense_port"
 			],
@@ -58,10 +118,6 @@
 			[
 				"db",
 				"dbonline"
-			],
-			[
-				"json",
-				"jsonobj"
 			],
 			[
 				"del",
@@ -188,10 +244,6 @@
 				"print_msg"
 			],
 			[
-				"deli",
-				"deliv_nav_rtrn_msg"
-			],
-			[
 				"seq",
 				"seq_num"
 			],
@@ -244,10 +296,6 @@
 				"SCANNER_NAVIGATION_COL_NAME"
 			],
 			[
-				"msg",
-				"msg_num"
-			],
-			[
 				"ZON",
 				"ZONE1_DEFAULT_2"
 			],
@@ -288,27 +336,20 @@
 	"buffers":
 	[
 		{
-			"file": "/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/countdownp.py",
+			"file": "EricTesting/Test3.py",
 			"settings":
 			{
-				"buffer_size": 673,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Testing/db.py",
-			"settings":
-			{
-				"buffer_size": 287,
+				"buffer_size": 2352,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Testing/database.py",
+			"file": "EricTesting/Test3Client.py",
 			"settings":
 			{
-				"buffer_size": 4573,
+				"buffer_size": 622,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		}
@@ -345,30 +386,59 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing"
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server"
 	],
 	"file_history":
 	[
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.h",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/communication_globals.h",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/system_config/default/system_interrupt.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scan_globals.h",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_threads.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2Client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test1Client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test1.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/SamTesting/TestMessageRate.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/server_defs.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/system_test.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_main.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/communication.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/system_config/default/system_interrupt.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/communication.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/peripherals.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/peripherals_globals.h",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/peripherals.h",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/debug.h",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/communication_globals.h",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/status_viewer.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_threads.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerNavPic/firmware/src/line_sensor.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerNavPic/firmware/src/motor_control.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_fields.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_defs.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/defines_status_viewer.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/srv_msg_def.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/system_config/default/system_init.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_main.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/client_tests.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/client.py",
+		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/countdownp.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/db.py",
 		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/receive.py",
 		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/prime.py",
 		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/send.py",
 		"/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/endian.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/client_tests.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_fields.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/system_test.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/client.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_main.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/temp_keys.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_threads.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_defs.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database_fields.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/srv_msg_def.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database_messages.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/status_viewer.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/defines_status_viewer.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/srv_msg_def.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/client_defs.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/clientKeys.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564/client.py",
@@ -409,6 +479,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"123"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -426,83 +497,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/C/Users/Eric/Downloads/E_ample_Code_export/Multiprocessing/countdownp.py",
+					"file": "EricTesting/Test3.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 673,
+						"buffer_size": 2352,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "Testing/db.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 287,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								287,
-								287
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Testing/database.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4573,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								76,
-								45
+								2281,
+								2281
 							]
 						],
 						"settings":
@@ -511,7 +523,36 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4446.0,
+						"translation.y": 2563.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "EricTesting/Test3Client.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 622,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								20,
+								20
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -597,7 +638,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 375.0,
+	"side_bar_width": 525.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

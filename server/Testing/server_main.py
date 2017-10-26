@@ -15,7 +15,6 @@ If you MUST print, do it from there after receiving from the deque
 That thread sends data to the status viewer that will then print it 
 """
 
-IP_ADDR = '192.168.1.123'
 print("INITIALIZING TEAM14 SERVER @ 192.168.1.123")
 
 # Instantiate all the thread objects ( calls __init__() )

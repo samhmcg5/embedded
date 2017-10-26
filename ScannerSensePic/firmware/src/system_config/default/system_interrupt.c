@@ -5,6 +5,7 @@
 
 #define ADC_NUM_SAMPLES     16
 #define SERVER_TIMEOUT      8
+unsigned int count = 0;
 
 void IntHandlerDrvUsartInstance0(void)
 {
@@ -59,12 +60,19 @@ void IntHandlerDrvAdc(void)
     
     struct scanQueueData data;
     data.type = ADC;
-    if (avg >= 600)
+    data.dist = avg;
+    
+    data.color = 0;
+    if (avg >= 600) {
         data.color = 0;
-    else if (avg < 600 && avg >= 300)
+    }
+    else if (avg < 600 && avg >= 300) {
         data.color = 1;
-    else if (avg >= 0 && avg < 300)
+    }
+    else if (avg >= 0 && avg < 300){
         data.color = 2;
+    }
+    
     sendMsgToScanQFromISR(data);
     dbgOutputLoc(ADC_ISR_END);
     
@@ -75,9 +83,14 @@ void IntHandlerDrvAdc(void)
 void IntHandlerDrvTmrInstance0(void)
 {
     dbgOutputLoc(TMR_ISR_START);
-    struct scanQueueData data;
-    data.type = TMR;
-    sendMsgToScanQFromISR(data);
+    count++;
+    if (count == 4) 
+    {
+        struct scanQueueData data;
+        data.type = TMR;
+        sendMsgToScanQFromISR(data);
+        count = 0;
+    }
     dbgOutputLoc(TMR_ISR_END);
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
 }

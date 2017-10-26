@@ -179,6 +179,8 @@ class SimpleServerTestCase(unittest.TestCase):
 		self.srv = srv.Server(srvf.IP_ADDR, srvf.scan_sense_port)
 		self.cli = cli.Client(srvf.IP_ADDR, srvf.scan_sense_port)
 
+# Server tests
+# PASSED
 class TestServerCalls(SimpleServerTestCase):
 
 	def test_init(self):
@@ -212,57 +214,35 @@ class TestServerCalls(SimpleServerTestCase):
 	# Tests connect, isSRVOnline, and disconnect
 	def test_connect(self):
 		self.srv.socket_init()
-		#self.cli.socket_init()
 		self.srv.start()
 		
 		self.assertFalse(self.srv.isSRVOnline())
 
 		self.srv.connect()
-		#self.cli.connect() # Client is connected
-
-		self.assertIsNotNone(client)
-		self.assertIsNotNone(client_addr)
+		
+		self.assertIsNotNone(self.srv.client)
+		self.assertIsNotNone(self.srv.client_addr)
 		self.assertTrue(self.srv.isSRVOnline())
 
 		self.srv.disconnect()
 		self.assertFalse(self.srv.isSRVOnline())
 		self.srv.reset()
 
-	# def test_sendmsg(self):
-	# 	self.srv.socket_init()
-	# 	self.cli.socket_init()
-	# 	self.srv.start()
-	# 	self.srv.connect()
-	# 	self.cli.connect()
+	def test_send_recv_msg(self):
+		self.srv.socket_init()
+		self.srv.start()
+		self.srv.connect()
+		
+		self.srv.sendmsg("Hello!")
+		buf = ""
+		while '!' not in buf:
+			buf += self.srv.recvmsg()
 
-	# 	self.srv.sendmsg("Hello!")
-	# 	buf = ""
-	# 	while '!' not in buf:
-	# 		buf += self.cli.recvmsg()
+		self.assertEquals(buf, "Hello!")
+		buf = ""
 
-	# 	self.assertEquals(buf, "Hello!")
-	# 	buf = ""
-
-	# 	self.srv.disconnect()
-	# 	self.srv.reset()
-
-	# def test_recvmsg(self):
-	# 	self.srv.socket_init()
-	# 	self.cli.socket_init()
-	# 	self.srv.start()
-	# 	self.srv.connect()
-	# 	self.cli.connect()
-
-	# 	self.cli.sendmsg("Hello!")
-	# 	buf = ""
-	# 	while '!' not in buf:
-	# 		buf += self.srv.recvmsg()
-
-	# 	self.assertEquals(buf, "Hello!")
-	# 	buf = ""
-
-	# 	self.srv.disconnect()
-	# 	self.srv.reset()
+		self.srv.disconnect()
+		self.srv.reset()
 
 if __name__ == '__main__':
 	suite = unittest.TestSuite()

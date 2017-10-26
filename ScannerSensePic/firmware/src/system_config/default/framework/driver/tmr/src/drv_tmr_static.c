@@ -157,7 +157,7 @@ void DRV_TMR0_Initialize(void)
     /* Clear counter */
     PLIB_TMR_Counter32BitClear(TMR_ID_2);
     /*Set period */ 
-    PLIB_TMR_Period32BitSet(TMR_ID_2, 10000000UL);
+    PLIB_TMR_Period32BitSet(TMR_ID_2, 2500000UL);
     /* Setup Interrupt */   
     PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_PRIORITY_LEVEL1);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_SUBPRIORITY_LEVEL0);          

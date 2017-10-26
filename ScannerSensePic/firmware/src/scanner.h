@@ -17,27 +17,18 @@ typedef enum
 	SCANNER_STATE_SCANNING,
 } SCANNER_STATES;
 
-typedef enum
-{
-    idle=0,
-    scanning,
-} STATUS;
-
 typedef struct
 {
     SCANNER_STATES state;
-    STATUS status;
 } SCANNER_DATA;
 
 unsigned int zone;
-unsigned int red;
+double red;
 unsigned int green;
-unsigned int blue = 0;
+unsigned int blue;
 
 void SCANNER_Initialize ( void );
 
 void SCANNER_Tasks( void );
-
-void handleIncomingMsg(struct scanQueueData data);
 
 #endif /* _SCANNER_H */
