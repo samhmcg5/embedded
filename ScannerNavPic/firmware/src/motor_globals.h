@@ -2,27 +2,54 @@
 #define	MOTOR_GLOBALS_H
 
 // PIN DIRECTIONS FOR MOTORS
-#define FORWARD     0 // also an action
-#define BACKWARD    1 // also an action...
-// ACTIONS
+#define FORWARD     0
+#define REVERSE     1
 #define TURN_LEFT   2
 #define TURN_RIGHT  3
 #define STOP        4
 
-// send to motor
-#define ACTION      0
-#define TASK        1
-// send to UART, coming from motor thread
-#define SPEEDS      2
-#define POSITION    3
-#define SENSOR      4
+#define TICKS_PER_CM        76
+#define TP_DEGREE_L         7.25
+#define TP_DEGREE_R         7.27
 
-// data inside Nav's incoming queue
+#define SPEED_0         0
+#define SPEED_1         470
+#define SPEED_2         625
+#define SPEED_3         940
+#define SPEED_4         1560
+#define SPEED_5         2815
+
+unsigned int speeds[] = {SPEED_0, SPEED_1, SPEED_2, SPEED_3, SPEED_4, SPEED_5};
+
+// for motor selection
+#define LEFT  0
+#define RIGHT 1
+
+// for error correction
+#define KP   5
+#define KI   20
+int integral = 0;
+
+// for motion control
+unsigned int distR = 0; // measured in ticks
+unsigned int distL = 0;
+unsigned int goalL = 0;
+unsigned int goalR = 0;
+unsigned int total_ticksL = 0;
+unsigned int total_ticksR = 0;
+unsigned int prev_cm = 0;
+
+// type definitions
+#define ACTION      0
+#define POSITION    1
+#define POS_UPDATE  2
+
+// data inside incoming queue
 struct motorQueueData
 {
     char type;
     char action;
-    char dist;
+    unsigned int dist;
     char speed;
 };
 
@@ -31,18 +58,25 @@ void sendMsgToMotorQFromISR(struct motorQueueData msg);
 
 struct pwmQueueData
 {
-    char dc;
+    unsigned int dc;
+    unsigned int dist;
     char dir;
-    char dist;
+    char action;
 };
 
 void sendMsgToMotor_R(struct pwmQueueData);
 void sendMsgToMotor_L(struct pwmQueueData);
 
-unsigned char getMotorR_DC();
-unsigned char getMotorL_DC();
+unsigned int getMotorR_DC();
+unsigned int getMotorL_DC();
+
 unsigned char getMotorR_Dir();
 unsigned char getMotorL_Dir();
+unsigned char getMotorAction();
+
+float posX = 0;
+char prev_dist = 0;
+int front_threshold = 50;  
+int rear_threshold = 70;  
 
 #endif	/* MOTOR_GLOBALS_H */
-
