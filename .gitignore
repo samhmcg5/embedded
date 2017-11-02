@@ -3,3 +3,4 @@
 *.hex
 *.o.d
 *.txt
+*.sublime*
