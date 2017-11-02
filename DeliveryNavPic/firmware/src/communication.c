@@ -72,7 +72,6 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
 
     /* Get the sequence ID number */
     int seq = getIntFromKey(t[2]);
-
     /* Is it the expected next sequence? */
     if (seq != prev_inc_seq + 1) // ERROR
     {
@@ -94,6 +93,13 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
         out.type = TASK;
         out.a = getIntFromKey(t[4]);
         out.b = getIntFromKey(t[6]);
+        if (out.a > 2 || out.b > 2)
+            out.type = 0xFF; // invalid, ignore this input
+    }
+    else if (r == 5) // MAGNET
+    {
+        out.type = MAG_UPDATE;
+        out.a = getIntFromKey(t[4]);
     }
     else // ERROR
     {

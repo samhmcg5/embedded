@@ -4,16 +4,120 @@
 		"selected_items":
 		[
 			[
-				"getMo",
-				"getMotorR_Dir"
+				"del",
+				"delivery"
 			],
 			[
-				"tick",
-				"ticksL"
+				"ma",
+				"magnet_is"
+			],
+			[
+				"nav",
+				"navigationData"
+			],
+			[
+				"comm",
+				"commSendMsgToUartQueue"
+			],
+			[
+				"com",
+				"commSendMsgToUartQueue"
 			],
 			[
 				"get",
-				"getMotorR_DC"
+				"getNearestVertical"
+			],
+			[
+				"set",
+				"setOrientation"
+			],
+			[
+				"pos",
+				"posX"
+			],
+			[
+				"C",
+				"CRASH_MARGIN_H"
+			],
+			[
+				"CR",
+				"CRASH_MARGIN_L"
+			],
+			[
+				"TURN",
+				"TURN_LEFT"
+			],
+			[
+				"or",
+				"orientation"
+			],
+			[
+				"th",
+				"theta"
+			],
+			[
+				"diff",
+				"diff90"
+			],
+			[
+				"magn",
+				"magnet_should_be"
+			],
+			[
+				"navigati",
+				"navigationData"
+			],
+			[
+				"out",
+				"outgoing_seq"
+			],
+			[
+				"t",
+				"type"
+			],
+			[
+				"tot",
+				"total_ticksR"
+			],
+			[
+				"getM",
+				"getMotorAction"
+			],
+			[
+				"delta",
+				"delta_y"
+			],
+			[
+				"semd",
+				"sendMsgToNavQFromISR"
+			],
+			[
+				"goal",
+				"goalL"
+			],
+			[
+				"dist",
+				"distL"
+			],
+			[
+				"total",
+				"total_ticksL"
+			],
+			[
+				"ti",
+				"ticks"
+			],
+			[
+				"tick",
+				"tick_ref"
+			],
+			[
+				"ticks",
+				"ticksL"
+			],
+			[
+				"getMo",
+				"getMotorR_Dir"
 			],
 			[
 				"reg",
@@ -44,10 +148,6 @@
 				"next_R"
 			],
 			[
-				"C",
-				"count"
-			],
-			[
 				"sD",
 				"sDIV"
 			],
@@ -58,10 +158,6 @@
 			[
 				"end",
 				"endcase"
-			],
-			[
-				"del",
-				"deliv_nav"
 			],
 			[
 				"seq",
@@ -108,10 +204,6 @@
 				"status"
 			],
 			[
-				"nav",
-				"navigationData"
-			],
-			[
 				"motor",
 				"motor_q"
 			]
@@ -120,19 +212,10 @@
 	"buffers":
 	[
 		{
-			"file": "firmware/src/motor_control.c",
+			"file": "firmware/src/navigation.c",
 			"settings":
 			{
-				"buffer_size": 7198,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "firmware/src/motor_globals.h",
-			"settings":
-			{
-				"buffer_size": 1593,
+				"buffer_size": 8291,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -141,8 +224,42 @@
 			"file": "firmware/src/system_config/default/system_interrupt.c",
 			"settings":
 			{
-				"buffer_size": 3857,
+				"buffer_size": 5225,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/communication_globals.h",
+			"settings":
+			{
+				"buffer_size": 1139,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/navigation.h",
+			"settings":
+			{
+				"buffer_size": 1392,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/nav_globals.h",
+			"settings":
+			{
+				"buffer_size": 928,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "firmware/src/motor_globals.h",
+			"settings":
+			{
+				"buffer_size": 1439,
 				"line_ending": "Windows"
 			}
 		}
@@ -211,10 +328,19 @@
 	],
 	"file_history":
 	[
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/main.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/system_config/default/system_interrupt.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_control.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication_globals.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.c",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/debug.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/debug.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_globals.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/sam.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/nav_globals.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/main.c",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_isr_fxns.c",
 		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case2.obj",
 		"/C/Users/Samuel McGhee/Google Drive/CompOrg/Project 1/test cases/test_case2.s",
@@ -278,17 +404,9 @@
 		"/C/Users/Samuel McGhee/to_embedded.bat",
 		"/C/cygwin64/home/sam/embedded/server/threading_example.py",
 		"/C/cygwin64/home/sam/embedded/server/edit_status_viewer.py",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/system_config/default/system_interrupt.c",
 		"/C/cygwin64/home/sam/embedded/server/sams_simple_server.py",
 		"/C/cygwin64/home/sam/embedded/server/color_console.py",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication_globals.h",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.h",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_control.c",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.h",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/sam.c",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_globals.h",
 		"/C/cygwin64/home/sam/embedded/server/server_test.py",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/debug.h",
 		"/C/cygwin64/home/sam/embedded/pwm_registers/firmware/src/app.h",
 		"/C/cygwin64/home/sam/embedded/pwm_registers/firmware/src/app.c",
 		"/C/Users/Samuel McGhee/Downloads/embedded-uart_wifly/embedded-uart_wifly/event_driven/firmware/src/communication.h",
@@ -337,12 +455,11 @@
 		"/C/Users/Samuel McGhee/Downloads/BOLT3.dbc",
 		"/C/Users/Samuel McGhee/Desktop/ros_gui_template_backup/src/data_node.cpp",
 		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/include/dash_gui.h",
-		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/src/dash_gui.cpp",
-		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/CMakeLists.txt"
+		"/C/Users/Samuel McGhee/Downloads/ros_gui_template_backup/ros_gui_template_backup/src/dash_gui.cpp"
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 48.0
 	},
 	"find_in_files":
 	{
@@ -356,6 +473,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"prev_action"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -378,19 +496,19 @@
 			[
 				{
 					"buffer": 0,
-					"file": "firmware/src/motor_control.c",
+					"file": "firmware/src/navigation.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7198,
+						"buffer_size": 8291,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1578,
-								1578
+								6682,
+								6682
 							]
 						],
 						"settings":
@@ -400,27 +518,57 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 240.0,
+						"translation.y": 3923.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "firmware/src/motor_globals.h",
+					"file": "firmware/src/system_config/default/system_interrupt.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1593,
+						"buffer_size": 5225,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								99,
-								99
+								3563,
+								3563
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2178.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "firmware/src/communication_globals.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1139,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1021,
+								1021
 							]
 						],
 						"settings":
@@ -431,37 +579,97 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
-				},
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
 				{
-					"buffer": 2,
-					"file": "firmware/src/system_config/default/system_interrupt.c",
+					"buffer": 3,
+					"file": "firmware/src/navigation.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3857,
+						"buffer_size": 1392,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3135,
-								3147
+								349,
+								349
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 660.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "firmware/src/nav_globals.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 928,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								841,
+								841
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "firmware/src/motor_globals.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1439,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								417,
+								417
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -484,11 +692,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.725368731563,
 			1.0
 		],
 		"rows":

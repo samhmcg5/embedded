@@ -84,6 +84,7 @@ void IntHandlerDrvTmrInstance2(void)
     bool LorR     = getMotorL_Dir() != getMotorR_Dir();
 
     /* Outgoing Message Construction */
+    // only update position if moving (dc != 0)
     struct navQueueData data;
     if (fwdORrev && distL >= TICKS_PER_CM && getMotorL_DC() != 0)
     {
@@ -114,6 +115,9 @@ void IntHandlerDrvTmrInstance2(void)
         sendMsgToNavQFromISR(data);
     }
 
+    if (distL >= 10*TICKS_PER_CM)
+        integral = 0;
+
     /* If we have reached the goal of ticks to travel ...  for either motor */
     if (distL >= goalL || distR >= goalR || stopped)
     {
@@ -134,19 +138,29 @@ void IntHandlerDrvTmrInstance2(void)
     }
 
     /* If we are moving, try to correct the motion */
-    // if ( getMotorL_DC() != 0 && getMotorR_DC() != 0 )
-    if ( getMotorL_DC() != 0 )
+    if ( getMotorL_DC() != 0 && getMotorR_DC() != 0 )
     {
         // int offset = ( ticksL - ticksR ) * kp - 5;
-        int error = ( ticksL - ticksR );
+        int error = ticksL - ticksR;
         integral  = integral + error;
-        unsigned int new_dc = getMotorR_DC() + (error * KP) + (integral * KI) - (getMotorR_DC() / 75);
+        unsigned int new_dc;
+        if (fwdORrev)
+            new_dc = getMotorR_DC() + (error * KP) + (integral * KI) - (getMotorR_DC() / 75);
+        else
+            new_dc = getMotorR_DC() + (error * KP) + (integral * KI);
 
         if (new_dc > getMotorL_DC())
             new_dc = getMotorL_DC();
+
         setMotorR_DC( new_dc );
     }
 
+    // magnet stuff, rate = 2 Hz
+    if (isr_count % 5 == 0)
+    {
+        // tell server what the current magnet state should be 
+        data.type = MAG_REQUEST;
+    }
     // get speed data, rate = 1 Hz
     if (isr_count % 10 == 0)
     {
@@ -158,7 +172,7 @@ void IntHandlerDrvTmrInstance2(void)
         data.d = total_ticksL;
         sendMsgToNavQFromISR(data);
 
-        // // position
+        // position to server
         data.type = POSITION;
         data.a = posX; // x
         data.b = posY; // y

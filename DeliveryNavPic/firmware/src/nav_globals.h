@@ -9,6 +9,8 @@
 #define POSITION    3
 // process data
 #define POS_UPDATE  4
+#define MAG_REQUEST 5
+#define MAG_UPDATE  6
 
 // data inside Nav's incoming queue
 struct navQueueData
@@ -34,7 +36,7 @@ void sendMsgToNavQFromISR(struct navQueueData msg);
 */
 unsigned int tick_ref  = 0;
 float posX = 0;
-float posY = 0;
+float posY = 20;
 int orientation = 0;
 unsigned char prev_action = 0xFF;
 

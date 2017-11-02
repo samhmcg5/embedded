@@ -8,9 +8,9 @@
 #define TURN_RIGHT  3
 #define STOP        4
 
-#define TICKS_PER_CM        76
-#define TP_DEGREE_L         7.25
-#define TP_DEGREE_R         7.27
+#define TICKS_PER_CM        74
+#define TP_DEGREE_L         7.32
+#define TP_DEGREE_R         7.33
 
 #define SPEED_0         0
 #define SPEED_1         470
