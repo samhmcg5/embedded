@@ -33,6 +33,9 @@
 #define PI 3.14159265
 const double convert = PI / 180.0;
 
+// incoming nav queue
+QueueHandle_t nav_q;
+
 typedef enum
 {
 	NAVIGATION_STATE_INIT=0,

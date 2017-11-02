@@ -159,7 +159,7 @@ void IntHandlerDrvTmrInstance2(void)
     if (isr_count % 5 == 0)
     {
         // tell server what the current magnet state should be 
-        data.type = MAG_REQUEST;
+        data.type = DATA_REQ;
     }
     // get speed data, rate = 1 Hz
     if (isr_count % 10 == 0)

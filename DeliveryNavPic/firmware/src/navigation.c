@@ -214,10 +214,15 @@ void handleIncomingMsg(struct navQueueData data)
             updateLocation(data.a, data.b);
             break;
         }
-        case MAG_REQUEST:
+        case DATA_REQ:
         {
             char buf[64];
+            // Request Magnet state
             sprintf(buf, STR_MAG_REQ, outgoing_seq, navigationData.magnet_should_be);
+            commSendMsgToUartQueue(buf);
+            // Request IR data
+            sprintf(buf, STR_IR_REQ);
+            commSendMsgToUartQueue(buf);
             break;
         }
         case MAG_UPDATE:
@@ -244,12 +249,17 @@ void handleTaskState()
         case pickup:
         {
             // test the done condition for getting to the pickup spot
+            /*
+            Done Conditions:
+                1. I have stopped moving
+                2. I have read the IR data and acted upon it
+            */
             break;
         }
         case magnet_on:
         {
             navigationData.magnet_should_be = ON;
-            // can i go to the next state
+            // can i go to the next state ?
             if (navigationData.magnet_is == ON)
                 navigationData.status = delivery;
             break;
@@ -257,7 +267,7 @@ void handleTaskState()
         case delivery:
         {
             // generate delivery directions
-            // test the done condition for getting the deliv spot
+            // Done Condition --> I've stopped moving
             break;
         }
         case magnet_off:
