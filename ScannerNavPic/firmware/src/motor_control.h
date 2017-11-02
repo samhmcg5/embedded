@@ -16,13 +16,6 @@
 
 // MOTOR 2 === motor on the left when youre facing the USB plugs
 
-unsigned int distR = 0; // measured in ticks
-unsigned int distL = 0;
-unsigned int total_ticksL = 0;
-unsigned int total_ticksR = 0;
-unsigned int goalL = 0;
-unsigned int goalR = 0;
-
 // incoming motor queue
 QueueHandle_t motor_q;
 // action queue for right motor
@@ -39,10 +32,13 @@ typedef enum
 typedef struct
 {
     MOTOR_CONTROL_STATES state;
-    unsigned char dcL;
-    unsigned char dcR;
+    unsigned int dcL;
+    unsigned int dcR;
+    unsigned char speedR;
+    unsigned char speedL;
     unsigned char dirL;
     unsigned char dirR;
+    unsigned char action;
 } MOTOR_CONTROL_DATA;
 
 void MOTOR_CONTROL_Initialize ( void );
@@ -54,13 +50,6 @@ void motorL_recvQInISR(struct pwmQueueData* msg);
 bool rightQIsEmpty();
 bool leftQIsEmpty();
 
-/*
- * fxn: initMotor1and2()
- * -- set GPIO pins to put both motors forward
- * -- enable OC1 and OC2 in PWM mode
- * -- set original duty cycle to 0%
- * -- turn on TIMER2 
-*/ 
 void initMotors();
 
 // Set motor directions
@@ -70,10 +59,16 @@ void setMotorR_Bck();
 void setMotorL_Bck();
 
 // Set Duty Cycles (number between 0 and 100)
-void setMotorR_DC(unsigned char dc);
-void setMotorL_DC(unsigned char dc);
+void setMotorR_DC(unsigned int dc);
+void setMotorL_DC(unsigned int dc);
 
 void generateActionItems(struct motorQueueData data, struct pwmQueueData * left, struct pwmQueueData * right);
-//void handleIncomingMsg(struct motorQueueData data);
+
+void readFromQandSetPins(unsigned char motor);
+
+void updateLocation(unsigned int cm, unsigned char action);
+void handleIncomingMsg(struct motorQueueData data);
+
+// unsigned char getDCFromSpeed(unsigned char speed);
 
 #endif /* _MOTOR_CONTROL_H */

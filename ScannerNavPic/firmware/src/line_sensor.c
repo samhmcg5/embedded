@@ -1,8 +1,7 @@
 #include "line_sensor.h"
-#include "communication.h"
 #include "communication_globals.h"
-#include "motor_control.h"
 #include "motor_globals.h"
+#include "i2c.h"
 
 LINE_SENSOR_DATA line_sensorData;
 
@@ -20,12 +19,33 @@ void LINE_SENSOR_Initialize ( void )
 
 void sensorHandleIncomingMsg(struct sensorQueueData data)
 {
-    struct motorQueueData out;
-    out.type = SENSOR;
-    out.action = 0;
-    out.dist = 5;
-    out.speed = 10;
-    sendMsgToMotorQ(out);
+    if(sensor_enable) {
+        if(data.front_sensor > 75) {
+                struct motorQueueData out;
+                out.type = ACTION;    
+                out.action = 2;
+                out.dist = 5;
+                out.speed = 2;
+                sendMsgToMotorQ(out);
+
+                char buf[64];
+                sprintf(buf, "{\"SEQ\":%i, \"SCAN_NAV\": { \"SENSOR\": \"FRONT\", \"VALUE\": %i, \"TYPE\": \"LEFT CORRECTION\" }}!", outgoing_seq, data.front_sensor);
+                commSendMsgToUartQueue(buf);
+        }
+        else if(data.rear_sensor > 75) {
+                struct motorQueueData out;
+                out.type = ACTION;    
+                out.action = 3;
+                out.dist = 5;
+                out.speed = 2;
+                sendMsgToMotorQ(out);
+
+                char buf[64];
+                sprintf(buf, "{\"SEQ\":%i, \"SCAN_NAV\": { \"SENSOR\": \"REAR\", \"VALUE\": %i, \"TYPE\": \"RIGHT CORRECTION\" }}!", outgoing_seq, data.rear_sensor);
+                commSendMsgToUartQueue(buf);
+        }
+    }
+    
 }
 
 void LINE_SENSOR_Tasks ( void )
@@ -51,6 +71,7 @@ void LINE_SENSOR_Tasks ( void )
         case LINE_SENSOR_STATE_SERVICE_TASKS:
         {
             struct sensorQueueData rec;
+            
             if(xQueueReceive(sensor_q, &rec, portMAX_DELAY))
             {
                 //dbgOutputLoc(MOTOR_THREAD_RECVD);
@@ -59,8 +80,6 @@ void LINE_SENSOR_Tasks ( void )
             }
             break;
         }
-
-        /* TODO: implement your application state machine.*/
         
 
         /* The default state should never be executed. */
@@ -71,4 +90,5 @@ void LINE_SENSOR_Tasks ( void )
         }
     }
 }
+
 
