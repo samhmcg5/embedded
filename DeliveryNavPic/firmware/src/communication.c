@@ -170,13 +170,9 @@ void COMMUNICATION_Tasks(void)
         }
         case COMM_AWAIT_RESPONSE:
         {
-            dbgOutputLoc(COMM_THREAD_WAIT);
-
             unsigned char rec[UART_RX_QUEUE_SIZE];
             if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
             {
-                dbgOutputLoc(COMM_THREAD_RECVD);
-
                 struct  navQueueData out = parseJSON(rec);
                 sendMsgToNavQ(out);
             }

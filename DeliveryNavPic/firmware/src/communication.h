@@ -15,8 +15,7 @@
 #include <GenericTypeDefs.h>
 #include "system/common/sys_module.h"
 #include "system/msg/sys_msg.h"
-#include "debug.h"
-#include "jsmn.h"
+    #include "jsmn.h"
 #include "string.h"
 
 #define UART_RX_QUEUE_SIZE  256

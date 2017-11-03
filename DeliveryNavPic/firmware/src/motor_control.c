@@ -198,6 +198,11 @@ bool leftQIsEmpty()
     return xQueueIsQueueEmptyFromISR(left_q);
 }
 
+bool motorQueuesAreEmpty()
+{
+    return ( leftQIsEmpty() && rightQIsEmpty() );
+}
+
 void readFromQandSetPins(unsigned char motor)
 {
     struct pwmQueueData data;
@@ -262,13 +267,9 @@ void MOTOR_CONTROL_Tasks ( void )
 
         case MOTOR_CONTROL_HANDLE_INCOMING:
         {
-            dbgOutputLoc(MOTOR_THREAD_WAIT);
-
             struct motorQueueData rec;
             if(xQueueReceive(motor_q, &rec, portMAX_DELAY))
             {
-                dbgOutputLoc(MOTOR_THREAD_RECVD);
-
                 struct pwmQueueData left, right;
 
                 generateActionItems(rec, &left, &right);

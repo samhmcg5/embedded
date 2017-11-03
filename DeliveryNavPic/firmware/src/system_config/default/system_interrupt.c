@@ -12,8 +12,6 @@ void IntHandlerDrvUsartInstance0(void)
 {
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE))
     {
-        dbgOutputLoc(ISR_UART_RX);
-
         if (PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
         {
             readUartReceived();//receive uart
@@ -23,8 +21,6 @@ void IntHandlerDrvUsartInstance0(void)
     }
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_TRANSMIT))
     {
-        dbgOutputLoc(ISR_UART_TX);
-
         while (1)
         {
             if (!checkIfSendQueueIsEmpty())

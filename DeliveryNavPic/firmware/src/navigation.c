@@ -194,19 +194,13 @@ void handleIncomingMsg(struct navQueueData data)
         }
         case SPEEDS:
         {
+            navigationData.stopped = (data.c == 0 && data.d == 0);
             char buf[128];
-            if (navigationData.status == idle && data.c == 0 && data.d == 0)
+            if (navigationData.status == idle && navigationData.stopped)
             {
                 sprintf(buf, STR_IDLE, outgoing_seq);
                 commSendMsgToUartQueue(buf);
-                // navigationData.status = idle;
             }
-            // else if ( data.c != 0 || data.d != 0 )
-            // {
-            //     sprintf(buf, STR_EXECUTING, outgoing_seq);
-            //     commSendMsgToUartQueue(buf);
-            //     // navigationData.status = moving;
-            // }
             break;
         }
         case POS_UPDATE:
@@ -300,6 +294,8 @@ void NAVIGATION_Initialize ( void )
     navigationData.status = idle;
     navigationData.magnet_should_be = OFF;
     navigationData.magnet_is = OFF;
+    navigationData.stopped = true;
+    navigationData.ir_used = false;
     nav_q = xQueueCreate(32, sizeof (struct navQueueData));
 }
 
@@ -319,12 +315,9 @@ void NAVIGATION_Tasks ( void )
 
         case NAVIGATION_STATE_SERVICE_TASKS:
         {
-            dbgOutputLoc(NAV_THREAD_WAIT);
-
             struct navQueueData rec;
             if(xQueueReceive(nav_q, &rec, portMAX_DELAY))
             {
-                dbgOutputLoc(NAV_THREAD_RECVD);
                 handleIncomingMsg(rec);
                 handleTaskState();
             }

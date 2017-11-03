@@ -9,7 +9,6 @@
           <itemPath>../src/communication.h</itemPath>
           <itemPath>../src/communication_globals.h</itemPath>
           <itemPath>../src/jsmn.h</itemPath>
-          <itemPath>../src/debug.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f4" displayName="motor" projectFiles="true">
           <itemPath>../src/motor_control.h</itemPath>
@@ -146,12 +145,10 @@
       <logicalFolder name="f3" displayName="app" projectFiles="true">
         <logicalFolder name="f2" displayName="comm" projectFiles="true">
           <itemPath>../src/communication.c</itemPath>
-          <itemPath>../src/debug.c</itemPath>
           <itemPath>../src/jsmn.c</itemPath>
         </logicalFolder>
         <logicalFolder name="f3" displayName="motor" projectFiles="true">
           <itemPath>../src/motor_control.c</itemPath>
-          <itemPath>../src/motor_isr_fxns.c</itemPath>
         </logicalFolder>
         <logicalFolder name="f4" displayName="nav" projectFiles="true">
           <itemPath>../src/navigation.c</itemPath>

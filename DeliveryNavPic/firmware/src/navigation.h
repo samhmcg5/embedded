@@ -45,8 +45,6 @@ typedef enum
 typedef enum
 {
     idle=0,
-    moving,
-
     pickup,
     magnet_on,
     delivery,
@@ -60,6 +58,8 @@ typedef struct
     STATUS status;
     char magnet_should_be;
     char magnet_is;
+    bool stopped;
+    bool ir_used;
 } NAVIGATION_DATA;
 
 void NAVIGATION_Initialize ( void );

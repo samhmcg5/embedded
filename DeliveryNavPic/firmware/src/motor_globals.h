@@ -67,5 +67,7 @@ unsigned char getMotorR_Dir();
 unsigned char getMotorL_Dir();
 unsigned char getMotorAction();
 
+bool motorQueuesAreEmpty();
+
 #endif	/* MOTOR_GLOBALS_H */
 
