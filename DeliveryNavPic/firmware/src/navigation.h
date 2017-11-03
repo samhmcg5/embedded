@@ -16,11 +16,13 @@
 #define RED_X   20
 #define GREEN_X 40
 #define BLUE_X  60
+const unsigned int PICKUP_ZONES[] = {RED_X, GREEN_X, BLUE_X};
 #define PROD_Y  8
 
 #define ALPHA_X 10
 #define BETA_X  30
 #define GAMMA_X 50
+const unsigned int DROP_ZONES[] = {ALPHA_X, BETA_X, GAMMA_X};
 #define DELIV_Y 42
 
 #define CRASH_MARGIN_L 15
@@ -47,9 +49,10 @@ typedef enum
     idle=0,
     pickup,
     magnet_on,
+    reverse1,
     delivery,
     magnet_off,
-    reverse,
+    reverse2,
 } STATUS;
 
 typedef struct
@@ -58,8 +61,11 @@ typedef struct
     STATUS status;
     char magnet_should_be;
     char magnet_is;
+    unsigned int ir_dist;
     bool stopped;
     bool ir_used;
+    unsigned int from;
+    unsigned int to;
 } NAVIGATION_DATA;
 
 void NAVIGATION_Initialize ( void );
@@ -71,11 +77,12 @@ void handleTaskState();
 
 void updateLocation(unsigned int cm, unsigned char action);
 
-void beginTask(struct navQueueData task);
+void beginTask(unsigned int task);
 
 unsigned int getNearestVertical();
 void getOutOfCrashZone();
 void setOrientation(unsigned int theta, unsigned char speed);
 int getPickupDX(unsigned int zone);
+void generateDeliveryDirs(unsigned int zone);
 
 #endif /* _NAVIGATION_H */

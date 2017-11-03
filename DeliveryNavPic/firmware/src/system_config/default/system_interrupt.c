@@ -156,6 +156,7 @@ void IntHandlerDrvTmrInstance2(void)
     {
         // tell server what the current magnet state should be 
         data.type = DATA_REQ;
+        sendMsgToNavQFromISR(data);
     }
     // get speed data, rate = 1 Hz
     if (isr_count % 10 == 0)

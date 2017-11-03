@@ -8,7 +8,7 @@
 #define POSITION    3
 #define POS_UPDATE  4
 #define DATA_REQ    5
-#define MAG_UPDATE  6
+#define DATA_UPDATE  6
 
 // data inside Nav's incoming queue
 struct navQueueData
@@ -27,7 +27,7 @@ float posX = 0;
 float posY = 20;
 int orientation = 0;
 unsigned char prev_action = 0xFF;
-
+bool task_done = false;
 
 #endif	/* NAV_GLOBALS_H */
 

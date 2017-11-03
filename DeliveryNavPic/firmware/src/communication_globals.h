@@ -13,8 +13,9 @@ void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]);
 #define STR_EXECUTING       "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":0,\"MSG\":\"Task EXECUTING\"}}!"
 #define STR_ACK_TASK        "{\"SEQ\":%i,\"DELIV_NAV\":{\"TASK\":\"RECIEVED\"}}!"
 #define STR_ACK_ACT         "{\"SEQ\":%i,\"DELIV_NAV\":{\"ACTION\":\"RECIEVED\"}}!"
-#define STR_MAG_REQ         "{\"SEQ\":%i,\"DELIV_NAV\":{\"SET_MAGNET\":%u}}!"
-#define STR_IR_REQ          "{\"SEQ\":%i,\"DELIV_NAV\":{\"IR_DATA\":\"RETRIEVE\"}}!"
+#define STR_DATA_REQ        "{\"SEQ\":%i,\"DELIV_NAV\":{\"SET_MAGNET\":%u, \"IR_DATA\":1}}!"
+
+#define STR_DBG             "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATE\":%u, \"IR\":%u, \"MAG\":%u}}!"
 
 #endif  /* COMMUNICATION_GLOBALS_H */
 

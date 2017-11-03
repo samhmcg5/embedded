@@ -232,6 +232,9 @@ void readFromQandSetPins(unsigned char motor)
     default:
         break;
     }
+
+    if (data.action == STOP)
+        task_done = true;
 }
 
 void MOTOR_CONTROL_Initialize ( void )

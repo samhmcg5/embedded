@@ -59,6 +59,14 @@ int getIntFromKey(jsmntok_t key)
     return atoi(keyString);
 }
 
+char getFirstCharOfKey(jsmntok_t key)
+{
+    unsigned int length = key.end - key.start;
+    char keyString[length + 1];
+    memcpy(keyString, &JSON_STRING[key.start], length);
+    return keyString[0];
+}
+
 struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
 {
     struct navQueueData out;
@@ -90,16 +98,20 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     }
     else if (r == 7) // TASK
     {
-        out.type = TASK;
-        out.a = getIntFromKey(t[4]);
-        out.b = getIntFromKey(t[6]);
-        if (out.a > 2 || out.b > 2)
-            out.type = 0xFF; // invalid, ignore this input
-    }
-    else if (r == 5) // MAGNET
-    {
-        out.type = MAG_UPDATE;
-        out.a = getIntFromKey(t[4]);
+        if (getFirstCharOfKey(t[3]) == 'C') // TASK
+        {
+            out.type = TASK;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+            if (out.a > 2 || out.b > 2)
+                out.type = 0xFF; // invalid, ignore this input
+        }
+        else if (getFirstCharOfKey(t[3]) == 'M') // data
+        {
+            out.type = DATA_UPDATE;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+        }
     }
     else // ERROR
     {
