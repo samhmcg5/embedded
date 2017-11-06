@@ -65,115 +65,137 @@ void updateLocation(unsigned int cm, unsigned char action)
 }
 
 // return direction to get to 90 or 270 degrees
-unsigned int getNearestVertical()
+unsigned int getNearestVertical(unsigned int o)
 {
-    unsigned int diff270 = abs(270 - orientation);
-    unsigned int diff90  = abs(90  - orientation);
+    unsigned int diff270 = abs(270 - o);
+    unsigned int diff90  = abs(90  - o);
 
     int theta = (diff270 <= diff90) ? 270 : 90;
     return theta;
 }
 
-void getOutOfCrashZone()
+void getOutOfCrashZone(int x, int y, int o, int *future_x, int *future_y, int *future_o)
 {
     struct motorQueueData out;
-    if (posY < CRASH_MARGIN_L)
+    if (y < CRASH_MARGIN_L)
     {
         // negative for right, positive for left
-        setOrientation(getNearestVertical(), 4);
+        *future_o = getNearestVertical(o);
+        setOrientation(*future_o, o, 4);
         // move forward or reverse
-        int dist = CRASH_MARGIN_L - posY;
-        out.action = (getNearestVertical() == 90) ? FORWARD : REVERSE;
-        out.dist   = dist;
+        int dist = CRASH_MARGIN_L - y;
+        out.action = (*future_o == 90) ? FORWARD : REVERSE;
+        out.dist   = abs(dist);
         out.speed  = 3;
+        *future_y = (*future_o == 90) ? (*future_y+abs(dist)) : (*future_y-abs(dist));
         sendMsgToMotorQ(out);
     }
-    else if (posY > CRASH_MARGIN_H)
+    else if (y > CRASH_MARGIN_H)
     {
         // negative for right, positive for left
-        setOrientation(getNearestVertical(), 4);
+        *future_o = getNearestVertical(o);
+        setOrientation(*future_o, o, 4);
         // move forward or reverse
-        int dist = posY - CRASH_MARGIN_H;
-        out.action = (getNearestVertical() == 270) ? FORWARD : REVERSE;
-        out.dist   = dist;
+        int dist = y - CRASH_MARGIN_H;
+        out.action = (*future_o == 270) ? FORWARD : REVERSE;
+        out.dist   = abs(dist);
         out.speed  = 3;
+        *future_y = (*future_o == 270) ? (*future_y+abs(dist)) : (*future_y-abs(dist));
         sendMsgToMotorQ(out);
     }
 }
 
-void setOrientation(unsigned int theta, unsigned char speed)
+void setOrientation(unsigned int goal, unsigned int current, unsigned char speed)
 {
-    if (theta == orientation)
+    if (goal == current)
         return;
 
     struct motorQueueData out;
-    int turn   = theta - orientation;
+    int turn = goal - current;
+
     if (turn > 180)
         turn = 180 - turn;
-    out.action = (turn <= 0) ? TURN_RIGHT : TURN_LEFT;
+    if (turn < -180)
+        turn = -180 - turn;
+
+    out.action = (turn < 0) ? TURN_RIGHT : TURN_LEFT;
     out.dist   = abs(turn);
     out.speed  = speed;
     sendMsgToMotorQ(out);
 }
 
-int getPickupDX(unsigned int zone)
-{
-    if (zone == 0)      {   return RED_X - posX;    }
-    else if (zone == 1) {   return GREEN_X - posX;  }
-    else if (zone == 2) {   return BLUE_X - posX;   }
-    else                {   return 0;   }
-}
-
 void beginTask(unsigned int task)
 {
+    int future_x = posX;
+    int future_y = posY;
+    int future_o = orientation;
+
     // Generate the pickup instructions
     struct motorQueueData out;
     // ONE : am i in the crash margin?
     if (posY < CRASH_MARGIN_L || posY > CRASH_MARGIN_H)
-        getOutOfCrashZone();
+        getOutOfCrashZone(posX, posY, orientation, &future_x, &future_y, &future_o);
     // TWO : Adjust delta X
-    int dX = PICKUP_ZONES[task];
-    // int dX = getPickupDX(task);
-    (dX < 0) ? setOrientation(180,3) : setOrientation(0,3);
-    out.action = FORWARD;
-    out.dist   = abs(dX);
-    out.speed  = 4;
-    sendMsgToMotorQ(out);
+    int dX = PICKUP_ZONES[task] - posX;
+    if (dX != 0)
+    {
+        (dX < 0) ? setOrientation(180,orientation,4) : setOrientation(0,orientation,4);
+        (dX < 0) ? (future_o = 180) : (future_o = 0);
+        future_x += dX;
+        out.action = FORWARD;
+        out.dist   = abs(dX);
+        out.speed  = 4;
+        sendMsgToMotorQ(out);
+    }
     // Three : Adjust delta Y
     int dY = PROD_Y - posY;
-    (dY < 0) ? setOrientation(270,3) : setOrientation(90,3);
-    out.action = FORWARD;
-    out.dist   = abs(dY);
-    out.speed  = 4;
-    sendMsgToMotorQ(out);
-    // Four : check orientation for 270 degrees
-    // specific to pickup...
-    // if (orientation != 270)
-    //     setOrientation(270,2);
+    if (dY != 0)
+    {
+        (dY < 0) ? setOrientation(270,future_o,4) : setOrientation(90,future_o,4);
+        (dX < 0) ? (future_o = 270) : (future_o = 90);
+        future_y += dY;
+        out.action = FORWARD;
+        out.dist   = abs(dY);
+        out.speed  = 4;
+        sendMsgToMotorQ(out);
+    }
     out.action = STOP;
     sendMsgToMotorQ(out);
 }
 
-// fix me
 void generateDeliveryDirs(unsigned int zone)
 {
+    int future_x = posX;
+    int future_y = posY;
+    int future_o = orientation;
+
     task_done = false;
     struct motorQueueData out;
     int dX = DROP_ZONES[zone] - posX;
-    (dX < 0) ? setOrientation(180,3) : setOrientation(0,3);
-    out.action = FORWARD;
-    out.dist   = abs(dX);
-    out.speed  = 4;
-    // sendMsgToMotorQ(out);
+    if (dX != 0)
+    {
+        (dX < 0) ? setOrientation(180,future_o,3) : setOrientation(0,future_o,3);
+        (dX < 0) ? (future_o = 180) : (future_o = 0);
+        future_x += dX;
+        out.action = FORWARD;
+        out.dist   = abs(dX);
+        out.speed  = 4;
+        sendMsgToMotorQ(out);
+    }
     // Three : Adjust delta Y
-    int dY = DELIV_Y - posY;
-    (dY < 0) ? setOrientation(270,3) : setOrientation(90,3);
-    out.action = FORWARD;
-    out.dist   = abs(dY);
-    out.speed  = 4;
-    // sendMsgToMotorQ(out);
-    out.action = STOP;
-    // sendMsgToMotorQ(out);
+    int dY = DELIV_Y - future_y;
+    if (dY != 0) 
+    {
+        (dY < 0) ? setOrientation(270,future_o,3) : setOrientation(90,future_o,3);
+        (dX < 0) ? (future_o = 270) : (future_o = 90);
+        future_y += dY;
+        out.action = FORWARD;
+        out.dist   = abs(dY);
+        out.speed  = 4;
+        sendMsgToMotorQ(out);
+        out.action = STOP;
+        sendMsgToMotorQ(out);
+    }
 }
 
 void handleIncomingMsg(struct navQueueData data)
@@ -268,11 +290,12 @@ void handleIncomingMsg(struct navQueueData data)
 
 void handleTaskState()
 {
+    // char buf[64];
     switch (navigationData.status)
     {
         case idle:
         {
-            // Do nothing, this is handled by incoming message
+            generated = false;
             break;
         }
         case pickup:
@@ -287,9 +310,13 @@ void handleTaskState()
                 sendMsgToMotorQ(out);
                 navigationData.ir_used = true;
             }
+
             // check for done conditions
-            if (navigationData.stopped && navigationData.ir_used)
+            if (navigationData.stopped && navigationData.ir_used && motorQueuesAreEmpty())
+            {
                 navigationData.status = magnet_on;
+                navigationData.ir_used = false;
+            }
             break;
         }
         case magnet_on:
@@ -297,23 +324,40 @@ void handleTaskState()
             navigationData.magnet_should_be = ON;
             // can i go to the next state ?
             if (navigationData.magnet_is == ON)
+            {
+                generated = false;
                 navigationData.status = reverse1;
+            }
             break;
         }
         case reverse1:
         {
-            struct motorQueueData out_m;
-            out_m.action = REVERSE;
-            out_m.dist   = 10;
-            out_m.speed  = 3;
-            sendMsgToMotorQ(out_m);
-            navigationData.status = delivery;
+            if (!generated)
+            {   
+                generated = true;
+                struct motorQueueData out_m;
+                out_m.action = REVERSE;
+                out_m.dist   = 7;
+                out_m.speed  = 3;
+                sendMsgToMotorQ(out_m);
+                out_m.action = STOP;
+                sendMsgToMotorQ(out_m);
+            }
+            if (navigationData.stopped && motorQueuesAreEmpty())
+            {
+                navigationData.status = delivery;
+                generated = false;
+            }
             break;
         }
         case delivery:
         {
             // generate delivery directions
-            generateDeliveryDirs(navigationData.to);
+            if (!generated)
+            {
+                generateDeliveryDirs(navigationData.to);
+                generated = true;
+            }
             // Done Condition --> I've stopped moving
             if (navigationData.stopped && motorQueuesAreEmpty())
                 navigationData.status = magnet_off;
@@ -323,17 +367,27 @@ void handleTaskState()
         {
             navigationData.magnet_should_be = OFF;
             if (navigationData.magnet_is == OFF)
-                navigationData.status = reverse2;
+            {
+                navigationData.status = idle;
+                generated = false;
+            }
             break;
         }
         case reverse2:
         {
-            struct motorQueueData out_m;
-            out_m.action = REVERSE;
-            out_m.dist   = 10;
-            out_m.speed  = 4;
-            sendMsgToMotorQ(out_m);
-            navigationData.status = idle;
+            if (!generated)
+            {
+                generated = true;
+                struct motorQueueData out_m;
+                out_m.action = REVERSE;
+                out_m.dist   = 10;
+                out_m.speed  = 4;
+                sendMsgToMotorQ(out_m);
+                out_m.action = STOP;
+                sendMsgToMotorQ(out_m);
+            }
+            if (navigationData.stopped && motorQueuesAreEmpty())
+                navigationData.status = idle;
             break;
         }
         default:
@@ -341,6 +395,7 @@ void handleTaskState()
             break;
         }
     }
+    // commSendMsgToUartQueue(buf);
 }
 
 void NAVIGATION_Initialize ( void )

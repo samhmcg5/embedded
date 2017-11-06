@@ -23,10 +23,10 @@ const unsigned int PICKUP_ZONES[] = {RED_X, GREEN_X, BLUE_X};
 #define BETA_X  30
 #define GAMMA_X 50
 const unsigned int DROP_ZONES[] = {ALPHA_X, BETA_X, GAMMA_X};
-#define DELIV_Y 42
+#define DELIV_Y 32
 
 #define CRASH_MARGIN_L 15
-#define CRASH_MARGIN_H 35
+#define CRASH_MARGIN_H 27
 
 /* MAGNET STATES */
 #define OFF 0
@@ -46,13 +46,13 @@ typedef enum
 
 typedef enum
 {
-    idle=0,
-    pickup,
-    magnet_on,
-    reverse1,
-    delivery,
-    magnet_off,
-    reverse2,
+    idle      =0,
+    pickup    =1,
+    magnet_on =2,
+    reverse1  =3,
+    delivery  =4,
+    magnet_off=5,
+    reverse2  =6,
 } STATUS;
 
 typedef struct
@@ -68,6 +68,8 @@ typedef struct
     unsigned int to;
 } NAVIGATION_DATA;
 
+bool generated = false;
+
 void NAVIGATION_Initialize ( void );
 
 void NAVIGATION_Tasks( void );
@@ -79,10 +81,9 @@ void updateLocation(unsigned int cm, unsigned char action);
 
 void beginTask(unsigned int task);
 
-unsigned int getNearestVertical();
-void getOutOfCrashZone();
-void setOrientation(unsigned int theta, unsigned char speed);
-int getPickupDX(unsigned int zone);
+unsigned int getNearestVertical(unsigned int o);
+void getOutOfCrashZone(int x, int y, int o, int *future_x, int *future_y, int *future_o);
+void setOrientation(unsigned int goal, unsigned int current ,unsigned char speed);
 void generateDeliveryDirs(unsigned int zone);
 
 #endif /* _NAVIGATION_H */

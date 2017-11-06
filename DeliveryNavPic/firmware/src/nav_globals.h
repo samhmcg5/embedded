@@ -23,6 +23,15 @@ struct navQueueData
 void sendMsgToNavQ(struct navQueueData msg);
 void sendMsgToNavQFromISR(struct navQueueData msg);
 
+// TODO !!!
+// typedef struct 
+// {
+//     X;
+//     Y;
+//     OR;
+// } POS;
+// POS pos;
+
 float posX = 0;
 float posY = 20;
 int orientation = 0;
