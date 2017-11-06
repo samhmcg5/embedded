@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"consu",
+				"consume_send"
+			],
+			[
+				"cons",
+				"consume_send"
+			],
+			[
+				"stat",
+				"status_queue"
+			],
+			[
+				"routing",
+				"routing_key"
+			],
+			[
+				"exp",
+				"expected_color"
+			],
+			[
+				"color",
+				"color_err_count"
+			],
+			[
+				"ex",
+				"expected_color"
+			],
+			[
 				"C",
 				"Checkpoint"
 			],
@@ -348,21 +376,20 @@
 	"buffers":
 	[
 		{
-			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
+			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/262546_3_0/bridge.py",
 			"settings":
 			{
-				"buffer_size": 1706,
+				"buffer_size": 7884,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
+			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/262546_4_1/rmq_param.py",
 			"settings":
 			{
-				"buffer_size": 1624,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 213,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -398,10 +425,18 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564"
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project1_4564"
 	],
 	"file_history":
 	[
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/201182_2_2/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/201182_2_0/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/331018_5_0/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/525234_2_2/rmq_param.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/525234_2_1/bridge.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test4.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/server.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/findmyphone.py",
@@ -488,7 +523,7 @@
 	],
 	"find":
 	{
-		"height": 59.0
+		"height": 100.0
 	},
 	"find_in_files":
 	{
@@ -526,19 +561,19 @@
 			[
 				{
 					"buffer": 0,
-					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
+					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/262546_3_0/bridge.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1706,
+						"buffer_size": 7884,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1628,
-								1628
+								3671,
+								3671
 							]
 						],
 						"settings":
@@ -546,7 +581,7 @@
 							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1237.0,
+						"translation.y": 4680.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -554,25 +589,24 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
+					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/262546_4_1/rmq_param.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1624,
+						"buffer_size": 213,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76,
-								76
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
