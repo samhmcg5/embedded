@@ -5,12 +5,18 @@ import time
 time.clock()
 
 cm10  = ["{ \"seq\":0, \"act\":0, \"dist\":10, \"speed\":2}"]
+
 cm25  = ["{ \"seq\":0, \"act\":0, \"dist\":15, \"speed\":3}"]
+
 cm50  = ["{ \"seq\":0, \"act\":0, \"dist\":15, \"speed\":4}",
          "{ \"seq\":0, \"act\":0, \"dist\":10, \"speed\":4}"]
-cm100 = ["{ \"seq\":0, \"act\":0, \"dist\":20, \"speed\":4}",
-         "{ \"seq\":0, \"act\":0, \"dist\":20, \"speed\":4}",
+
+cm100 = ["{ \"seq\":0, \"act\":0, \"dist\":10, \"speed\":4}",
+         "{ \"seq\":0, \"act\":0, \"dist\":10, \"speed\":4}",
+         "{ \"seq\":0, \"act\":0, \"dist\":10, \"speed\":4}",
+         "{ \"seq\":0, \"act\":0, \"dist\":10, \"speed\":4}",
          "{ \"seq\":0, \"act\":0, \"dist\":10, \"speed\":4}"]
+
 cm80  = ["{ \"seq\":0, \"act\":1, \"dist\":20, \"speed\":3}"]
 
 # server definitions
@@ -45,7 +51,7 @@ def listenForIdle():
         buf = ""
         data = ""
         if not paused:
-            if time.clock() - pause_time >= 7:
+            if time.clock() - pause_time >= 1:
                 return
 
 
@@ -62,6 +68,8 @@ listenForIdle()
 client.send(cm100[0].encode())
 client.send(cm100[1].encode())
 client.send(cm100[2].encode())
+client.send(cm100[3].encode())
+client.send(cm100[4].encode())
 listenForIdle()
 
 client.send(cm80[0].encode())
