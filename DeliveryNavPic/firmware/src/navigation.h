@@ -14,8 +14,8 @@
 
 /* LOCATION DEFINITIONS */
 #define RED_X   20
-#define GREEN_X 40
-#define BLUE_X  60
+#define GREEN_X 45
+#define BLUE_X  65
 const unsigned int PICKUP_ZONES[] = {RED_X, GREEN_X, BLUE_X};
 #define PROD_Y  8
 

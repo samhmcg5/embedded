@@ -111,7 +111,8 @@ void IntHandlerDrvTmrInstance2(void)
         sendMsgToNavQFromISR(data);
     }
 
-    if (distL >= 10*TICKS_PER_CM)
+    // reset the integral after a certain distance
+    if (distL >= 17*TICKS_PER_CM)
         integral = 0;
 
     /* If we have reached the goal of ticks to travel ...  for either motor */

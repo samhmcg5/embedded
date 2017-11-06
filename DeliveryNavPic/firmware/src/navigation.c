@@ -133,8 +133,8 @@ void beginTask(unsigned int task)
     // Generate the pickup instructions
     struct motorQueueData out;
     // ONE : am i in the crash margin?
-    if (posY < CRASH_MARGIN_L || posY > CRASH_MARGIN_H)
-        getOutOfCrashZone(posX, posY, orientation, &future_x, &future_y, &future_o);
+    // if (posY < CRASH_MARGIN_L || posY > CRASH_MARGIN_H)
+    //     getOutOfCrashZone(posX, posY, orientation, &future_x, &future_y, &future_o);
     // TWO : Adjust delta X
     int dX = PICKUP_ZONES[task] - posX;
     if (dX != 0)
@@ -355,8 +355,8 @@ void handleTaskState()
             // generate delivery directions
             if (!generated)
             {
-                generateDeliveryDirs(navigationData.to);
                 generated = true;
+                generateDeliveryDirs(navigationData.to);
             }
             // Done Condition --> I've stopped moving
             if (navigationData.stopped && motorQueuesAreEmpty())
@@ -368,7 +368,7 @@ void handleTaskState()
             navigationData.magnet_should_be = OFF;
             if (navigationData.magnet_is == OFF)
             {
-                navigationData.status = idle;
+                navigationData.status = reverse2;
                 generated = false;
             }
             break;
@@ -387,7 +387,10 @@ void handleTaskState()
                 sendMsgToMotorQ(out_m);
             }
             if (navigationData.stopped && motorQueuesAreEmpty())
+            {
                 navigationData.status = idle;
+                generated = false;
+            }
             break;
         }
         default:
@@ -409,6 +412,7 @@ void NAVIGATION_Initialize ( void )
     navigationData.ir_dist = 0;
     navigationData.from = 0xFF;
     navigationData.to   = 0xFF;
+    task_done = true;
 
     nav_q = xQueueCreate(32, sizeof (struct navQueueData));
 }
