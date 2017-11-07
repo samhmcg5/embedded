@@ -14,8 +14,8 @@
 
 /* LOCATION DEFINITIONS */
 #define RED_X   20
-#define GREEN_X 45
-#define BLUE_X  65
+#define GREEN_X 40
+#define BLUE_X  60
 const unsigned int PICKUP_ZONES[] = {RED_X, GREEN_X, BLUE_X};
 #define PROD_Y  8
 
@@ -82,7 +82,7 @@ void updateLocation(unsigned int cm, unsigned char action);
 void beginTask(unsigned int task);
 
 unsigned int getNearestVertical(unsigned int o);
-void getOutOfCrashZone(int x, int y, int o, int *future_x, int *future_y, int *future_o);
+// void getOutOfCrashZone(int x, int y, int o, int *future_x, int *future_y, int *future_o);
 void setOrientation(unsigned int goal, unsigned int current ,unsigned char speed);
 void generateDeliveryDirs(unsigned int zone);
 

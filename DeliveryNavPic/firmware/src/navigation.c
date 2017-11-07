@@ -48,7 +48,6 @@ void updateLocation(unsigned int cm, unsigned char action)
         }
         case STOP:
         {
-            // TODO
             break;
         }
         default:
@@ -74,36 +73,36 @@ unsigned int getNearestVertical(unsigned int o)
     return theta;
 }
 
-void getOutOfCrashZone(int x, int y, int o, int *future_x, int *future_y, int *future_o)
-{
-    struct motorQueueData out;
-    if (y < CRASH_MARGIN_L)
-    {
-        // negative for right, positive for left
-        *future_o = getNearestVertical(o);
-        setOrientation(*future_o, o, 4);
-        // move forward or reverse
-        int dist = CRASH_MARGIN_L - y;
-        out.action = (*future_o == 90) ? FORWARD : REVERSE;
-        out.dist   = abs(dist);
-        out.speed  = 3;
-        *future_y = (*future_o == 90) ? (*future_y+abs(dist)) : (*future_y-abs(dist));
-        sendMsgToMotorQ(out);
-    }
-    else if (y > CRASH_MARGIN_H)
-    {
-        // negative for right, positive for left
-        *future_o = getNearestVertical(o);
-        setOrientation(*future_o, o, 4);
-        // move forward or reverse
-        int dist = y - CRASH_MARGIN_H;
-        out.action = (*future_o == 270) ? FORWARD : REVERSE;
-        out.dist   = abs(dist);
-        out.speed  = 3;
-        *future_y = (*future_o == 270) ? (*future_y+abs(dist)) : (*future_y-abs(dist));
-        sendMsgToMotorQ(out);
-    }
-}
+// void getOutOfCrashZone(int x, int y, int o, int *future_x, int *future_y, int *future_o)
+// {
+//     struct motorQueueData out;
+//     if (y < CRASH_MARGIN_L)
+//     {
+//         // negative for right, positive for left
+//         *future_o = getNearestVertical(o);
+//         setOrientation(*future_o, o, 4);
+//         // move forward or reverse
+//         int dist = CRASH_MARGIN_L - y;
+//         out.action = (*future_o == 90) ? FORWARD : REVERSE;
+//         out.dist   = abs(dist);
+//         out.speed  = 3;
+//         *future_y = (*future_o == 90) ? (*future_y+abs(dist)) : (*future_y-abs(dist));
+//         sendMsgToMotorQ(out);
+//     }
+//     else if (y > CRASH_MARGIN_H)
+//     {
+//         // negative for right, positive for left
+//         *future_o = getNearestVertical(o);
+//         setOrientation(*future_o, o, 4);
+//         // move forward or reverse
+//         int dist = y - CRASH_MARGIN_H;
+//         out.action = (*future_o == 270) ? FORWARD : REVERSE;
+//         out.dist   = abs(dist);
+//         out.speed  = 3;
+//         *future_y = (*future_o == 270) ? (*future_y+abs(dist)) : (*future_y-abs(dist));
+//         sendMsgToMotorQ(out);
+//     }
+// }
 
 void setOrientation(unsigned int goal, unsigned int current, unsigned char speed)
 {
@@ -136,10 +135,13 @@ void beginTask(unsigned int task)
     // if (posY < CRASH_MARGIN_L || posY > CRASH_MARGIN_H)
     //     getOutOfCrashZone(posX, posY, orientation, &future_x, &future_y, &future_o);
     // TWO : Adjust delta X
-    int dX = PICKUP_ZONES[task] - posX;
+    int dX = PICKUP_ZONES[task] - (int)posX;
     if (dX != 0)
     {
-        (dX < 0) ? setOrientation(180,orientation,4) : setOrientation(0,orientation,4);
+        (dX < 0) ? setOrientation(180,orientation,3) : setOrientation(0,orientation,3);
+        char buf[128];
+        sprintf(buf,"{\"SEQ\":0,\"DELIV_NAV\":{\"DELTAX\":%i}}!", dX);
+        commSendMsgToUartQueue(buf);
         (dX < 0) ? (future_o = 180) : (future_o = 0);
         future_x += dX;
         out.action = FORWARD;
@@ -148,10 +150,10 @@ void beginTask(unsigned int task)
         sendMsgToMotorQ(out);
     }
     // Three : Adjust delta Y
-    int dY = PROD_Y - posY;
+    int dY = PROD_Y - (int)posY;
     if (dY != 0)
     {
-        (dY < 0) ? setOrientation(270,future_o,4) : setOrientation(90,future_o,4);
+        (dY < 0) ? setOrientation(270,future_o,3) : setOrientation(90,future_o,3);
         (dX < 0) ? (future_o = 270) : (future_o = 90);
         future_y += dY;
         out.action = FORWARD;
@@ -252,7 +254,7 @@ void handleIncomingMsg(struct navQueueData data)
         {
             navigationData.stopped = (data.c == 0 && data.d == 0 && task_done);
             char buf[128];
-            if (navigationData.status == idle && navigationData.stopped)
+            if (navigationData.status == idle)
             {
                 sprintf(buf, STR_IDLE, outgoing_seq);
                 commSendMsgToUartQueue(buf);
@@ -268,7 +270,7 @@ void handleIncomingMsg(struct navQueueData data)
         {
             char buf[64];
             // Request Magnet state
-            sprintf(buf, STR_DATA_REQ, outgoing_seq, navigationData.magnet_should_be);
+            sprintf(buf, STR_DATA_REQ, outgoing_seq, navigationData.magnet_should_be, navigationData.ir_dist);
             commSendMsgToUartQueue(buf);
             break;
         }
@@ -290,12 +292,13 @@ void handleIncomingMsg(struct navQueueData data)
 
 void handleTaskState()
 {
-    // char buf[64];
     switch (navigationData.status)
     {
         case idle:
         {
             generated = false;
+            task_done = false;
+            navigationData.stopped = false;
             break;
         }
         case pickup:
@@ -307,6 +310,8 @@ void handleTaskState()
                 out.action = FORWARD;
                 out.dist   = navigationData.ir_dist;
                 out.speed  = 2;
+                sendMsgToMotorQ(out);
+                out.action = STOP;
                 sendMsgToMotorQ(out);
                 navigationData.ir_used = true;
             }
@@ -407,12 +412,12 @@ void NAVIGATION_Initialize ( void )
     navigationData.status = idle;
     navigationData.magnet_should_be = OFF;
     navigationData.magnet_is        = OFF;
-    navigationData.stopped = true;
+    navigationData.stopped = false;
     navigationData.ir_used = false;
     navigationData.ir_dist = 0;
     navigationData.from = 0xFF;
     navigationData.to   = 0xFF;
-    task_done = true;
+    task_done = false;
 
     nav_q = xQueueCreate(32, sizeof (struct navQueueData));
 }
