@@ -1,9 +1,11 @@
 from PyQt5.QtCore import QThread, pyqtSignal
+import json
 
 from server import *
 from database_fields import *
 from server_fields import *
 import server_defs as defs
+import re
 
 class ServerBaseThread(QThread):
     statusSig = pyqtSignal(str,str)
@@ -47,9 +49,8 @@ class ServerBaseThread(QThread):
             except ConnectionError as err:
                 raise ConnectionError(err)
             # if *HELLO* seen scrap the data
-            if buf is WIFLY_INIT_MSG:
-                buf = ""
-                break
+            if "*HELLO*" in buf:
+                buf = re.sub("\*HELLO\*","" , buf)
         buf = buf[:-1]
         self.sendToStatus(str("Received: " + buf))
         return buf
