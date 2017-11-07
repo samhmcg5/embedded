@@ -1,0 +1,141 @@
+# Database class, constants, and definitions
+from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
+import database_fields as db
+import server_defs as srv
+import sys
+import json
+
+# TODO 
+# send messages to status viewer and not just print
+
+# OPERATIONAL
+# TESTED 
+class Database():
+
+    def __init__(self, parent):
+        self.parent             = parent
+        # Connection settings
+        self.host               = db.localhost
+        self.port               = db.port
+        
+        # Database and collection names
+        self.dbname             = db.dbname
+        self.deliv_nav          = db.deliv_nav
+        self.deliv_sense        = db.deliv_sense
+        self.scan_nav           = db.scan_nav
+        self.scan_sense         = db.scan_sense
+        
+        # Database connection and collection handlers
+        self.mongoclient        = None
+        self.dbonline           = False
+        self.db                 = None
+        self.deliv_nav_col      = None
+        self.deliv_sense_col    = None
+        self.scan_nav_col       = None
+        self.scan_sense_col     = None
+
+    def sendToStatus(self, msg):
+        self.parent.sendToStatus(msg)
+
+    # Initialize database and collection fields
+    def db_init(self):
+        self.sendToStatus(db.INFO_DB_INIT)
+        self.db = self.mongoclient[self.dbname]
+        self.col_init()
+    
+    # Initialize collections with default storage fields
+    def col_init(self):
+        # Initialize delivery navigation
+        self.sendToStatus(db.INFO_DB_INIT_DELIV_NAV)
+        self.deliv_nav_col = self.db[self.deliv_nav]
+        self.fill_default_fields(self.deliv_nav_col, db.DELIV_NAV_FIELDS, self.deliv_nav)
+
+        # Initialize delivery sensing
+        self.sendToStatus(db.INFO_DB_INIT_DELIV_SENSE)
+        self.deliv_sense_col = self.db[self.deliv_sense]    
+        self.fill_default_fields(self.deliv_sense_col, db.DELIV_SENSE_FIELDS, self.deliv_sense)
+        
+        # Initialize scanner navigation
+        self.sendToStatus(db.INFO_DB_INIT_SCAN_NAV)
+        self.scan_nav_col = self.db[self.scan_nav]
+        self.fill_default_fields(self.scan_nav_col, db.SCAN_NAV_FIELDS, self.scan_nav)
+
+        # Initialize scanner sensing
+        self.sendToStatus(db.INFO_DB_INIT_SCAN_SENSE)
+        self.scan_sense_col = self.db[self.scan_sense]
+        self.fill_default_fields(self.scan_sense_col, db.SCAN_SENSE_FIELDS, self.scan_sense)
+
+    # Fill collections with default fields
+    def fill_default_fields(self, col, fields, colName):
+        for jsonstr in fields:
+            if srv.isjson(jsonstr):
+                self.sendToStatus(db.INFO_DB_STORE_ATT + colName)
+                res = col.replace_one(json.loads(jsonstr), json.loads(jsonstr), True)
+                if res.modified_count == 1 or res.upserted_id is not None:
+                    self.sendToStatus(db.INFO_DB_STORE_SUC + colName)
+                    thicc = 69 # placeholder, means nothing, just used to avoid printing
+                # should never happen
+                else: 
+                    raise RuntimeError(db.ERROR_DB_STORE + colName)
+            else:
+                raise ValueError(db.ERROR_DB_JSON)
+
+    # Connect to database
+    def connect(self):
+        self.sendToStatus(db.INFO_DB_CONN_ATT)
+        self.mongoclient = MongoClient(self.host, self.port, serverSelectionTimeoutMS=3000)
+        try: 
+            result = self.mongoclient.admin.command("ismaster")
+        except ServerSelectionTimeoutError:
+            self.dbonline = False
+            raise ConnectionError(db.ERROR_DB_CONN)
+        self.dbonline = True
+        self.sendToStatus(db.INFO_DB_CONN_SUC + self.host + ":" + str(self.port))
+
+    # Disconnect from database
+    def disconnect(self):
+        # Disconnect mongo
+        self.clean()
+        self.mongoclient.close()
+        self.dbonline = False
+
+    # Empty databse and clear fields
+    def clean(self):
+        self.mongoclient.drop_database(self.dbname)
+        self.db = None
+        self.deliv_nav_col = None
+        self.deliv_sense_col = None
+        self.scan_nav_col = None
+        self.scan_sense_col = None
+
+    # Check if database is connected
+    def isDBOnline(self):
+        return self.dbonline
+
+    # Stores a JSON formatted object in the database
+    # Return TRUE on successful store
+    def store(self, col, criteria, json_obj, colName):
+        self.sendToStatus(db.INFO_DB_STORE_ATT + colName)
+        # Replace database field with given criteria with new json_obj data
+        res = col.replace_one(json.loads(criteria), json_obj)
+        # Criteria does not match database field in a given collection
+        if res.matched_count == 0:
+            raise RuntimeError(db.ERROR_DB_STORE + colName)
+        else:
+            self.sendToStatus(db.INFO_DB_STORE_SUC + colName)
+        return True
+
+    # Gets action message to respective pic
+    def retrieve(self, col, criteria, colName):
+        self.sendToStatus(db.INFO_DB_RETR_ATT + colName)
+        # Find data in given collection matching specified criteria
+        doc = col.find_one(json.loads(criteria))
+        del doc['_id']
+        if doc:
+            self.sendToStatus(db.INFO_DB_RETR_SUC + colName)
+            thicc = 69 # means nothing, placeholder to avoid printing
+        # Data field in collection could not be found
+        else:
+            raise RuntimeError(db.ERROR_DB_RETR + colName)
+        return doc

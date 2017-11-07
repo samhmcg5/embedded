@@ -8,7 +8,8 @@ class StatusThread(QThread):
         self.wait()
 
     def receiveMsg(self,name,msg):
-        print("[%s] %s" % (name, msg))
+        fmt = '[{0:10}] {1:}'.format(name,msg)
+        print(fmt)
 
     def run(self):
-        print("Status Thread")
+        return

@@ -1,5 +1,5 @@
-# Function library for handling messages that are sent to the server, 
-# performing database calls, and standard error reporting  
+# Function library for handling messages that are sent to the server,
+# performing database calls, and standard error reporting
 
 from pymongo import MongoClient
 import socket
@@ -35,7 +35,7 @@ deliv_nav_col = None
 
 # Message constants
 DELIM = "!"
-SEQ_FIELD = "SEQ" 
+SEQ_FIELD = "SEQ"
 WIFLY_INIT_MSG = '*HELLO*'
 RECV = 'RECV'
 SENT = 'SENT'
@@ -47,7 +47,7 @@ ZONE = 'ZONE'
 RED = 'RED'
 BLUE = 'BLUE'
 GREEN = 'GREEN'
-SCAN_SENSE_DEFAULT_ZONE_ACTION = '{ "SEQ": 0, "ZONE": 1, "ACTION": 0 }' 
+SCAN_SENSE_DEFAULT_ZONE_ACTION = '{ "SEQ": 0, "ZONE": 1, "ACTION": 0 }'
 SCAN_SENSE_DEFAULT_ZONE_1 = '{ "SEQ": 0, "ZONE": 1, "RED": 0, "GREEN": 0, "BLUE": 0 }'
 SCAN_SENSE_DEFAULT_ZONE_2 = '{ "SEQ": 0, "ZONE": 2, "RED": 0, "GREEN": 0, "BLUE": 0 }'
 SCAN_SENSE_DEFAULT_ZONE_3 = '{ "SEQ": 0, "ZONE": 3, "RED": 0, "GREEN": 0, "BLUE": 0 }'
@@ -59,13 +59,13 @@ SCAN_NAV_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0 }'
 
 # Delivery navigation fields
 DELIV_NAV = 'DELIV_NAV'
-STATUS = 'STATUS' 
+STATUS = 'STATUS'
 MESSAGE = 'MESSAGE'
-X = 'X' 
-Y = 'Y' 
-RIGHT_DIR = 'RIGHT_DIR' 
-LEFT_DIR = 'LEFT_DIR' 
-RIGHT_SPEED = 'RIGHT_SPEED' 
+X = 'X'
+Y = 'Y'
+RIGHT_DIR = 'RIGHT_DIR'
+LEFT_DIR = 'LEFT_DIR'
+RIGHT_SPEED = 'RIGHT_SPEED'
 LEFT_SPEED = 'LEFT_SPEED'
 DELIV_NAV_DEFAULT_PATH = '{ "SEQ": 0, "COLOR": 0, "X": 0}'
 DELIV_NAV_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0, "DISTANCE": 10, "INTENSITY":50 }'
@@ -76,7 +76,7 @@ DELIV_SENSE_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0 }'
 # ZONE and STATUS defined same as before
 
 # Info messages
-INFO_DB_CONN_ATT        = 'Attempting to connect to database.' 
+INFO_DB_CONN_ATT        = 'Attempting to connect to database.'
 INFO_DB_CONN            = 'Connected to database.'
 INFO_DB_INIT            = 'Initializing database fields.'
 INFO_DB_INIT_SENSING    = 'Initializing sensing scanner rover collection.'
@@ -119,12 +119,12 @@ def create_default_server_msg_fields(col, name):
         list.append(json_obj)
         json_obj = json.loads(DELIV_NAV_DEFAULT_ACTION)
         list.append(json_obj)
-    
+
     for json_obj in list:
         col.replace_one(json_obj, json_obj, True)
     return
 
-# Updates incoming messaage sequence number to expected result 
+# Updates incoming messaage sequence number to expected result
 def handle_seq(seq):
     seq_num = seq + 1
     return seq_num;
@@ -184,7 +184,7 @@ def connect_to_mongo():
     MONGODB_ONLINE = True
     print(INFO_DB_CONN)
     sys.stdout.flush()
-    
+
     # Connected, now initialize database names and collections with initial default messages, to create them
     print(INFO_DB_INIT)
     sys.stdout.flush()
@@ -238,8 +238,8 @@ def recv_msg(client, length):
         #print(ERROR_SRV_CONN + "\n")
         #sys.stdout.flush()
         return
-    data = data.decode()    
-    return data 
+    data = data.decode()
+    return data
 
 # Deliver message to client
 def send_msg(client, msg):
@@ -247,7 +247,7 @@ def send_msg(client, msg):
     try:
         client.send(msg.encode())
         #print(INFO_SRV_MSG_SENT)
-    except (ConnectionError): 
+    except (ConnectionError):
         SERVER_ONLINE = False
         #print(ERROR_SRV_CONN)
         #sys.stdout.flush()
@@ -273,7 +273,7 @@ def get_collections():
 # Return the json fields for a scanner sensing message
 def get_scanner_sensing_fields():
     return SCAN_SENSE, ZONE, RED, BLUE, GREEN
-    
+
 # Return the json fields for a scanner navigation message
 def get_scanner_navigation_fields():
     return SCAN_NAV, DISTANCE
