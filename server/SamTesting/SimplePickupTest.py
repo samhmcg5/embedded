@@ -19,8 +19,8 @@ print("Waiting for a connection:")
 client, address = s.accept()
 print("Connected to WiFly:")
 
-client.send( "{\"seq\":0, \"COLOR\":1, \"ZONE\":1}".encode() )
-client.send( "{\"seq\":0, \"MAGNET\":1, \"IR\":2}".encode() )
+client.send( "{\"seq\":0, \"COLOR\":0, \"ZONE\":0}".encode() )
+client.send( "{\"seq\":0, \"MAGNET\":0, \"IR\":2}".encode() )
 
 while True:
     while data != '!':
