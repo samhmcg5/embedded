@@ -69,6 +69,7 @@ typedef struct
 } NAVIGATION_DATA;
 
 bool generated = false;
+unsigned int ir_trav = 0;
 
 void NAVIGATION_Initialize ( void );
 

@@ -152,6 +152,16 @@ void IntHandlerDrvTmrInstance2(void)
         setMotorR_DC( new_dc );
     }
 
+
+    if (isr_count % 2 == 0)
+    {
+        // position to server
+        data.type = POSITION;
+        data.a = posX; // x
+        data.b = posY; // y
+        data.c = orientation;
+        sendMsgToNavQFromISR(data);
+    }
     // magnet stuff, rate = 2 Hz
     if (isr_count % 5 == 0)
     {
@@ -168,13 +178,6 @@ void IntHandlerDrvTmrInstance2(void)
         data.b = getMotorL_Dir();
         data.c = total_ticksR;
         data.d = total_ticksL;
-        sendMsgToNavQFromISR(data);
-
-        // position to server
-        data.type = POSITION;
-        data.a = posX; // x
-        data.b = posY; // y
-        data.c = orientation;
         sendMsgToNavQFromISR(data);
 
         isr_count = 0;

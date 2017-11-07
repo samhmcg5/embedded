@@ -171,7 +171,6 @@ void generateDeliveryDirs(unsigned int zone)
     int future_y = posY;
     int future_o = orientation;
 
-    task_done = false;
     struct motorQueueData out;
     int dX = DROP_ZONES[zone] - posX;
     if (dX != 0)
@@ -283,6 +282,17 @@ void handleIncomingMsg(struct navQueueData data)
                 navigationData.ir_dist = data.b;
             break;
         }
+        case CORRECTED_POS:
+        {
+            if (navigationData.status == idle      || 
+                navigationData.status == magnet_on || 
+                navigationData.status == magnet_off)
+            {
+                posX = data.a;
+                posY = data.b;
+                orientation = data.c;
+            }
+        }
         default:
         {
             break;
@@ -309,6 +319,7 @@ void handleTaskState()
                 struct motorQueueData out;
                 out.action = FORWARD;
                 out.dist   = navigationData.ir_dist;
+                ir_trav = navigationData.ir_dist;
                 out.speed  = 2;
                 sendMsgToMotorQ(out);
                 out.action = STOP;
@@ -342,7 +353,7 @@ void handleTaskState()
                 generated = true;
                 struct motorQueueData out_m;
                 out_m.action = REVERSE;
-                out_m.dist   = 7;
+                out_m.dist   = 7 + ir_trav;
                 out_m.speed  = 3;
                 sendMsgToMotorQ(out_m);
                 out_m.action = STOP;
@@ -360,6 +371,8 @@ void handleTaskState()
             // generate delivery directions
             if (!generated)
             {
+                navigationData.stopped = false;
+                task_done = false;
                 generated = true;
                 generateDeliveryDirs(navigationData.to);
             }

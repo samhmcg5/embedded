@@ -91,10 +91,20 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
 
     if(r == 9) // ACTION
     {
-        out.type = ACTION;
-        out.a = getIntFromKey(t[4]);
-        out.b = getIntFromKey(t[6]);
-        out.c = getIntFromKey(t[8]);
+        if (getFirstCharOfKey(t[3]) == 'A') // Action
+        {    
+            out.type = ACTION;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+            out.c = getIntFromKey(t[8]);
+        }
+        else if (getFirstCharOfKey(t[3]) == 'C') // OFFSET
+        {    
+            out.type = CORRECTED_POS;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+            out.c = getIntFromKey(t[8]);
+        }
     }
     else if (r == 7) // TASK
     {

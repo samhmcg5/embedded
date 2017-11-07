@@ -2,13 +2,14 @@
 #define	NAV_GLOBALS_H
 
 // Data types for for the Nav Queue
-#define ACTION      0
-#define TASK        1
-#define SPEEDS      2
-#define POSITION    3
-#define POS_UPDATE  4
-#define DATA_REQ    5
-#define DATA_UPDATE  6
+#define ACTION             0
+#define TASK               1
+#define SPEEDS             2
+#define POSITION           3
+#define POS_UPDATE         4
+#define DATA_REQ           5
+#define DATA_UPDATE        6
+#define CORRECTED_POS      7
 
 // data inside Nav's incoming queue
 struct navQueueData
