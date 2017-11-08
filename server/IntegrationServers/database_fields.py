@@ -1,6 +1,6 @@
 # Database fields and globals
-host = '127.0.0.1'
-port = 27017
+host        = '127.0.0.1'
+port        = 27017
 dbname      = 'team14'
 deliv_nav   = 'deliv_nav'
 deliv_sense = 'deliv_sense'
@@ -42,4 +42,29 @@ class DelivNavFields:
     crit_status = "STATUS"
     crit_mag    = 'SET_MAG'
 
+class DelivSenseFields:
+    col_name    = 'deliv_sense'
+    # master token for incoming JSON
+    token       = "DELIV_SENSE"
+    # tokens to find which message type
+    # TODO
+    # search criteria dicts
+    # TODO
 
+class ScanNavFields:
+    col_name    = 'scan_nav'
+    # master token for incoming JSON
+    token       = "SCAN_NAV"
+    # tokens to find which message type
+    # TODO    
+    # search criteria dicts
+    # TODO
+
+class ScanSenseFields:
+    col_name    = 'scan_sense'
+    # master token for incoming JSON
+    token       = "SCAN_SENSE"
+    # tokens to find which message type
+    # TODO    
+    # search criteria dicts
+    # TODO
