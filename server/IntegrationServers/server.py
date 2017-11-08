@@ -1,19 +1,19 @@
 # Server class
 from database import Database
-import server_fields as sf
 import socket
 
 # Simple server with default backlog and size of 1
 # Connects to a local mongodb service 
 class Server():
-    def __init__(self, addr, port):
+    def __init__(self, parent, addr, port):
         # Initialize server configuration settings
+        self.parent         = parent
         self.addr           = addr
         self.port           = port
         self.size           = 1
         self.backlog        = 1
         # Initialize database configuration settings
-        self.db             = Database()
+        self.db             = Database(self.parent)
         # Initialize client configuration settings
         self.client         = None
         self.client_addr    = None
@@ -21,6 +21,9 @@ class Server():
         self.socket         = None
         self.srvonline      = False
         # Initialize message constants
+
+    def sendToStatus(self, msg):
+        self.parent.sendToStatus(msg)
 
     # DATABASE METHODS
     #--------------------------------------------------------------------
@@ -30,7 +33,7 @@ class Server():
             try:
                 self.db.connect()
             except ConnectionError as err:
-                print(err)      
+                self.sendToStatus(str(err))      
         self.db.db_init()
 
     # Close and reset database
@@ -41,12 +44,12 @@ class Server():
             raise ConnectionError("Database is already offline")
 
     # Store json_obj in database, returns true if successful
-    def store(self, col, criteria, json_obj, colName):
-        return self.db.store(col, criteria, json_obj, colName)
+    def store(self, criteria, json_obj, colName):
+        return self.db.store(criteria, json_obj, colName)
 
     # Retrieves json_obj from database, returns json_obj
-    def retrieve(self, col, criteria, colName):
-        return self.db.retrieve(col, criteria, colName)
+    def retrieve(self, criteria, colName):
+        return self.db.retrieve(criteria, colName)
     #--------------------------------------------------------------------
 
     # SERVER METHODS
@@ -60,7 +63,7 @@ class Server():
     def start(self):
         self.socket.bind((self.addr, self.port))
         self.socket.listen(self.backlog)
-        # print("Server is listening on ...")
+        self.sendToStatus("Server is listening on %s:%s" % (self.addr, self.port))
 
     # Is server online
     def isSRVOnline(self):
@@ -68,36 +71,37 @@ class Server():
 
     # Connect to client
     def connect(self):
-        # print("Waiting for client connection ...")
+        self.sendToStatus("Waiting for client connection ...")
         if self.isSRVOnline():
             raise ConnectionError("Server is already online")
         else:
             (self.client, self.client_addr) = self.socket.accept()
             self.srvonline = True   
-        # print("Client is connected on ...")
+        self.sendToStatus("Client connected on %s:%s" % (self.addr, self.port))
     
     # Disconnect from client
     def disconnect(self):
         if self.isSRVOnline():
-            # print("Attempting to disconnect ...")
+            self.sendToStatus("Attempting to disconnect ...")
             self.socket.close()
             self.srvonline = False
-            # print("Disconnected ...")
+            self.sendToStatus("Disconnected ...")
         else:
             raise ConnectionError("Server is offline")
 
     # Reset server to inital settings
     def reset(self):
-        self.socket = None
-        self.client = None
+        self.socket      = None
+        self.client      = None
         self.client_addr = None
-        self.srvonline = False
+        self.srvonline   = False
 
     # Send message to client, returns true if successfully sent
     def sendmsg(self, msg):
         if self.isSRVOnline():
             try:
-                self.client.send(msg.encode())
+                ret = self.client.send( msg.encode() )
+                self.sendToStatus("Sent Message: %s" % msg)
             except ConnectionError:
                 self.srvonline = False
                 raise ConnectionError("Socket is disconnected!")

@@ -63,6 +63,16 @@ def main():
 			green = json_obj['SCAN_SENSE']['GREEN']
 			blue = json_obj['SCAN_SENSE']['BLUE']
 			
+			actual_color = None
+			if red == 1 and green == 0 and blue == 0:
+				actual_color = 'RED'
+			elif red == 0 and green == 1 and blue == 0:
+				actual_color = 'GREEN'
+			elif red == 0 and green == 0 and blue == 1:
+				actual_color = 'BLUE'
+			else:
+				actual_color = 'NO COLOR'
+				
 			check = None
 			# Check for expected color
 			if expected_color == 0:
@@ -86,7 +96,7 @@ def main():
 				if not check:
 					color_err_count += 1
 
-			print("Expected Color: %s | Actual Color: %s | Success: %s" % (expected_colors[expected_color], zone, check))	
+			print("Expected Color: %s | Actual Color: %s | Success: %s" % (expected_colors[expected_color], actual_color, check))	
 			print()
 			msg = '{ "SEQ": ' + str(seq+1) +  ', "ZONE": 1, "ACTION": 2 }!'
 			print("Sending Message: %s" % msg)
@@ -100,7 +110,7 @@ def main():
 		print("STATISTICS FOR TEST 4")
 		print("---------------------")
 		print()
-		print("COLOR: %s" % expected_color[expected_colors])
+		print("COLOR: %s" % expected_colors[expected_color])
 		print()
 		print("Ratio of color errors to total messages: %d/%d" % (color_err_count, msg_count))
 		print()

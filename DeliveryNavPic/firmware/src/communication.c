@@ -59,6 +59,14 @@ int getIntFromKey(jsmntok_t key)
     return atoi(keyString);
 }
 
+char getFirstCharOfKey(jsmntok_t key)
+{
+    unsigned int length = key.end - key.start;
+    char keyString[length + 1];
+    memcpy(keyString, &JSON_STRING[key.start], length);
+    return keyString[0];
+}
+
 struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
 {
     struct navQueueData out;
@@ -72,7 +80,6 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
 
     /* Get the sequence ID number */
     int seq = getIntFromKey(t[2]);
-
     /* Is it the expected next sequence? */
     if (seq != prev_inc_seq + 1) // ERROR
     {
@@ -84,16 +91,37 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
 
     if(r == 9) // ACTION
     {
-        out.type = ACTION;
-        out.a = getIntFromKey(t[4]);
-        out.b = getIntFromKey(t[6]);
-        out.c = getIntFromKey(t[8]);
+        if (getFirstCharOfKey(t[3]) == 'A') // Action
+        {    
+            out.type = ACTION;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+            out.c = getIntFromKey(t[8]);
+        }
+        else if (getFirstCharOfKey(t[3]) == 'C') // OFFSET
+        {    
+            out.type = CORRECTED_POS;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+            out.c = getIntFromKey(t[8]);
+        }
     }
     else if (r == 7) // TASK
     {
-        out.type = TASK;
-        out.a = getIntFromKey(t[4]);
-        out.b = getIntFromKey(t[6]);
+        if (getFirstCharOfKey(t[3]) == 'C') // TASK
+        {
+            out.type = TASK;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+            if (out.a > 2 || out.b > 2)
+                out.type = 0xFF; // invalid, ignore this input
+        }
+        else if (getFirstCharOfKey(t[3]) == 'M') // data
+        {
+            out.type = DATA_UPDATE;
+            out.a = getIntFromKey(t[4]);
+            out.b = getIntFromKey(t[6]);
+        }
     }
     else // ERROR
     {
@@ -164,13 +192,9 @@ void COMMUNICATION_Tasks(void)
         }
         case COMM_AWAIT_RESPONSE:
         {
-            dbgOutputLoc(COMM_THREAD_WAIT);
-
             unsigned char rec[UART_RX_QUEUE_SIZE];
             if(xQueueReceive(comm_incoming_q, &rec, portMAX_DELAY))
             {
-                dbgOutputLoc(COMM_THREAD_RECVD);
-
                 struct  navQueueData out = parseJSON(rec);
                 sendMsgToNavQ(out);
             }

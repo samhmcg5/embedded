@@ -1,4 +1,4 @@
-# Mock Client Test 3
+# Mock Client Test 4
 from client import Client
 from time import sleep
 import json
@@ -21,21 +21,25 @@ def main():
 	c.sendmsg(msg)
 	sleep(1)
 	
+	seq_num = 0
 	color = 0
 	# Send messages to server
 	while(True):
 		if color == 0:
-			msg = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 1, "GREEN": 0, "BLUE": 0 } }!'
+			msg = '{ "SEQ": ' + str(seq_num) + ', "SCAN_SENSE": { "ZONE": 0, "RED": 1, "GREEN": 0, "BLUE": 0 } }!'
 		elif color == 1:
-			msg = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 1, "BLUE": 0 } }!'
+			msg = '{ "SEQ": ' + str(seq_num) + ', "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 1, "BLUE": 0 } }!'
 		elif color == 2:
-			msg = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 0, "BLUE": 1 } }!'
+			msg = '{ "SEQ": ' + str(seq_num) + ', "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 0, "BLUE": 1 } }!'
 		elif color == 3:
-			msg = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
+			msg = '{ "SEQ": ' + str(seq_num) + ', "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
 		
 		print("Sending Message: %s" % msg)
 		c.sendmsg(msg)
-		recv = c.recvmsg()
+		recv = ''
+		while '!' not in recv:
+			recv += c.recvmsg()
+		recv = recv[:-1]
 		print("Received Message: %s" % recv)
 		json_obj = json.loads(recv)
 		seq = json_obj['SEQ']
@@ -48,6 +52,7 @@ def main():
 			color = 2
 		if seq >= 30:
 			color = 3
+		seq_num += 1
 
 		sleep(1)
 

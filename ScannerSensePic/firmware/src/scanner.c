@@ -1,7 +1,33 @@
 #include "scanner.h"
 #include "communication_globals.h"
 
+#define PIXY_SLAVE_ADDRESS              0x54
+#define PIXY_NUM_OF_BYTES               14
+
 SCANNER_DATA scannerData;
+
+DRV_I2C_BUFFER_EVENT i2cOpStatus;
+
+uint8_t operationStatus;
+
+uint8_t deviceAddressSlave;
+
+uint8_t indexRegByteSize;
+
+uint8_t         TXbuffer[] = "\x54";
+
+uint16_t        RXbuffer[100];
+
+typedef enum{
+    
+        TxRx_TO_PIXY = 0,
+        TxRx_COMPLETED
+
+}I2C_STATES;
+
+static I2C_STATES readWriteState = TxRx_TO_PIXY;
+
+DRV_I2C_BUFFER_EVENT SCANNER_Check_Transfer_Status(DRV_HANDLE drvOpenHandle, DRV_I2C_BUFFER_HANDLE drvBufferHandle);
 
 void sendMsgToScanQ(struct scanQueueData msg)
 {
@@ -39,7 +65,13 @@ void SCANNER_Tasks ( void )
             bool appInitialized = true;
             if (appInitialized)
             {
+                scannerData.drvI2CHandle_Master = DRV_I2C_Open(DRV_I2C_INDEX_0, DRV_IO_INTENT_READWRITE);
                 scannerData.state = SCANNER_STATE_SCANNING;
+
+                if(scannerData.drvI2CHandle_Master != (DRV_HANDLE) NULL)
+                {
+                    scannerData.state = SCANNER_READ_WRITE;
+                }
             }
             break;
         }
@@ -101,10 +133,60 @@ void SCANNER_Tasks ( void )
                 }
             }
         }
-
+        
+        case SCANNER_READ_WRITE:
+        {
+            if(SCANNER_Read_Tasks())
+            {
+                scannerData.state = SCANNER_STATE_SCANNING;
+            }
+        }
         default:
         {
             break;
         }
     }
+}
+
+bool SCANNER_Read_Tasks(void)
+{
+    switch (readWriteState)
+    {
+        case TxRx_TO_PIXY:
+        {    
+
+            deviceAddressSlave = PIXY_SLAVE_ADDRESS;
+
+            /* Write Read Transaction to PixyCAM */
+
+            if ( (scannerData.drvI2CTxRxBufferHandle[0] == (DRV_I2C_BUFFER_HANDLE) NULL) || 
+                    (SCANNER_Check_Transfer_Status(scannerData.drvI2CHandle_Master, scannerData.drvI2CTxRxBufferHandle[0]) == DRV_I2C_BUFFER_EVENT_COMPLETE) || 
+                        (SCANNER_Check_Transfer_Status(scannerData.drvI2CHandle_Master, scannerData.drvI2CTxRxBufferHandle[0]) == DRV_I2C_BUFFER_EVENT_ERROR) )
+            {
+                scannerData.drvI2CTxRxBufferHandle[0] = DRV_I2C_TransmitThenReceive (scannerData.drvI2CHandle_Master,
+                                                                                    deviceAddressSlave,
+                                                                                    &TXbuffer[0], 
+                                                                                    (sizeof(TXbuffer)-1),
+                                                                                    &RXbuffer[0],
+                                                                                    PIXY_NUM_OF_BYTES,
+                                                                                    NULL);
+                char buf[64];
+                sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, RXbuffer[0], RXbuffer[1], RXbuffer[2], RXbuffer[3]);    
+                commSendMsgToUartQueue(buf);
+            }
+            break;
+        }   
+        case TxRx_COMPLETED:
+        {
+            return true;
+            break;
+        }
+    }
+    return false;
+
+}
+
+DRV_I2C_BUFFER_EVENT SCANNER_Check_Transfer_Status(DRV_HANDLE drvOpenHandle, DRV_I2C_BUFFER_HANDLE drvBufferHandle)
+{
+    return (DRV_I2C_TransferStatusGet  (scannerData.drvI2CHandle_Master, drvBufferHandle));
 }

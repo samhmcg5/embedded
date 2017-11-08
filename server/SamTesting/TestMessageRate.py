@@ -56,7 +56,7 @@ except:
     sys.exit("Failed to parse input file, exiting")
 
 # listen for updates
-while time.clock() <= 45.0:
+while time.clock() <= 20.0:
     while data != '!':
         data = client.recv(SIZE).decode()
         buf += data

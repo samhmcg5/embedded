@@ -38,7 +38,7 @@ def listenForIdle():
         buf = ""
         data = ""
         if not paused:
-            if time.clock() - pause_time >= 2:
+            if time.clock() - pause_time >=2:
                 return
 
 def sendActions(actions):
