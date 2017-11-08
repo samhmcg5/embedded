@@ -45,12 +45,12 @@ class Server():
             raise ConnectionError("Database is already offline")
 
     # Store json_obj in database, returns true if successful
-    def store(self, col, criteria, json_obj, colName):
-        return self.db.store(col, criteria, json_obj, colName)
+    def store(self, criteria, json_obj, colName):
+        return self.db.store(criteria, json_obj, colName)
 
     # Retrieves json_obj from database, returns json_obj
-    def retrieve(self, col, criteria, colName):
-        return self.db.retrieve(col, criteria, colName)
+    def retrieve(self, criteria, colName):
+        return self.db.retrieve(criteria, colName)
     #--------------------------------------------------------------------
 
     # SERVER METHODS

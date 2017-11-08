@@ -1,5 +1,5 @@
 # Database fields and globals
-localhost = '127.0.0.1'
+host = '127.0.0.1'
 port = 27017
 dbname = 'team14'
 deliv_nav = 'deliv_nav'
@@ -18,7 +18,7 @@ INFO_DB_INIT_SCAN_SENSE     = 'Initializing scanner sensing pic collection.'
 
 # Database store and retrieve messages
 INFO_DB_STORE_ATT       	= 'Attempting to store data in... '
-INFO_DB_STORE_SUC       	= 'Succesfully stored data in... '
+INFO_DB_STORE_SUC       	= 'Succesfully stored \"%s\" in \"%s\"'
 INFO_DB_RETR_ATT			= 'Attempting to retrieve data from... '
 INFO_DB_RETR_SUC			= 'Succesfully retrieved data from... '
 
@@ -43,10 +43,18 @@ QUOTA_CRITERIA = '{ "QUOTA": { "$exists": true } }'
 
 # Default collection storage fields
 # DELIV NAV
-DELIV_NAV_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0, "DISTANCE": 0, "INTENSITY": 0 }'
-DELIV_NAV_DEFAULT_PATH = '{ "SEQ": 0, "COLOR": 0, "X": 0}'
-DELIV_NAV_FIELDS = [ DELIV_NAV_DEFAULT_ACTION,
-					DELIV_NAV_DEFAULT_PATH ]
+DELIV_NAV_DEFAULT_STATUS = '{ "SEQ": 0, "DELIV_NAV": { "STATUS": 0, "MSG": "Rover is IDLE, requesting task" } }'
+DELIV_NAV_TASK_ACK       = '{ "SEQ": 0, "DELIV_NAV": { "TASK": "RECEIVED" } }'
+DELIV_NAV_ACTION_ACK     = '{ "SEQ": 0, "DELIV_NAV": { "ACTION": "RECEIVED" } }'
+DELIV_NAV_DEFAULT_REQ    = '{ "SEQ": 0, "DELIV_NAV": { "SET_MAGNET": 0, "IR_DATA": 0 } }'
+DELIV_NAV_DEFAULT_POS    = '{ "SEQ": 0, "DELIV_NAV": { "X": 0, "Y": 20, "OR": 0 } }'
+DELIV_NAV_DEFAULT_ERR    = '{ "SEQ": 0, "DELIV_NAV": { "ERROR": 0, "MSG": "message" } }'
+DELIV_NAV_FIELDS = [DELIV_NAV_DEFAULT_STATUS,
+                    DELIV_NAV_TASK_ACK,
+                    DELIV_NAV_ACTION_ACK,
+                    DELIV_NAV_DEFAULT_REQ,
+                    DELIV_NAV_DEFAULT_POS,
+                    DELIV_NAV_DEFAULT_ERR]
 
 # DELIV SENSE
 DELIV_SENSE_DEFAULT_ACTION = '{ "SEQ": 0, "ACTION": 0 }'

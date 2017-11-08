@@ -11,4 +11,4 @@ class ScanSenseThread(ServerBaseThread):
            return
         scansense = json_obj[SCAN_SENSE]
         # now take an action based on the data ...
-        self.sendToStatus(str(scansense))
+        # self.sendToStatus(str(scansense))

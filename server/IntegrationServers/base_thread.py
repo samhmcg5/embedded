@@ -15,7 +15,7 @@ class ServerBaseThread(QThread):
         self.srv = Server(self, ip, port)
         self.status_thread = status_thread
         self.seq_num = 1
-        self.recv_seq = 0
+        self.recv_seq = -1
         self.connectSignals()
 
     def __del__(self):
@@ -52,7 +52,7 @@ class ServerBaseThread(QThread):
             if "*HELLO*" in buf:
                 buf = re.sub("\*HELLO\*","" , buf)
         buf = buf[:-1]
-        self.sendToStatus(str("Received: " + buf))
+        # self.sendToStatus(str("Received: " + buf))
         return buf
 
     def run(self):
