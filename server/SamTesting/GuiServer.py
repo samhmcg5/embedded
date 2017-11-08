@@ -76,10 +76,10 @@ class DeliveryTestGui(qt.QWidget):
 
     def updateData(self, json):
         if "STATUS" in json["DELIV_NAV"].keys():
-            if "IDLE" in json['DELIV_NAV']['MSG']:
+            if json['DELIV_NAV']['STATUS'] == 0:
                 self.stat_label.setText("Status: \t\t%s"%"IDLE")
-        elif "TASK" in json["DELIV_NAV"].keys() or "ACTION" in json["DELIV_NAV"].keys():
-            self.stat_label.setText("Status: \t%s"%"EXECUTING")
+            elif json['DELIV_NAV']['STATUS'] == 1 or json['DELIV_NAV']['STATUS'] == 2:
+                self.stat_label.setText("Status: \t%s"%"EXECUTING")
         elif "Y" in json["DELIV_NAV"].keys():
             self.updatePos(json)
         elif "SET_MAGNET" in json["DELIV_NAV"].keys():
