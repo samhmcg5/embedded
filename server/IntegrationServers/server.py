@@ -1,6 +1,5 @@
 # Server class
 from database import Database
-import server_fields as sf
 import socket
 
 # Simple server with default backlog and size of 1
@@ -92,16 +91,17 @@ class Server():
 
     # Reset server to inital settings
     def reset(self):
-        self.socket = None
-        self.client = None
+        self.socket      = None
+        self.client      = None
         self.client_addr = None
-        self.srvonline = False
+        self.srvonline   = False
 
     # Send message to client, returns true if successfully sent
     def sendmsg(self, msg):
         if self.isSRVOnline():
             try:
-                self.client.send(msg.encode())
+                ret = self.client.send( msg.encode() )
+                self.sendToStatus("Sent Message: %s" % msg)
             except ConnectionError:
                 self.srvonline = False
                 raise ConnectionError("Socket is disconnected!")

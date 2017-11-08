@@ -3,18 +3,28 @@ import json
 
 from server import *
 from database_fields import *
-from server_fields import *
 import server_defs as defs
 import re
+
+"""
+
+This class is the base for each of the threads connecting to the PICs. 
+It handles the connections, the signals/slots, server send/secv, and DB calls.
+
+Override the handleJSON() function in the inherited classes. This function is called by 
+the run() function once valid data is received over TCP/IP. At this point, you can take action on the available
+data such as storing it, doing some calculation, or sending data back to the pic
+
+"""
 
 class ServerBaseThread(QThread):
     statusSig = pyqtSignal(str,str)
     def __init__(self, ip, port, status_thread):
         QThread.__init__(self)
         self.name = "BaseThread"
-        self.srv = Server(self, ip, port)
+        self.srv  = Server(self, ip, port)
         self.status_thread = status_thread
-        self.seq_num = 1
+        self.seq_num  = 1
         self.recv_seq = -1
         self.connectSignals()
 
@@ -43,11 +53,8 @@ class ServerBaseThread(QThread):
     def readFromClient(self):
         buf = ""
         # read data until we see the '!' delimeter
-        while delim not in buf:
-            try:
-                buf += self.srv.recvmsg()
-            except ConnectionError as err:
-                raise ConnectionError(err)
+        while '!' not in buf:
+            buf += self.srv.recvmsg()
             # if *HELLO* seen scrap the data
             if "*HELLO*" in buf:
                 buf = re.sub("\*HELLO\*","" , buf)
@@ -73,7 +80,7 @@ class ServerBaseThread(QThread):
                         # handle the valid JSON object
                         self.handleJSON(json_obj)
                     else:
-                        self.sendToStatus("ERROR: REceived bad JSON")
+                        self.sendToStatus("ERROR: Received bad JSON")
                 except ConnectionError as err:
                         self.srv.reset()
                         self.srv.db.clean_db()

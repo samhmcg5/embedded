@@ -2,14 +2,8 @@
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 import database_fields as db
-import server_defs as srv
-import sys
-import json
 
-# OPERATIONAL
-# TESTED 
 class Database():
-
     def __init__(self, parent):
         self.parent             = parent
         # Database connection and collection handlers
@@ -55,7 +49,7 @@ class Database():
             self.dbonline = False
             raise ConnectionError(db.ERROR_DB_CONN)
         self.dbonline = True
-        self.sendToStatus(db.INFO_DB_CONN_SUC + db.host + ":" + str(db.port))
+        self.sendToStatus(db.INFO_DB_CONN_SUC%(db.host,db.port) )
 
     # Disconnect from database
     def disconnect(self):
@@ -82,7 +76,7 @@ class Database():
     # Stores a JSON formatted object in the database
     # Return TRUE on successful store
     def store(self, criteria, json_obj, colName):
-        self.sendToStatus(db.INFO_DB_STORE_ATT + colName)
+        self.sendToStatus(db.INFO_DB_STORE_ATT % colName)
         # Replace database field with given criteria with new json_obj data
         col = self.database[colName]
         res = col.replace_one(criteria, json_obj)
@@ -92,20 +86,20 @@ class Database():
             if res.acknowledged == True:
                 self.sendToStatus("New entry %s in %s" % (str(json_obj),colName))
             else:
-                raise RuntimeError(db.ERROR_DB_STORE + colName)
+                raise RuntimeError(db.ERROR_DB_STORE % colName)
         else:
             self.sendToStatus(db.INFO_DB_STORE_SUC % (str(json_obj),colName))
         return True
 
     # Gets action message to respective pic
     def retrieve(self, criteria, colName):
-        self.sendToStatus(db.INFO_DB_RETR_ATT + colName)
+        self.sendToStatus(db.INFO_DB_RETR_ATT % colName)
         # Find data in given collection matching specified criteria
         col = self.database[colName]
         doc = col.find_one(criteria)
-        del doc['_id']
         if doc:
-            self.sendToStatus(db.INFO_DB_RETR_SUC + colName)
+            del doc['_id']
+            self.sendToStatus(db.INFO_DB_RETR_SUC % colName)
         else:
-            raise RuntimeError(db.ERROR_DB_RETR + colName)
+            raise sendToStatus(db.ERROR_DB_RETR % colName)
         return doc

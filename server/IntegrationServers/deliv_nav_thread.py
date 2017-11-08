@@ -2,6 +2,7 @@ from base_thread import ServerBaseThread
 from database_fields import DelivNavFields as DNF
 
 """
+
 MONGO USAGE:
 
 Each field is stored under a specific search criteria:
@@ -10,6 +11,12 @@ Each field is stored under a specific search criteria:
         use a search dictionary {"POS":{"$exists":True}} to retrieve the last one
 --> status = {"STATUS":1}, (0=IDLE,1=EXEC_TASK,2=EXEC_ACTION)
 --> set magnet = {"SET_MAG":1}, (1=ON, 0=OFF)
+
+NOTE:
+
+All outgoing data is taken care of in the handleX() functions...
+-- since we use blocking receive calls, the only time we send data 
+   is immediately after the PIC requests it from the server
 
 """
 
@@ -33,13 +40,19 @@ class DelivNavThread(ServerBaseThread):
             # request new task ...
             # send new task to rover ...
             # start timer for task acknowledge status ...
-            pass
+            # TEMPORARY
+            self.srv.sendmsg("{\"seq\":%i, \"COLOR\":0, \"ZONE\":0}" % self.seq_num)
+            self.seq_num += 1
 
     def handleMAG(self, delivnav):
         json_store = {DNF.crit_mag : delivnav["SET_MAGNET"]}
         self.srv.store({DNF.crit_mag : {"$exists":True}}, json_store, DNF.col_name)
         # now request the state of the magnet ...
         # send the state of the magnet back to the rover ...
+        # REMOVE ME
+        self.srv.sendmsg("{\"seq\":%i, \"MAGNET\":%i, \"IR\":1}" % (self.seq_num,delivnav["SET_MAGNET"]) )
+        self.seq_num += 1
+
 
     # overridden from base class
     def handleJSON(self, json_obj):

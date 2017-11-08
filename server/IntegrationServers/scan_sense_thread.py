@@ -1,5 +1,5 @@
 from base_thread import ServerBaseThread
-from server_fields import *
+from database_fields import ScanSenseFields as SSF
 
 class ScanSenseThread(ServerBaseThread):
     def __init__(self, ip, port, status_thread):
@@ -7,7 +7,7 @@ class ScanSenseThread(ServerBaseThread):
         self.name = "ScanSense"
 
     def handleJSON(self, json_obj):
-        if not SCAN_SENSE in json_obj:
+        if not SSF.token in json_obj:
            return
         scansense = json_obj[SCAN_SENSE]
         # now take an action based on the data ...

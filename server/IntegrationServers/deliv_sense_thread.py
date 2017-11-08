@@ -1,5 +1,6 @@
 from base_thread import ServerBaseThread
-from server_fields import *
+from database_fields import DelivSenseFields as DSF
+
 
 class DelivSenseThread(ServerBaseThread):
     def __init__(self, ip, port, status_thread):
@@ -7,7 +8,7 @@ class DelivSenseThread(ServerBaseThread):
         self.name = "DelivSense"
 
     def handleJSON(self, json_obj):
-        if not DELIV_SENSE in json_obj:
+        if not DSF.token in json_obj:
            return
         delivsense = json_obj[DELIV_SENSE]
         # now take an action based on the data ...
