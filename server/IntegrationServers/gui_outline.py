@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QWidget, QApplication
 import PyQt5.QtWidgets as qtw
 import PyQt5.QtCore as qtc
 from PyQt5.QtGui import QFont
-
 import sys
 
 from styles import stylesheet
@@ -10,14 +9,16 @@ from styles import stylesheet
 ###############################
 ### TOP LEVEL GUI COMPONENT ###
 ###############################
+FONT_SIZE = 18
 class TopLevelUI(QWidget):
+    statusSig = qtc.pyqtSignal(str,str)
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.setStyle()
+        self.setStyleSheet(stylesheet)
     def initUI(self): 
         f = QFont()
-        f.setPointSize(18)
+        f.setPointSize(FONT_SIZE)
         self.setFont(f)
         self.quotaframe  = SetQuotaFrame()
         self.currentnums = CurrentNumbersFrame()
@@ -30,8 +31,6 @@ class TopLevelUI(QWidget):
         self.setGeometry(300, 300, 800, 500)
         self.setWindowTitle('Server Control')
         self.show()
-    def setStyle(self):
-        self.setStyleSheet(stylesheet)
 
 ######################
 ### SET THE QUOTAS ###
