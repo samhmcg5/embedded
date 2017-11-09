@@ -24,6 +24,7 @@ All outgoing data is taken care of in the handleX() functions...
 class DelivNavThread(ServerBaseThread):
     positionSig   = pyqtSignal(dict)
     taskStatusSig = pyqtSignal(str)
+    roverStateSig = pyqtSignal(int)
     def __init__(self, ip, port, status_thread):
         ServerBaseThread.__init__(self, ip, port, status_thread)
         self.name = "DelivNav"
@@ -39,26 +40,26 @@ class DelivNavThread(ServerBaseThread):
 
     def handleSTATUS(self, delivnav):
         # store the current status
-        json_store = {DNF.crit_status : delivnav["STATUS"]}
+        json_store = {DNF.crit_status : delivnav[DNF.tok_status]}
         self.srv.store({DNF.crit_status : {"$exists":True}}, json_store, DNF.col_name)
-        if delivnav["STATUS"] == 0:
+        if delivnav[DNF.tok_status] == 0:
             # emit idle status to the GUI
             self.taskStatusSig.emit("Rover is IDLE")
             # request new task ...
             # send new task to rover ...
             # start timer for task acknowledge status ...
             # TEMPORARY
-            # self.srv.sendmsg("{\"seq\":%i, \"COLOR\":0, \"ZONE\":0}" % self.seq_num)
-            # self.seq_num += 1
-        elif delivnav["STATUS"] == 1: # TASK
+            self.srv.sendmsg("{\"seq\":%i, \"COLOR\":0, \"ZONE\":0}" % self.seq_num)
+            self.seq_num += 1
+        elif delivnav[DNF.tok_status] == 1: # TASK
             # add logic to get last sent task ...
             self.taskStatusSig.emit("Executing TASK: ")
-        elif delivnav["STATUS"] == 2: # ACTION
+        elif delivnav[DNF.tok_status] == 2: # ACTION
             # add logic to get last sent action ...
             self.taskStatusSig.emit("Executing ACTION: ")
 
     def handleMAG(self, delivnav):
-        json_store = {DNF.crit_mag : delivnav["SET_MAGNET"]}
+        json_store = {DNF.crit_mag : delivnav[DNF.tok_mag]}
         self.srv.store({DNF.crit_mag : {"$exists":True}}, json_store, DNF.col_name)
         # now request the state of the magnet ...
         # send the state of the magnet back to the rover ...
@@ -66,6 +67,14 @@ class DelivNavThread(ServerBaseThread):
         # self.srv.sendmsg("{\"seq\":%i, \"MAGNET\":%i, \"IR\":1}" % (self.seq_num,delivnav["SET_MAGNET"]) )
         # self.seq_num += 1
 
+    def handleSTATE(self, delivnav):
+        # store the state
+        json_store = {DNF.crit_state : delivnav[DNF.tok_state]}
+        self.srv.store({DNF.crit_state : {"$exists":True}}, json_store, DNF.col_name)
+        # tell the GUI what my state is
+        self.roverStateSig.emit(delivnav[DNF.tok_state])
+
+    # QT SLOT
     def transmitPosUpdate(self, x, y, ori):
         msg = "{\"seq\":%i, \"CORR_X\":%i, \"CORR_Y\":%i, \"CORR_O\":%i}" % (self.seq_num, x, y, ori)
         self.seq_num += 1
@@ -93,3 +102,6 @@ class DelivNavThread(ServerBaseThread):
         # SET MAGNET ON OR OFF
         elif DNF.tok_mag in delivnav.keys():            
             self.handleMAG(delivnav)
+        # HANDLE THE STATE OF THE ROVER
+        elif DNF.tok_state in delivnav.keys():
+            self.handleSTATE(delivnav)

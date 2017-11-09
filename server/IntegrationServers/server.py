@@ -33,7 +33,7 @@ class Server():
             try:
                 self.db.connect()
             except ConnectionError as err:
-                self.sendToStatus(str(err))      
+                self.sendToStatus(str(err))
         self.db.db_init()
 
     # Close and reset database

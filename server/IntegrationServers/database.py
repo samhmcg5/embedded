@@ -14,6 +14,7 @@ class Database():
         self.deliv_sense        = db.deliv_sense
         self.scan_nav           = db.scan_nav
         self.scan_sense         = db.scan_sense
+        self.gui                = db.gui
         self.clean()
 
     # Initialize database and collection fields
@@ -38,6 +39,9 @@ class Database():
 
         self.scan_sense_col = self.database[db.scan_sense]
         self.scan_sense_col.delete_many({})
+
+        self.gui_col = self.database[db.gui]
+        self.gui_col.delete_many({})
 
     # Connect to database
     def connect(self):

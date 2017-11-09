@@ -6,6 +6,7 @@ deliv_nav   = 'deliv_nav'
 deliv_sense = 'deliv_sense'
 scan_nav    = 'scan_nav'
 scan_sense  = 'scan_sense'
+gui         = 'gui'
 
 # Database initialization messages
 INFO_DB_CONN_ATT            = 'Attempting to connect to database.' 
@@ -29,21 +30,30 @@ ERROR_DB_RETR               = 'ERROR: Database could not retrieve data from %s'
 ERROR_DB_JSON               = 'ERROR: Data being stored is not a JSON object!'
 
 
+class GuiFields:
+    col_name = gui
+    # criteria
+    crit_zone_a = 'zone_a'
+    crit_zone_b = 'zone_b'
+    crit_zone_c = 'zone_c'
+
 class DelivNavFields:
-    col_name    = 'deliv_nav'
+    col_name    = deliv_nav
     # master token for incoming JSON
     token       = "DELIV_NAV"
     # tokens to find which message type
     tok_pos     = "X"
     tok_status  = "STATUS"
     tok_mag     = "SET_MAGNET"
+    tok_state   = "STATE"
     # search criteria dicts
     crit_pos    = "POS"
     crit_status = "STATUS"
     crit_mag    = 'SET_MAG'
+    crit_state  = "STATE"
 
 class DelivSenseFields:
-    col_name    = 'deliv_sense'
+    col_name    = deliv_sense
     # master token for incoming JSON
     token       = "DELIV_SENSE"
     # tokens to find which message type
@@ -52,7 +62,7 @@ class DelivSenseFields:
     # TODO
 
 class ScanNavFields:
-    col_name    = 'scan_nav'
+    col_name    = scan_nav
     # master token for incoming JSON
     token       = "SCAN_NAV"
     # tokens to find which message type
@@ -61,7 +71,7 @@ class ScanNavFields:
     # TODO
 
 class ScanSenseFields:
-    col_name    = 'scan_sense'
+    col_name    = scan_sense
     # master token for incoming JSON
     token       = "SCAN_SENSE"
     # tokens to find which message type
