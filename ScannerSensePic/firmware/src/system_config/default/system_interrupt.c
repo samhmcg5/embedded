@@ -7,6 +7,12 @@
 #define SERVER_TIMEOUT      8
 unsigned int count = 0;
 
+void IntHandlerDrvI2CInstance0(void)
+{
+    DRV_I2C_Tasks(sysObj.drvI2C0);
+ 
+}
+
 void IntHandlerDrvUsartInstance0(void)
 {
     if (SYS_INT_SourceStatusGet(INT_SOURCE_USART_1_RECEIVE)) 

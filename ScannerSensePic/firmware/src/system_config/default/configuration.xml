@@ -54,190 +54,218 @@
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr</Path>
       </File>
       <File dnOrder="10">
+        <Name dnOrder="0">drv_i2c.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/driver/i2c/src/dynamic</Path>
+      </File>
+      <File dnOrder="11">
         <Name dnOrder="0">mpu_prototypes.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="11">
+      <File dnOrder="12">
         <Name dnOrder="0">list.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="12">
+      <File dnOrder="13">
         <Name dnOrder="0">driver.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver</Path>
       </File>
-      <File dnOrder="13">
+      <File dnOrder="14">
         <Name dnOrder="0">sys_int_pic32.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/framework/system/int/src</Path>
       </File>
-      <File dnOrder="14">
+      <File dnOrder="15">
         <Name dnOrder="0">sys_clk.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/clk</Path>
       </File>
-      <File dnOrder="15">
+      <File dnOrder="16">
         <Name dnOrder="0">sys_ports_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/ports</Path>
       </File>
-      <File dnOrder="16">
+      <File dnOrder="17">
         <Name dnOrder="0">port.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
-      <File dnOrder="17">
+      <File dnOrder="18">
         <Name dnOrder="0">sys_int_private.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/int/src</Path>
       </File>
-      <File dnOrder="18">
+      <File dnOrder="19">
         <Name dnOrder="0">deprecated_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="19">
+      <File dnOrder="20">
         <Name dnOrder="0">drv_tmr_compatibility.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr</Path>
       </File>
-      <File dnOrder="20">
+      <File dnOrder="21">
         <Name dnOrder="0">system.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system</Path>
       </File>
-      <File dnOrder="21">
+      <File dnOrder="22">
         <Name dnOrder="0">drv_usart.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usart</Path>
       </File>
-      <File dnOrder="22">
+      <File dnOrder="23">
+        <Name dnOrder="0">drv_i2c.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="24">
         <Name dnOrder="0">timers.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="23">
+      <File dnOrder="25">
         <Name dnOrder="0">heap_1.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/FreeRTOS/portable/MemMang</Path>
       </File>
-      <File dnOrder="24">
+      <File dnOrder="26">
         <Name dnOrder="0">task.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="25">
+      <File dnOrder="27">
         <Name dnOrder="0">sys_int.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/int</Path>
       </File>
-      <File dnOrder="26">
+      <File dnOrder="28">
         <Name dnOrder="0">drv_tmr_variant_mapping.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr/src</Path>
       </File>
-      <File dnOrder="27">
+      <File dnOrder="29">
         <Name dnOrder="0">list.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="28">
+      <File dnOrder="30">
         <Name dnOrder="0">drv_tmr.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr</Path>
       </File>
-      <File dnOrder="29">
+      <File dnOrder="31">
         <Name dnOrder="0">sys_dma.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/dma</Path>
       </File>
-      <File dnOrder="30">
+      <File dnOrder="32">
         <Name dnOrder="0">osal_freertos.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/osal</Path>
       </File>
-      <File dnOrder="31">
+      <File dnOrder="33">
         <Name dnOrder="0">osal.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/osal</Path>
       </File>
-      <File dnOrder="32">
+      <File dnOrder="34">
         <Name dnOrder="0">StackMacros.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="33">
+      <File dnOrder="35">
         <Name dnOrder="0">osal_freertos.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/framework/osal/src</Path>
       </File>
-      <File dnOrder="34">
+      <File dnOrder="36">
         <Name dnOrder="0">tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="35">
+      <File dnOrder="37">
         <Name dnOrder="0">sys_ports.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/ports</Path>
       </File>
-      <File dnOrder="36">
+      <File dnOrder="38">
         <Name dnOrder="0">projdefs.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="37">
+      <File dnOrder="39">
         <Name dnOrder="0">portable.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="38">
+      <File dnOrder="40">
         <Name dnOrder="0">croutine.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="39">
+      <File dnOrder="41">
+        <Name dnOrder="0">drv_i2c_compatibility.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="42">
         <Name dnOrder="0">sys_common.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
       </File>
-      <File dnOrder="40">
+      <File dnOrder="43">
         <Name dnOrder="0">sys_buffer.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
       </File>
-      <File dnOrder="41">
+      <File dnOrder="44">
         <Name dnOrder="0">event_groups.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="42">
+      <File dnOrder="45">
         <Name dnOrder="0">drv_usart_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usart</Path>
       </File>
-      <File dnOrder="43">
+      <File dnOrder="46">
         <Name dnOrder="0">sys_clk_compatibility.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/clk</Path>
       </File>
-      <File dnOrder="44">
+      <File dnOrder="47">
         <Name dnOrder="0">osal_impl_basic.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/osal</Path>
       </File>
-      <File dnOrder="45">
+      <File dnOrder="48">
+        <Name dnOrder="0">drv_i2c_variant_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c/src</Path>
+      </File>
+      <File dnOrder="49">
         <Name dnOrder="0">sys_clk_mapping.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/clk</Path>
       </File>
-      <File dnOrder="46">
+      <File dnOrder="50">
         <Name dnOrder="0">sys_int_mapping.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/int</Path>
       </File>
-      <File dnOrder="47">
+      <File dnOrder="51">
         <Name dnOrder="0">osal_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/osal</Path>
       </File>
-      <File dnOrder="48">
+      <File dnOrder="52">
         <Name dnOrder="0">FreeRTOS.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="49">
+      <File dnOrder="53">
+        <Name dnOrder="0">drv_i2c_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c/src</Path>
+      </File>
+      <File dnOrder="54">
         <Name dnOrder="0">event_groups.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="50">
+      <File dnOrder="55">
         <Name dnOrder="0">sys_debug.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/debug</Path>
       </File>
-      <File dnOrder="51">
+      <File dnOrder="56">
         <Name dnOrder="0">drv_usart_variant_mapping.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usart/src</Path>
       </File>
-      <File dnOrder="52">
+      <File dnOrder="57">
         <Name dnOrder="0">sys_module.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
       </File>
-      <File dnOrder="53">
+      <File dnOrder="58">
+        <Name dnOrder="0">drv_i2c_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="59">
         <Name dnOrder="0">timers.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="54">
+      <File dnOrder="60">
+        <Name dnOrder="0">drv_i2c_device_pic32m.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="61">
         <Name dnOrder="0">mpu_wrappers.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/FreeRTOS</Path>
       </File>
-      <File dnOrder="55">
+      <File dnOrder="62">
         <Name dnOrder="0">sys_queue.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
       </File>
-      <File dnOrder="56">
+      <File dnOrder="63">
         <Name dnOrder="0">queue.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/FreeRTOS</Path>
       </File>
@@ -251,7 +279,7 @@
       <Template dnOrder="1">
         <Name dnOrder="0">system_interrupt_a.S</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">F3CCB862C099079E9ADB832AC8FB35C5</Checksum>
+        <Checksum dnOrder="2">259DE7932514E55C3500B9F45CF46DC9</Checksum>
       </Template>
       <Template dnOrder="2">
         <Name dnOrder="0">drv_tmr_static.h</Name>
@@ -301,7 +329,7 @@
       <Template dnOrder="11">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">11EA447668A602222DE98CF841D77997</Checksum>
+        <Checksum dnOrder="2">86587534BE7D2968EE1F235DF9E1A708</Checksum>
         <ProjectFileChecksum dnOrder="3">27334975F8E30ADC4B68260C54CAE0D6</ProjectFileChecksum>
       </Template>
       <Template dnOrder="12">
@@ -312,7 +340,7 @@
       <Template dnOrder="13">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">1F531AA0E5194566A6853DE0174ED463</Checksum>
+        <Checksum dnOrder="2">67A57DD6DE2EDC75BA9EEDB5FECCB245</Checksum>
       </Template>
       <Template dnOrder="14">
         <Name dnOrder="0">main.c</Name>
@@ -321,7 +349,7 @@
       <Template dnOrder="15">
         <Name dnOrder="0">system_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">3B636B8D1A86B218FF7D2295CA748339</Checksum>
+        <Checksum dnOrder="2">873D4E265CDBA3E4BCDD01DAC31F5E18</Checksum>
       </Template>
       <Template dnOrder="16">
         <Name dnOrder="0">system_exceptions.c</Name>
@@ -351,13 +379,12 @@
       <Template dnOrder="21">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">862407ED8F5653BD8AFE469D457249DC</Checksum>
+        <Checksum dnOrder="2">01BDDAD28EEB0AD07C3F8A884617921D</Checksum>
       </Template>
       <Template dnOrder="22">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
         <Checksum dnOrder="2">E7235FD28678F5078671018515130EAA</Checksum>
-        <ProjectFileChecksum dnOrder="3">5954D5293530809975268CCD63B75868</ProjectFileChecksum>
       </Template>
       <Template dnOrder="23">
         <Name dnOrder="0">rtos_hooks.c</Name>

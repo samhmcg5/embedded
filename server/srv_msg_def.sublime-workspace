@@ -4,6 +4,78 @@
 		"selected_items":
 		[
 			[
+				"SCA",
+				"SCANNER_STATE_SCANNING"
+			],
+			[
+				"SCANN",
+				"SCANNER_Read_Tasks"
+			],
+			[
+				"PI",
+				"PIXY_NUM_OF_BYTES"
+			],
+			[
+				"scanner",
+				"scannerData"
+			],
+			[
+				"zone2",
+				"zone2_actual"
+			],
+			[
+				"zone",
+				"zone3_actual"
+			],
+			[
+				"zon",
+				"zone1_actual"
+			],
+			[
+				"blue",
+				"blue_msg_count"
+			],
+			[
+				"exp",
+				"expected_colors"
+			],
+			[
+				"expecte",
+				"expected_color"
+			],
+			[
+				"colo",
+				"color_err_count"
+			],
+			[
+				"expec",
+				"expected_color"
+			],
+			[
+				"consu",
+				"consume_send"
+			],
+			[
+				"cons",
+				"consume_send"
+			],
+			[
+				"stat",
+				"status_queue"
+			],
+			[
+				"routing",
+				"routing_key"
+			],
+			[
+				"color",
+				"color_err_count"
+			],
+			[
+				"ex",
+				"expected_color"
+			],
+			[
 				"C",
 				"Checkpoint"
 			],
@@ -30,14 +102,6 @@
 			[
 				"dis",
 				"dist_err_count"
-			],
-			[
-				"expec",
-				"expected_distance"
-			],
-			[
-				"zone",
-				"zone_err_count"
 			],
 			[
 				"expected",
@@ -184,10 +248,6 @@
 				"DELIV_NAV_DEFAULT_PATH"
 			],
 			[
-				"SCA",
-				"SCAN_SENSE_DEFAULT_ZONE_1_CURR"
-			],
-			[
 				"Connec",
 				"ConnectionError"
 			],
@@ -304,10 +364,6 @@
 				"deliv_nav_col"
 			],
 			[
-				"SCANN",
-				"SCANNER_NAVIGATION_COL_NAME"
-			],
-			[
 				"ZON",
 				"ZONE1_DEFAULT_2"
 			],
@@ -348,21 +404,59 @@
 	"buffers":
 	[
 		{
-			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
+			"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/app.c",
 			"settings":
 			{
-				"buffer_size": 1706,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 27641,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
+			"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/app.h",
 			"settings":
 			{
-				"buffer_size": 1624,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 7407,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.h",
+			"settings":
+			{
+				"buffer_size": 886,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.c",
+			"settings":
+			{
+				"buffer_size": 5910,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16_freertos/framework/driver/i2c/src/drv_i2c_mapping.c",
+			"settings":
+			{
+				"buffer_size": 7468,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16/framework/driver/i2c/src/drv_i2c_static_buffer_model.c",
+			"settings":
+			{
+				"buffer_size": 58329,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/system_config/default/system_interrupt.c",
+			"settings":
+			{
+				"buffer_size": 2472,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -398,10 +492,36 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564"
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/system_config",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/system_config/default"
 	],
 	"file_history":
 	[
+		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16_freertos/system_interrupt.c",
+		"/C/Users/Eric/Downloads/PIC32_I2C_CodeExample_101911/PIC32_I2C_CodeExample/source/i2c_master.c",
+		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/app.h",
+		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16/framework/driver/i2c/src/drv_i2c_mapping.c",
+		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16/system_interrupt.c",
+		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16_freertos/framework/system/ports/src/sys_ports_static.c",
+		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/main.c",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test5Client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test5.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test4.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test4Client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2Client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test3Client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test3.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/262546_4_1/rmq_param.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/262546_3_0/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/201182_2_2/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/201182_2_0/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/331018_5_0/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/525234_2_2/rmq_param.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/525234_2_1/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/server.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/findmyphone.py",
@@ -411,9 +531,6 @@
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/testphone.py",
 		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_1/database.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/database.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/client.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test3Client.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test3.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.h",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/communication_globals.h",
@@ -421,7 +538,6 @@
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.c",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scan_globals.h",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_threads.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2Client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test1Client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test1.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/SamTesting/TestMessageRate.py",
@@ -521,64 +637,213 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
+					"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/app.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1706,
+						"buffer_size": 27641,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1628,
-								1628
+								7374,
+								7486
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
+							"syntax": "Packages/C++/C.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1237.0,
+						"translation.y": 8541.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/app.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7407,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6435.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 886,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								656,
+								656
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 117.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5910,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5452,
+								5452
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5616.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
+					"buffer": 4,
+					"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16_freertos/framework/driver/i2c/src/drv_i2c_mapping.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1624,
+						"buffer_size": 7468,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76,
-								76
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6435.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16/framework/driver/i2c/src/drv_i2c_static_buffer_model.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 58329,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2574.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/system_config/default/system_interrupt.c",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 2472,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
