@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"C",
+				"Checkpoint"
+			],
+			[
+				"targ",
+				"target_address"
+			],
+			[
+				"nea",
+				"nearby_devices"
+			],
+			[
 				"total",
 				"total_err"
 			],
@@ -336,21 +348,21 @@
 	"buffers":
 	[
 		{
-			"file": "EricTesting/Test3.py",
+			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
 			"settings":
 			{
-				"buffer_size": 2352,
+				"buffer_size": 1706,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "EricTesting/Test3Client.py",
+			"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
 			"settings":
 			{
-				"buffer_size": 622,
+				"buffer_size": 1624,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -386,10 +398,22 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server"
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564"
 	],
 	"file_history":
 	[
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/server.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/findmyphone.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/db.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/prime.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/bridge.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/testphone.py",
+		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_1/database.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/database.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test3Client.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test3.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.h",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/communication_globals.h",
@@ -402,7 +426,6 @@
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test1.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/SamTesting/TestMessageRate.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/server_defs.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/server.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/system_test.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_main.py",
@@ -479,6 +502,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"sf",
 			"123"
 		],
 		"highlight": true,
@@ -502,28 +526,27 @@
 			[
 				{
 					"buffer": 0,
-					"file": "EricTesting/Test3.py",
+					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_0/bridge.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2352,
+						"buffer_size": 1706,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2281,
-								2281
+								1628,
+								1628
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2563.0,
+						"translation.y": 1237.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -531,19 +554,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "EricTesting/Test3Client.py",
+					"file": "/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_2/database.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 622,
+						"buffer_size": 1624,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20,
-								20
+								76,
+								76
 							]
 						],
 						"settings":

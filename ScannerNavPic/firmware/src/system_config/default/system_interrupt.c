@@ -1,5 +1,6 @@
 #include "system/common/sys_common.h"
 #include "communication.h"
+#include "communication_globals.h"
 #include "motor_control.h"
 #include "motor_globals.h"
 #include "system_definitions.h"
@@ -9,6 +10,7 @@
 #define SERVER_TIMEOUT      8
 
 char isr_count = 0;
+char isr_count1 = 0;
 
 unsigned int sumArrayLen10(unsigned int * arr)
 {
@@ -17,6 +19,12 @@ unsigned int sumArrayLen10(unsigned int * arr)
     for (i=0; i<10; i++)
         sum += arr[i];
     return sum;
+}
+
+void IntHandlerDrvI2CInstance0(void)
+{
+    DRV_I2C_Tasks(sysObj.drvI2C0);
+ 
 }
 
 void IntHandlerDrvUsartInstance0(void)
@@ -133,128 +141,112 @@ void IntHandlerDrvTmrInstance1(void)
 void IntHandlerDrvTmrInstance2(void)
 {
     isr_count++;
+    isr_count1++;
+
     /* Get the current value from the timer registers */
     short int ticksL = DRV_TMR0_CounterValueGet();
     short int ticksR = DRV_TMR1_CounterValueGet();
-            
-    /* Add to total ticks per this half second run */
-//    total_ticksL[isr_count % 10] = ticksL;
-//    total_ticksR[isr_count % 10] = ticksR;
-    total_ticksL += ticksL;
-    total_ticksR += ticksR;
-    
-    /* increment the distnace traveled per motor in ticks*/
-    distL        += ticksL;
-    distR        += ticksR;
-    
+
     /* Clear the counter registers */
     DRV_TMR0_CounterClear();
     DRV_TMR1_CounterClear();
-    
-    /* If we have reached the goal of ticks to travel ... */
-    if (distL >= goalL)
+
+    /* increment the distance traveled per motor in ticks*/
+    distL        += ticksL;
+    distR        += ticksR;
+    total_ticksL += ticksL;
+    total_ticksR += ticksR;
+
+    /* Are Both Motors Stopped ? */
+    bool stopped  = getMotorL_DC() == 0 && getMotorR_DC() == 0;
+    bool fwdORrev = getMotorL_Dir() == getMotorR_Dir();
+    bool LorR     = getMotorL_Dir() != getMotorR_Dir();
+
+    /* Outgoing Message Construction */
+    struct motorQueueData data;
+    if (fwdORrev && distL >= TICKS_PER_CM && getMotorL_DC() != 0)
     {
-        distL = 0; // reset the distance traveled 
+        unsigned int cm = (distL / TICKS_PER_CM) - prev_cm;
+        prev_cm = distL / TICKS_PER_CM;
+
+        data.type = POS_UPDATE;
+        data.dist = cm;
+        data.action = getMotorAction();
+        sendMsgToMotorQFromISR(data);
+    }
+
+    /* If we have reached the goal of ticks to travel ...  for either motor */
+    if (distL >= goalL || distR >= goalR || stopped)
+    {
+        integral = 0;
+        distL    = 0;
+        distR    = 0;
+        prev_cm  = 0;
+
         if (!leftQIsEmpty())
-        {
-            /* Read the next action off the queue */
-            dbgOutputLoc(ISR_MOTOR_L_Q_READ);
-            // read data
-            struct pwmQueueData data;
-            motorL_recvQInISR(&data);
-            
-            dbgOutputVal(data.dist);
-            // set motor motion stuff
-            setMotorL_DC(data.dc);
-            goalL = data.dist * 60;
-            if (data.dir == FORWARD)
-                setMotorL_Fwd();
-            else
-                setMotorL_Bck();
-        }
+            readFromQandSetPins(LEFT);
         else
-        {
-            /* Stop the motors if no task available */
             setMotorL_DC(0);
-        }
-    }
-    if (distR >= goalL)
-    {
-        distR = 0;
+
         if (!rightQIsEmpty())
-        {
-            dbgOutputLoc(ISR_MOTOR_R_Q_READ);
-            // read data
-            struct pwmQueueData data;
-            motorR_recvQInISR(&data);
-            
-            dbgOutputVal(data.dist);
-            // set motor motion stuff
-            setMotorR_DC(data.dc);
-            goalR = data.dist * 60;
-            if (data.dir == FORWARD)
-                setMotorR_Fwd();
-            else
-                setMotorR_Bck();
-        }
+            readFromQandSetPins(RIGHT);
         else
-        {
             setMotorR_DC(0);
-        }
     }
-    
-//    struct navQueueData data;
-//    // get speed data, rate = 1 Hz
-//    if (isr_count % 10 == 0)
-//    {
-//        data.type = SPEEDS;
-//        data.a = getMotorR_Dir();
-//        data.b = getMotorL_Dir();
-////        data.c = ticksR;
-//        data.c = total_ticksR;
-////        data.d = ticksL;
-//        data.d = total_ticksL;
-//        
-//        sendMsgToNavQFromISR(data);
-//        
-//        total_ticksL = 0;
-//        total_ticksR = 0;
-//    }
-//    // rate = 0.4 Hz
-//    if (isr_count % 20 == 0)
-//    {
-//        // TODO
-//        data.type = POSITION;
-//        data.a = 0; // x
-//        data.b = 0; // y
-//        sendMsgToNavQFromISR(data);
-//        
-//        isr_count = 0;
-//    }
-    
-    struct motorQueueData p_data;
-    // rate = 0.4 Hz
+
+    /* If we are moving, try to correct the motion */
+    if ( getMotorL_DC() != 0 )
+    {
+        // int offset = ( ticksL - ticksR ) * kp - 5;
+        int error = ( ticksL - ticksR );
+        integral  = integral + error;
+        unsigned int new_dc = getMotorR_DC() + (error * KP) + (integral * KI) - (getMotorR_DC() / 75);
+
+        if (new_dc > getMotorL_DC())
+            new_dc = getMotorL_DC();
+        setMotorR_DC( new_dc );
+    }
+
     if (isr_count % 10 == 0)
     {
-        // TODO
-        p_data.type = POSITION;
-        p_data.action = 0; 
-        p_data.dist = 0;
-        p_data.speed = 0;
-        sendMsgToMotorQFromISR(p_data);
-        
-        //isr_count = 0;
-    }
-    
-    struct sensorQueueData s_data;
-    if(isr_count % 50 == 0)
-    {
-         // TODO
-        s_data.front_sensor = 10;
-        s_data.rear_sensor = 20;
-        sendMsgToSensorQFromISR(s_data);
-        
+        // // position
+        data.type = POSITION;
+        data.dist = posX; // x
+        sendMsgToMotorQFromISR(data);
+
         isr_count = 0;
+
+        total_ticksL = 0;
+        total_ticksR = 0;
+    }
+
+    // Sensor reading 
+    struct sensorQueueData s_data;
+    
+    if(isr_count1 % 10 == 0)
+    {
+        // TODO
+        if(sensor_enable) {
+            s_data.front_sensor = front_threshold;
+            s_data.rear_sensor = rear_threshold;
+            sendMsgToSensorQFromISR(s_data);
+            if(front_threshold < 80) {
+                front_threshold+=1;
+            }
+            else {
+                front_threshold-=10;
+            }
+
+            if(rear_threshold < 80) {
+                rear_threshold+=2;
+            }
+            else {
+                rear_threshold-=30;
+            }
+            }
+
+        
+        isr_count1 = 0;
     }
     
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);

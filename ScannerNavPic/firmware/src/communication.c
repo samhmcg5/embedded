@@ -2,7 +2,7 @@
 #include "communication.h"
 #include "communication_globals.h"
 #include "queue.h"
-#include "motor_control.h"
+//#include "motor_control.h"
 #include "motor_globals.h"
 
 // communication's state
@@ -62,7 +62,7 @@ int getIntFromKey(jsmntok_t key)
 struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]) 
 {
     struct motorQueueData out;
-    
+    out.type = ACTION;
     JSON_STRING = rec;
     int r;
     jsmn_parser p;
@@ -85,7 +85,13 @@ struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     {
         out.action = getIntFromKey(t[4]);
         out.dist = getIntFromKey(t[6]);
-        out.speed = getIntFromKey(t[8]);
+        //out.speed = getIntFromKey(t[8]); // FIXME
+        out.speed = 5;
+    }
+    
+    // Sensor reading enable
+    if(r == 5) {
+        sensor_enable = 1;
     }
   
     else // ERROR
