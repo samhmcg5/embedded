@@ -5,6 +5,7 @@
 #include "driver/tmr/drv_tmr_static.h"
 #include "communication_globals.h"
 #include <stdio.h>
+#include <math.h>
 PERIPHERALS_DATA peripheralsData;
 
 void sendMsgToPeriphQ(struct periphQueueData msg){
@@ -15,11 +16,24 @@ void sendMsgToPeriphQFromISR(struct periphQueueData msg){
 }
 void setMagnet(bool on){
     if(on == MAGNET_STATE_ON){
-        LATBSET = 0x000B;//RB11 is my pin
+        
+//        TRISBCLR = 0x0400;
+//        ODCBCLR  = 0x0400;
+//        
+//        LATBCLR = 0x0400;
+//        LATBSET = 0x0400;//RB11 is my pin
+        TRISFCLR = 0x0008;
+        ODCFCLR  = 0x0008;
+        
+        LATFCLR = 0x0008;
+        LATFSET = 0x0008;//RB11 is my pin
         magnet_state = 1;
     }
     else{
-        LATBCLR = 0x000B;//RB11 is my pin
+        TRISFCLR = 0x0008;
+        ODCFCLR  = 0x0008;
+        
+        LATFCLR = 0x0008;
         magnet_state = 0;
     }
 }
@@ -75,6 +89,7 @@ void PERIPHERALS_Tasks ( void )
             //setADC(ADC_STATE_ON);
             DRV_ADC_Open();
             DRV_TMR0_Start();
+            //setMagnet(MAGNET_STATE_ON);
             struct periphQueueData recv;
             while(1){
                 if(xQueueReceive(periph_q, &recv, portMAX_DELAY)){
@@ -85,10 +100,13 @@ void PERIPHERALS_Tasks ( void )
                         Nop();
                         if(recv.magnet == true){
                             setMagnet(MAGNET_STATE_ON);
+                            
+                            
+                            
                             //uart send magnet on
-                             char buf[55];
-                            sprintf(buf, STR_MAGNET_STATE, outgoing_seq, magnet_state);
-                            commSendMsgToUartQueue(buf);
+                             //char buf[55];
+                            //sprintf(buf, STR_MAGNET_STATE, outgoing_seq, magnet_state);
+                            //commSendMsgToUartQueue(buf);
                             /**
                             #define STR_MAGNET_STATE	"{\"SEQ\":%i,\"DELIV_SENSE\": { \"MAGNET\":%i}}!"
                             #define STR_IR_DISTANCE 	"{\"SEQ\":%i,\"DELIV_SENSE\":{\"IRDIST\":%i}}!"
@@ -96,17 +114,24 @@ void PERIPHERALS_Tasks ( void )
                         }
                         else{
                             setMagnet(MAGNET_STATE_OFF);
-                            char buf[55];
-                            sprintf(buf, STR_MAGNET_STATE, outgoing_seq, magnet_state);
-                            commSendMsgToUartQueue(buf);
+                            
+                            
+                            //char buf[55];
+                            //sprintf(buf, STR_MAGNET_STATE, outgoing_seq, magnet_state);
+                            //commSendMsgToUartQueue(buf);
                             //uart send magnet off
                         }
                     }
                     else if(recv.type == ADC_TO_PERIPHERAL_MSG){
                         dbgOutputLoc(PERIPH_ADC);
                         Nop();
-                       objDist = recv.distance;
-                       objHeld = recv.object;
+                        //double convert = 4118.6/(recv.distance) + 0.5;
+                        double convert = 2076.0/(recv.distance - 11.0);
+                       objDist = convert;
+                       if(objDist < 5.0)
+                           objHeld = true;
+                       else
+                           objHeld = false;
                     }
                     else if(recv.type == TMR_TO_PERIPHERAL_MSG){
                         dbgOutputLoc(PERIPH_TMR);
