@@ -27,7 +27,13 @@ class SystemGui(QWidget):
         self.sendToStatus("Gui Initialized ...")
     
     def connectSignals(self):
+        # OUTGOING signal to status thread
         self.statusSig.connect(self.threads["Status"].receiveMsg)
+        # INCOMING signals from DELIV_NAV thread
+        self.threads["DelivNav"].positionSig.connect(self.delivstats.posGrid.setCurrentPos)
+        self.threads["DelivNav"].taskStatusSig.connect(self.delivstats.execStatus.setStatus)
+        # OUTGOING signals to DELIV_NAV thread
+        self.delivstats.posCorrectSig.connect(self.threads["DelivNav"].transmitPosUpdate)
     
     def sendToStatus(self, msg):
         self.statusSig.emit(self.name, msg)
@@ -40,8 +46,8 @@ class SystemGui(QWidget):
         self.currentnums = CurrentNumbersFrame()
         self.delivstats  = DelivNavStatusFrame()
         vbox = qtw.QVBoxLayout()
-        vbox.addWidget(self.quotaframe)
         vbox.addWidget(self.currentnums)
+        vbox.addWidget(self.quotaframe)
         vbox.addWidget(self.delivstats)
         self.setLayout(vbox)
         self.setGeometry(300, 300, 800, 500)
@@ -114,9 +120,9 @@ class NumsRow(QWidget):
         self.name = name
         self.initUI()
     def initUI(self):
-        self.red = qtw.QLabel("Red = 0")
-        self.green = qtw.QLabel("Green = 0")
-        self.blue = qtw.QLabel("Blue = 0")
+        self.red = qtw.QLabel("Red = ...")
+        self.green = qtw.QLabel("Green = ...")
+        self.blue = qtw.QLabel("Blue = ...")
         hbox = qtw.QHBoxLayout()
         hbox.addWidget(qtw.QLabel(self.name + ":\t"))
         hbox.addWidget(self.red)
@@ -132,9 +138,23 @@ class NumsRow(QWidget):
 ### DELIVERY NAVIG STATUS ###
 #############################
 class DelivNavStatusFrame(QWidget):
+    posCorrectSig = qtc.pyqtSignal(int, int, int)
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.connectSignals()
+
+    def connectSignals(self):
+        self.posGrid.sendButton.clicked.connect(self.handleSendPos)
+
+    def handleSendPos(self):
+        # gather data
+        x    = self.posGrid.nx.value()
+        y    = self.posGrid.ny.value()
+        ori = self.posGrid.nori.value()
+        # emit new signal
+        self.posCorrectSig.emit(x,y,ori)
+
     def initUI(self):
         vbox = qtw.QVBoxLayout()
         self.execStatus = ExecStatus()
@@ -147,22 +167,27 @@ class DelivNavStatusFrame(QWidget):
 class ExecStatus(QWidget):
     def __init__(self):
         super().__init__()
-        self.status = qtw.QLabel("IDLE")
+        self.status = qtw.QLabel("...waiting for connection...")
         hbox = qtw.QHBoxLayout()
         hbox.addWidget(qtw.QLabel("Currently: "))
         hbox.addWidget(self.status, alignment=qtc.Qt.AlignLeft, stretch=1)
         self.setLayout(hbox)
-    def setStatus(msg):
+    def setStatus(self, msg):
         self.status.setText(msg)
 
 class PositionGrid(QWidget):
     def __init__(self): 
         super().__init__()
         self.initUI()
+    def setCurrentPos(self, pos):
+        self.x.setText("X: %i" % pos["X"])
+        self.y.setText("Y: %i" % pos["Y"])
+        self.ori.setText("OR: %i" % pos["OR"])
+
     def initUI(self):
-        self.x    = qtw.QLabel("X: 0")
-        self.y    = qtw.QLabel("Y: 20")
-        self.ori  = qtw.QLabel("OR: 0")
+        self.x    = qtw.QLabel("X: ...")
+        self.y    = qtw.QLabel("Y: ...")
+        self.ori  = qtw.QLabel("OR: ...")
         self.nx   = SpinBoxQuota("X",90)
         self.ny   = SpinBoxQuota("Y",50)
         self.nori = SpinBoxQuota("OR",359)
@@ -178,5 +203,6 @@ class PositionGrid(QWidget):
         gbox.addWidget(self.nori,1,3)
         gbox.addWidget(self.sendButton,1,4)
         self.setLayout(gbox)
+
 
 
