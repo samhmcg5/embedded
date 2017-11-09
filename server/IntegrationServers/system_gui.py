@@ -41,6 +41,8 @@ class SystemGui(QWidget):
         self.delivstats.posCorrectSig.connect(self.threads["DelivNav"].transmitPosUpdate)
         # connect button CLICKED to DB STORE
         self.quotaframe.sendButton.clicked.connect(self.storeQuotaInDB)
+        # INCOMING signal from SCAN_SENSE
+        self.threads["ScanSense"].zoneNumbersSignal.connect(self.currentnums.updateZone)
     
     def initDB(self):
         # we just need the server to expose the database calls
@@ -147,6 +149,13 @@ class CurrentNumbersFrame(QWidget):
         vbox.addWidget(self.zoneB)
         vbox.addWidget(self.zoneC)
         self.setLayout(vbox)
+    def updateZone(self, zone, vals):
+        if zone == 0:
+            self.zoneA.setNums(vals["R"],vals["G"],vals["B"])
+        if zone == 1:
+            self.zoneB.setNums(vals["R"],vals["G"],vals["B"])
+        if zone == 2:
+            self.zoneC.setNums(vals["R"],vals["G"],vals["B"])
 
 class NumsRow(QWidget):
     def __init__(self, name):
