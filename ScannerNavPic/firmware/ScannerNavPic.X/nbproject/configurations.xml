@@ -5,26 +5,12 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="f3" displayName="app" projectFiles="true">
-        <logicalFolder name="f2" displayName="comm" projectFiles="true">
-          <itemPath>../src/communication.h</itemPath>
-          <itemPath>../src/communication_globals.h</itemPath>
-          <itemPath>../src/jsmn.h</itemPath>
-          <itemPath>../src/debug.h</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f3" displayName="line_sensor" projectFiles="true">
-          <itemPath>../src/line_sensor.h</itemPath>
-          <itemPath>../src/i2c.h</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f4" displayName="motor" projectFiles="true">
-          <itemPath>../src/motor_control.h</itemPath>
-          <itemPath>../src/motor_globals.h</itemPath>
-        </logicalFolder>
         <logicalFolder name="f1" displayName="system_config" projectFiles="true">
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="adc" projectFiles="true">
-                  <itemPath>../src/system_config/default/framework/driver/adc/drv_adc_static.h</itemPath>
+                <logicalFolder name="f1" displayName="i2c" projectFiles="true">
+                  <itemPath>../src/system_config/default/framework/driver/i2c/drv_i2c_static_buffer_model.h</itemPath>
                 </logicalFolder>
                 <logicalFolder name="f2" displayName="tmr" projectFiles="true">
                   <itemPath>../src/system_config/default/framework/driver/tmr/drv_tmr_static.h</itemPath>
@@ -50,100 +36,107 @@
             <itemPath>../src/system_config/default/system_definitions.h</itemPath>
           </logicalFolder>
         </logicalFolder>
+        <itemPath>../src/communication_globals.h</itemPath>
+        <itemPath>../src/motor_globals.h</itemPath>
+        <itemPath>../src/debug.h</itemPath>
+        <itemPath>../src/jsmn.h</itemPath>
+        <itemPath>../src/communication.h</itemPath>
+        <itemPath>../src/motor_control.h</itemPath>
+        <itemPath>../src/line_sensor.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">
           <logicalFolder name="f1" displayName="i2c" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_local.h</itemPath>
-              <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_variant_mapping.h</itemPath>
+              <itemPath>../../../../framework/driver/i2c/src/drv_i2c_local.h</itemPath>
+              <itemPath>../../../../framework/driver/i2c/src/drv_i2c_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_device_pic32m.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_compatibility.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_mapping.h</itemPath>
+            <itemPath>../../../../framework/driver/i2c/drv_i2c.h</itemPath>
+            <itemPath>../../../../framework/driver/i2c/drv_i2c_device_pic32m.h</itemPath>
+            <itemPath>../../../../framework/driver/i2c/drv_i2c_compatibility.h</itemPath>
+            <itemPath>../../../../framework/driver/i2c/drv_i2c_mapping.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
+              <itemPath>../../../../framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr_mapping.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
+            <itemPath>../../../../framework/driver/tmr/drv_tmr.h</itemPath>
+            <itemPath>../../../../framework/driver/tmr/drv_tmr_mapping.h</itemPath>
+            <itemPath>../../../../framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
+            <itemPath>../../../../framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f3" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
+              <itemPath>../../../../framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/usart/drv_usart.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/usart/drv_usart_definitions.h</itemPath>
+            <itemPath>../../../../framework/driver/usart/drv_usart.h</itemPath>
+            <itemPath>../../../../framework/driver/usart/drv_usart_definitions.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/driver.h</itemPath>
-          <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/driver_common.h</itemPath>
+          <itemPath>../../../../framework/driver/driver.h</itemPath>
+          <itemPath>../../../../framework/driver/driver_common.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f3" displayName="osal" projectFiles="true">
-          <itemPath>../../../../../../../microchip/harmony/v2_04/framework/osal/osal.h</itemPath>
-          <itemPath>../../../../../../../microchip/harmony/v2_04/framework/osal/osal_definitions.h</itemPath>
-          <itemPath>../../../../../../../microchip/harmony/v2_04/framework/osal/osal_freertos.h</itemPath>
-          <itemPath>../../../../../../../microchip/harmony/v2_04/framework/osal/osal_impl_basic.h</itemPath>
+          <itemPath>../../../../framework/osal/osal.h</itemPath>
+          <itemPath>../../../../framework/osal/osal_definitions.h</itemPath>
+          <itemPath>../../../../framework/osal/osal_freertos.h</itemPath>
+          <itemPath>../../../../framework/osal/osal_impl_basic.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="system" projectFiles="true">
           <logicalFolder name="f4" displayName="clk" projectFiles="true">
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk_compatibility.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk_mapping.h</itemPath>
+            <itemPath>../../../../framework/system/clk/sys_clk.h</itemPath>
+            <itemPath>../../../../framework/system/clk/sys_clk_compatibility.h</itemPath>
+            <itemPath>../../../../framework/system/clk/sys_clk_mapping.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f3" displayName="common" projectFiles="true">
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/common/sys_common.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/common/sys_module.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/common/sys_buffer.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/common/sys_queue.h</itemPath>
+            <itemPath>../../../../framework/system/common/sys_common.h</itemPath>
+            <itemPath>../../../../framework/system/common/sys_module.h</itemPath>
+            <itemPath>../../../../framework/system/common/sys_buffer.h</itemPath>
+            <itemPath>../../../../framework/system/common/sys_queue.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f6" displayName="debug" projectFiles="true">
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/debug/sys_debug.h</itemPath>
+            <itemPath>../../../../framework/system/debug/sys_debug.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f1" displayName="dma" projectFiles="true">
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/dma/sys_dma.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/dma/sys_dma_definitions.h</itemPath>
+            <itemPath>../../../../framework/system/dma/sys_dma.h</itemPath>
+            <itemPath>../../../../framework/system/dma/sys_dma_definitions.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="int" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/int/src/sys_int_private.h</itemPath>
+              <itemPath>../../../../framework/system/int/src/sys_int_private.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/int/sys_int.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/int/sys_int_mapping.h</itemPath>
+            <itemPath>../../../../framework/system/int/sys_int.h</itemPath>
+            <itemPath>../../../../framework/system/int/sys_int_mapping.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f5" displayName="ports" projectFiles="true">
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h</itemPath>
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h</itemPath>
+            <itemPath>../../../../framework/system/ports/sys_ports.h</itemPath>
+            <itemPath>../../../../framework/system/ports/sys_ports_definitions.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/system.h</itemPath>
+          <itemPath>../../../../framework/system/system.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f2" displayName="FreeRTOS" projectFiles="true">
         <logicalFolder name="f1" displayName="portable" projectFiles="true">
           <logicalFolder name="f1" displayName="MPLAB" projectFiles="true">
             <logicalFolder name="f1" displayName="PIC32MX" projectFiles="true">
-              <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/ISR_Support.h</itemPath>
-              <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/portmacro.h</itemPath>
+              <itemPath>../../../../third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/ISR_Support.h</itemPath>
+              <itemPath>../../../../third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/portmacro.h</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/croutine.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/event_groups.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/list.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/portable.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/projdefs.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/queue.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/semphr.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/StackMacros.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/task.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/timers.h</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/mpu_prototypes.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/croutine.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/event_groups.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/list.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/portable.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/projdefs.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/queue.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/semphr.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/StackMacros.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/task.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/timers.h</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/include/mpu_prototypes.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -154,25 +147,14 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f3" displayName="app" projectFiles="true">
-        <logicalFolder name="f2" displayName="comm" projectFiles="true">
-          <itemPath>../src/communication.c</itemPath>
-          <itemPath>../src/debug.c</itemPath>
-          <itemPath>../src/jsmn.c</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f4" displayName="line_sensor" projectFiles="true">
-          <itemPath>../src/line_sensor.c</itemPath>
-          <itemPath>../src/i2c.c</itemPath>
-        </logicalFolder>
-        <logicalFolder name="f3" displayName="motor" projectFiles="true">
-          <itemPath>../src/motor_control.c</itemPath>
-        </logicalFolder>
         <logicalFolder name="f1" displayName="system_config" projectFiles="true">
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="adc" projectFiles="true">
+                <logicalFolder name="f1" displayName="i2c" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
-                    <itemPath>../src/system_config/default/framework/driver/adc/src/drv_adc_static.c</itemPath>
+                    <itemPath>../src/system_config/default/framework/driver/i2c/src/drv_i2c_static_buffer_model.c</itemPath>
+                    <itemPath>../src/system_config/default/framework/driver/i2c/src/drv_i2c_mapping.c</itemPath>
                   </logicalFolder>
                 </logicalFolder>
                 <logicalFolder name="f2" displayName="tmr" projectFiles="true">
@@ -216,27 +198,23 @@
             <itemPath>../src/system_config/default/rtos_hooks.c</itemPath>
           </logicalFolder>
         </logicalFolder>
+        <itemPath>../src/debug.c</itemPath>
+        <itemPath>../src/jsmn.c</itemPath>
+        <itemPath>../src/communication.c</itemPath>
+        <itemPath>../src/motor_control.c</itemPath>
+        <itemPath>../src/line_sensor.c</itemPath>
         <itemPath>../src/main.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
-        <logicalFolder name="f1" displayName="driver" projectFiles="true">
-          <logicalFolder name="f1" displayName="i2c" projectFiles="true">
-            <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <logicalFolder name="f1" displayName="dynamic" projectFiles="true">
-                <itemPath>../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/src/dynamic/drv_i2c.c</itemPath>
-              </logicalFolder>
-            </logicalFolder>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="f2" displayName="osal" projectFiles="true">
+        <logicalFolder name="f1" displayName="osal" projectFiles="true">
           <logicalFolder name="f1" displayName="src" projectFiles="true">
-            <itemPath>../../../../../../../microchip/harmony/v2_04/framework/osal/src/osal_freertos.c</itemPath>
+            <itemPath>../../../../framework/osal/src/osal_freertos.c</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <logicalFolder name="f3" displayName="system" projectFiles="true">
+        <logicalFolder name="f2" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="int" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../microchip/harmony/v2_04/framework/system/int/src/sys_int_pic32.c</itemPath>
+              <itemPath>../../../../framework/system/int/src/sys_int_pic32.c</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
@@ -244,21 +222,21 @@
       <logicalFolder name="f2" displayName="FreeRTOS" projectFiles="true">
         <logicalFolder name="f1" displayName="portable" projectFiles="true">
           <logicalFolder name="f1" displayName="MemMang" projectFiles="true">
-            <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_1.c</itemPath>
+            <itemPath>../../../../third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_1.c</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="MPLAB" projectFiles="true">
             <logicalFolder name="f1" displayName="PIC32MX" projectFiles="true">
-              <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c</itemPath>
-              <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S</itemPath>
+              <itemPath>../../../../third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c</itemPath>
+              <itemPath>../../../../third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/croutine.c</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/list.c</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/queue.c</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/tasks.c</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/timers.c</itemPath>
-        <itemPath>../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/event_groups.c</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/croutine.c</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/list.c</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/queue.c</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/tasks.c</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/timers.c</itemPath>
+        <itemPath>../../../../third_party/rtos/FreeRTOS/Source/event_groups.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -269,11 +247,10 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>../src</Elem>
-    <Elem>../../../../../microchip/harmony/v2_04</Elem>
+    <Elem>../..</Elem>
     <Elem>..\src</Elem>
     <Elem>..\src\default</Elem>
     <Elem>..\src\system_config\default</Elem>
-    <Elem>../../../../../../../../microchip/harmony/v2_04</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -291,8 +268,7 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../../../../../../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX795F512L_peripherals.a</linkerLibFileItem>
-            <linkerLibFileItem>../../../../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX795F512L_peripherals.a</linkerLibFileItem>
+            <linkerLibFileItem>../../../../bin/framework/peripheral/PIC32MX795F512L_peripherals.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -322,7 +298,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../../../../../../../../../../microchip/harmony/v2_04/framework;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src;../src/default;../src/system_config/default/framework;../src/system_config/default;../../../../../../../microchip/harmony/v2_04/framework;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+                  value="../src;../src/system_config/default;../src/default;../../../../framework;../src/system_config/default/framework;../../../../third_party/rtos/FreeRTOS/Source/include;../../../../third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
@@ -343,9 +319,9 @@
       </C32-AR>
       <C32-AS>
         <property key="extra-include-directories-for-assembler"
-                  value="../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
+                  value="../../../../third_party/rtos/FreeRTOS/Source/include;../../../../third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
         <property key="extra-include-directories-for-preprocessor"
-                  value="../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../../../../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+                  value="../../../../third_party/rtos/FreeRTOS/Source/include;../../../../third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
         <property key="generate-micro-compressed-code" value="false"/>
       </C32-AS>
       <C32-LD>

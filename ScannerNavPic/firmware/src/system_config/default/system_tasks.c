@@ -55,8 +55,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "communication.h"
-#include "line_sensor.h"
 #include "motor_control.h"
+#include "line_sensor.h"
 
 
 // *****************************************************************************
@@ -71,7 +71,6 @@ static void _SYS_Tasks ( void );
  
  
 static void _COMMUNICATION_Tasks(void);
-static void _NAVIGATION_Tasks(void);
 static void _MOTOR_CONTROL_Tasks(void);
 static void _LINE_SENSOR_Tasks(void);
 
@@ -104,14 +103,14 @@ void SYS_Tasks ( void )
                 "COMMUNICATION Tasks",
                 1024, NULL, 1, NULL);
 
-    /* Create OS Thread for NAVIGATION Tasks. */
-    xTaskCreate((TaskFunction_t) _LINE_SENSOR_Tasks,
-                "LINE_SENSOR Tasks",
-                1024, NULL, 1, NULL);
-
     /* Create OS Thread for MOTOR_CONTROL Tasks. */
     xTaskCreate((TaskFunction_t) _MOTOR_CONTROL_Tasks,
                 "MOTOR_CONTROL Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for LINE_SENSOR Tasks. */
+    xTaskCreate((TaskFunction_t) _LINE_SENSOR_Tasks,
+                "LINE_SENSOR Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -167,23 +166,6 @@ static void _COMMUNICATION_Tasks(void)
 
 /*******************************************************************************
   Function:
-    void _NAVIGATION_Tasks ( void )
-
-  Summary:
-    Maintains state machine of NAVIGATION.
-*/
-
-static void _LINE_SENSOR_Tasks(void)
-{
-    while(1)
-    {
-        LINE_SENSOR_Tasks();
-    }
-}
-
-
-/*******************************************************************************
-  Function:
     void _MOTOR_CONTROL_Tasks ( void )
 
   Summary:
@@ -195,6 +177,23 @@ static void _MOTOR_CONTROL_Tasks(void)
     while(1)
     {
         MOTOR_CONTROL_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _LINE_SENSOR_Tasks ( void )
+
+  Summary:
+    Maintains state machine of LINE_SENSOR.
+*/
+
+static void _LINE_SENSOR_Tasks(void)
+{
+    while(1)
+    {
+        LINE_SENSOR_Tasks();
     }
 }
 

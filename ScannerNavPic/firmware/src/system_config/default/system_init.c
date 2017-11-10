@@ -48,7 +48,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "system_config.h"
 #include "system_definitions.h"
-#include "i2c.h"
 
 
 // ****************************************************************************
@@ -100,26 +99,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Driver Initialization Data
 // *****************************************************************************
 // *****************************************************************************
+// <editor-fold defaultstate="collapsed" desc="DRV_I2C Initialization Data">
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="DRV_Timer Initialization Data">
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="DRV_USART Initialization Data">
 // </editor-fold>
-
-// *****************************************************************************
-/* I2C Driver Initialization Data
-*/
-
-const DRV_I2C_INIT drvI2C0InitData =
-{
-    .i2cId = DRV_I2C_PERIPHERAL_ID_IDX0,
-    .i2cMode = DRV_I2C_OPERATION_MODE_IDX0,
-    .baudRate = DRV_I2C_BAUD_RATE_IDX0,
-    .busspeed = DRV_I2C_SLEW_RATE_CONTROL_IDX0,
-    .buslevel = DRV_I2C_SMBus_SPECIFICATION_IDX0,
-    .mstrInterruptSource = DRV_I2C_MASTER_INT_SRC_IDX0,
-    .errInterruptSource = DRV_I2C_ERR_MX_INT_SRC_IDX0,
-};
-
 
 // *****************************************************************************
 // *****************************************************************************
@@ -167,11 +152,11 @@ void SYS_Initialize ( void* data )
     SYS_DEVCON_PerformanceConfig(SYS_CLK_SystemFrequencyGet());
     SYS_DEVCON_JTAGDisable();
     SYS_PORTS_Initialize();
-    
-    /* Initialize Drivers */
-    //sysObj.drvI2C0 = DRV_I2C_Initialize(DRV_I2C_INDEX_0, (SYS_MODULE_INIT *)&drvI2C0InitData);
 
     /* Initialize Drivers */
+    DRV_I2C0_Initialize();
+    DRV_I2C1_Initialize();
+
     /*Initialize TMR0 */
     DRV_TMR0_Initialize();
     /*Initialize TMR1 */
@@ -192,7 +177,6 @@ void SYS_Initialize ( void* data )
 
     /* Initialize the Application */
     COMMUNICATION_Initialize();
-    LINE_SENSOR_Initialize();
     MOTOR_CONTROL_Initialize();
     LINE_SENSOR_Initialize();
 }
