@@ -50,7 +50,7 @@ PIXY_STATES DRV_PIXY_HandleColors(DRV_HANDLE i2c_handle, PIXY_STATES state)
             }
             else
             {
-                return I2C_SEND_SLAVE_ADDRESS; 
+                return I2C_SEND_READ_COLOR_DATA; 
             }
             break;
         }
@@ -160,7 +160,7 @@ PIXY_STATES DRV_PIXY_HandleColors(DRV_HANDLE i2c_handle, PIXY_STATES state)
                 msg.type = I2C;
                 //msg.color = sync;
                 char buf[64];
-                sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, 0, 0, 0, sync);    
+                sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, 0, 0, 0, sync, "COLOR TESTING");    
                 commSendMsgToUartQueue(buf);
                 return I2C_SENT_MSG_TO_SCAN_QUEUE;
             }
@@ -170,6 +170,7 @@ PIXY_STATES DRV_PIXY_HandleColors(DRV_HANDLE i2c_handle, PIXY_STATES state)
                 error = 4;
                 return SERVER_TESTING;
             }*/
+            return I2C_FINISH_READ_COLOR_DATA;
             break;
         }
         case I2C_SENT_MSG_TO_SCAN_QUEUE:

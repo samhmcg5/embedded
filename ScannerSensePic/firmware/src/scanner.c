@@ -48,6 +48,7 @@ void SCANNER_Tasks ( void )
             {
                 scannerData.i2c_handle = DRV_I2C_Open(DRV_I2C_INDEX_0, DRV_IO_INTENT_READWRITE);
                 scannerData.state = SCANNER_STATE_SCANNING;
+                //scannerData.state = SCANNER_READ_WRITE;
             }
             break;
         }
@@ -144,9 +145,10 @@ void SCANNER_Tasks ( void )
             scannerData.state = SCANNER_STATE_SCANNING;
             
             // COLOR SENSING
-            /* pixyState = DRV_PIXY_HandleColors(scannerData.i2c_handle, pixyState);
+            /*pixyState = DRV_PIXY_HandleColors(scannerData.i2c_handle, pixyState);
             
             if (pixyState == I2C_SENT_MSG_TO_SCAN_QUEUE) {
+                
                 scannerData.state = SCANNER_STATE_SCANNING;
                 pixyState = I2C_WAIT_FOR_OPEN;
             }*/

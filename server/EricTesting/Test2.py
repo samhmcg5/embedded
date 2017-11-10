@@ -14,8 +14,7 @@ def main():
 
 	# Start stopwatch
 	start = time.clock()
-
-	# Get args
+        
 	args = getargs(sys.argv)
 	runtime = float(args[1]) + start
 
