@@ -1,33 +1,9 @@
 #include "scanner.h"
 #include "communication_globals.h"
 
-#define PIXY_SLAVE_ADDRESS              0x54
-#define PIXY_NUM_OF_BYTES               14
-
 SCANNER_DATA scannerData;
-
-DRV_I2C_BUFFER_EVENT i2cOpStatus;
-
-uint8_t operationStatus;
-
-uint8_t deviceAddressSlave;
-
-uint8_t indexRegByteSize;
-
-uint8_t         TXbuffer[] = "\x54";
-
-uint16_t        RXbuffer[100];
-
-typedef enum{
-    
-        TxRx_TO_PIXY = 0,
-        TxRx_COMPLETED
-
-}I2C_STATES;
-
-static I2C_STATES readWriteState = TxRx_TO_PIXY;
-
-DRV_I2C_BUFFER_EVENT SCANNER_Check_Transfer_Status(DRV_HANDLE drvOpenHandle, DRV_I2C_BUFFER_HANDLE drvBufferHandle);
+PIXY_STATES pixyState;
+unsigned int flag;
 
 void sendMsgToScanQ(struct scanQueueData msg)
 {
@@ -49,10 +25,15 @@ double voltsToCm(double volts)
 void SCANNER_Initialize ( void )
 {
     scannerData.state = SCANNER_STATE_INIT;
-    zone = 0;
+    prevzone = 1;
+    zone = 1;
     red = 0;
     green = 0;
     blue = 0;
+    prevEdge = 0;
+    currXPos = 0;
+    flag = 1;
+    pixyState = I2C_WAIT_FOR_OPEN;
     scan_q = xQueueCreate(32, sizeof (struct scanQueueData));
 }
 
@@ -65,21 +46,16 @@ void SCANNER_Tasks ( void )
             bool appInitialized = true;
             if (appInitialized)
             {
-                scannerData.drvI2CHandle_Master = DRV_I2C_Open(DRV_I2C_INDEX_0, DRV_IO_INTENT_READWRITE);
+                scannerData.i2c_handle = DRV_I2C_Open(DRV_I2C_INDEX_0, DRV_IO_INTENT_READWRITE);
                 scannerData.state = SCANNER_STATE_SCANNING;
-
-                if(scannerData.drvI2CHandle_Master != (DRV_HANDLE) NULL)
-                {
-                    scannerData.state = SCANNER_READ_WRITE;
-                }
             }
             break;
         }
 
         case SCANNER_STATE_SCANNING:
         {   
-            DRV_ADC_Open();
-            DRV_TMR0_Start();
+            // DRV_ADC_Open();
+            // DRV_TMR0_Start();
             struct scanQueueData rec;
             while(1) 
             {
@@ -87,10 +63,29 @@ void SCANNER_Tasks ( void )
                 if(xQueueReceive(scan_q, &rec, portMAX_DELAY))
                 {
                     dbgOutputLoc(SCAN_THREAD_RECVD);
-
                     if(rec.type == INFO)
                     {
+                        // set current position and zone
+                        currXPos = rec.x;
+                        if (currXPos - prevEdge > 2)
+                        {
+                            DRV_ADC_Open();
+                            DRV_ADC_Start();
+                        }
                         zone = rec.zone;
+                        if (zone != prevzone)
+                        {
+                            // Detected zone change so send object info
+                            char buf[64];
+                            sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, prevzone, red, green, blue, "FINISHED ZONE");    
+                            commSendMsgToUartQueue(buf);
+                            // new zone, reset colors
+                            red = 0;
+                            green = 0;
+                            blue = 0;
+                        }
+                        prevzone = zone;
+                        
                         if (rec.action == 0) // STOP
                         {
                             DRV_ADC_Stop();
@@ -105,88 +100,61 @@ void SCANNER_Tasks ( void )
                         // else CONTINUE
                     }
                     else if (rec.type == ADC)
-                    {
-                        red = 0;
-                        green = 0;
-                        blue = 0;
-                        
-                        if (rec.color == 0) {
-                            red = 1;
-                        }
-                        else if (rec.color == 1) {
-                            green = 1;
-                        }
-                        else if (rec.color == 2) {
-                            blue = 1;    
-                        }
-                        
+                    {   
                         double volts = (double)rec.dist;
                         double cm = voltsToCm(volts);
-                        red = cm;
+                        // objected detected, now determine color
+                        if (cm <= 8.0 && (currXPos - prevEdge > 2 || flag == 1)) 
+                        {
+                            flag = 0;
+                            scannerData.state = SCANNER_READ_WRITE;
+                            break;
+                        }
+                    }
+                    else if (rec.type == I2C)
+                    {
+                        // count colors 
                     }
                     else if (rec.type == TMR)
                     {
+                        // merely for debug info
                         char buf[64];
-                        sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, zone, red, green, blue);    
+                        sprintf(buf, STR_ZONE_INFO, outgoing_seq, zone, red, green, blue, "SCANNING ZONE");    
                         commSendMsgToUartQueue(buf);   
                     }
                 }
             }
         }
-        
+        // Read color data over I2C
         case SCANNER_READ_WRITE:
         {
-            if(SCANNER_Read_Tasks())
-            {
-                scannerData.state = SCANNER_STATE_SCANNING;
+            // FAKE SENSOR DATA FOR TESTING
+            prevEdge = currXPos;
+            if (zone == 1) {
+                red += 1;
             }
+            else if (zone == 2){
+                green += 1;
+            }
+            else if (zone == 3){
+                blue += 1;
+            }
+            DRV_ADC_Stop();
+            
+            scannerData.state = SCANNER_STATE_SCANNING;
+            
+            // COLOR SENSING
+            /* pixyState = DRV_PIXY_HandleColors(scannerData.i2c_handle, pixyState);
+            
+            if (pixyState == I2C_SENT_MSG_TO_SCAN_QUEUE) {
+                scannerData.state = SCANNER_STATE_SCANNING;
+                pixyState = I2C_WAIT_FOR_OPEN;
+            }*/
+            break;
         }
         default:
         {
             break;
         }
     }
-}
-
-bool SCANNER_Read_Tasks(void)
-{
-    switch (readWriteState)
-    {
-        case TxRx_TO_PIXY:
-        {    
-
-            deviceAddressSlave = PIXY_SLAVE_ADDRESS;
-
-            /* Write Read Transaction to PixyCAM */
-
-            if ( (scannerData.drvI2CTxRxBufferHandle[0] == (DRV_I2C_BUFFER_HANDLE) NULL) || 
-                    (SCANNER_Check_Transfer_Status(scannerData.drvI2CHandle_Master, scannerData.drvI2CTxRxBufferHandle[0]) == DRV_I2C_BUFFER_EVENT_COMPLETE) || 
-                        (SCANNER_Check_Transfer_Status(scannerData.drvI2CHandle_Master, scannerData.drvI2CTxRxBufferHandle[0]) == DRV_I2C_BUFFER_EVENT_ERROR) )
-            {
-                scannerData.drvI2CTxRxBufferHandle[0] = DRV_I2C_TransmitThenReceive (scannerData.drvI2CHandle_Master,
-                                                                                    deviceAddressSlave,
-                                                                                    &TXbuffer[0], 
-                                                                                    (sizeof(TXbuffer)-1),
-                                                                                    &RXbuffer[0],
-                                                                                    PIXY_NUM_OF_BYTES,
-                                                                                    NULL);
-                char buf[64];
-                sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, RXbuffer[0], RXbuffer[1], RXbuffer[2], RXbuffer[3]);    
-                commSendMsgToUartQueue(buf);
-            }
-            break;
-        }   
-        case TxRx_COMPLETED:
-        {
-            return true;
-            break;
-        }
-    }
-    return false;
-
-}
-
-DRV_I2C_BUFFER_EVENT SCANNER_Check_Transfer_Status(DRV_HANDLE drvOpenHandle, DRV_I2C_BUFFER_HANDLE drvBufferHandle)
-{
-    return (DRV_I2C_TransferStatusGet  (scannerData.drvI2CHandle_Master, drvBufferHandle));
 }

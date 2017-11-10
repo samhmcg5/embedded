@@ -68,17 +68,6 @@ void IntHandlerDrvAdc(void)
     data.type = ADC;
     data.dist = avg;
     
-    data.color = 0;
-    if (avg >= 600) {
-        data.color = 0;
-    }
-    else if (avg < 600 && avg >= 300) {
-        data.color = 1;
-    }
-    else if (avg >= 0 && avg < 300){
-        data.color = 2;
-    }
-    
     sendMsgToScanQFromISR(data);
     dbgOutputLoc(ADC_ISR_END);
     

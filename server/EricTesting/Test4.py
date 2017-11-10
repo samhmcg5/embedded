@@ -39,6 +39,7 @@ def main():
 	print("Connected to wifly at %s:%s" % (s.client_addr[0], s.client_addr[1]))
 	print()
 
+	first = True
 	for expected_color in [0, 1, 2, 3]:
 		# Run for x seconds
 		while time.clock() <= aggregate_runtime:
@@ -56,54 +57,60 @@ def main():
 			print()
 			msg_count += 1
 
-			# Determine current color
-			json_obj = json.loads(buf)
-			seq = json_obj['SEQ']
-			red = json_obj['SCAN_SENSE']['RED']
-			green = json_obj['SCAN_SENSE']['GREEN']
-			blue = json_obj['SCAN_SENSE']['BLUE']
-			
-			actual_color = None
-			if red == 1 and green == 0 and blue == 0:
-				actual_color = 'RED'
-			elif red == 0 and green == 1 and blue == 0:
-				actual_color = 'GREEN'
-			elif red == 0 and green == 0 and blue == 1:
-				actual_color = 'BLUE'
+			if first:
+				msg = '{ "SEQ": 1, "ZONE": 1, "ACTION": 1, "XPOS": 0 }!' 
+				print("Sending Message: %s" % msg)
+				s.sendmsg(msg)
+				first = False
 			else:
-				actual_color = 'NO COLOR'
+				# Determine current color
+				json_obj = json.loads(buf)
+				seq = json_obj['SEQ']
+				red = json_obj['SCAN_SENSE']['RED']
+				green = json_obj['SCAN_SENSE']['GREEN']
+				blue = json_obj['SCAN_SENSE']['BLUE']
 				
-			check = None
-			# Check for expected color
-			if expected_color == 0:
-				# RED
-				check = True if red == 1 and green == 0 and blue == 0 else False
-				if not check:
-					color_err_count += 1
-			elif expected_color == 1:
-				# GREEN
-				check = True if red == 0 and green == 1 and blue == 0 else False
-				if not check:
-					color_err_count += 1
-			elif expected_color == 2:
-				# BLUE
-				check = True if red == 0 and green == 0 and blue == 1 else False
-				if not check:
-					color_err_count += 1
-			elif expected_color == 3:
-				# NO COLOR
-				check = True if red == 0 and green == 0 and blue == 0 else False
-				if not check:
-					color_err_count += 1
+				actual_color = None
+				if red == 1 and green == 0 and blue == 0:
+					actual_color = 'RED'
+				elif red == 0 and green == 1 and blue == 0:
+					actual_color = 'GREEN'
+				elif red == 0 and green == 0 and blue == 1:
+					actual_color = 'BLUE'
+				else:
+					actual_color = 'NO COLOR'
+					
+				check = None
+				# Check for expected color
+				if expected_color == 0:
+					# RED
+					check = True if red == 1 and green == 0 and blue == 0 else False
+					if not check:
+						color_err_count += 1
+				elif expected_color == 1:
+					# GREEN
+					check = True if red == 0 and green == 1 and blue == 0 else False
+					if not check:
+						color_err_count += 1
+				elif expected_color == 2:
+					# BLUE
+					check = True if red == 0 and green == 0 and blue == 1 else False
+					if not check:
+						color_err_count += 1
+				elif expected_color == 3:
+					# NO COLOR
+					check = True if red == 0 and green == 0 and blue == 0 else False
+					if not check:
+						color_err_count += 1
 
-			print("Expected Color: %s | Actual Color: %s | Success: %s" % (expected_colors[expected_color], actual_color, check))	
-			print()
-			msg = '{ "SEQ": ' + str(seq+1) +  ', "ZONE": 1, "ACTION": 2 }!'
-			print("Sending Message: %s" % msg)
-			s.sendmsg(msg)
+				print("Expected Color: %s | Actual Color: %s | Success: %s" % (expected_colors[expected_color], actual_color, check))	
+				print()
+				msg = '{ "SEQ": ' + str(seq+1) +  ', "ZONE": 1, "ACTION": 2, "XPOS": ' + str(seq+1) + ' }!'
+				print("Sending Message: %s" % msg)
+				s.sendmsg(msg)
 
-			print("-----------------------------------------------------------------------------")
-			print()
+				print("-----------------------------------------------------------------------------")
+				print()
 
 		print()
 		print("---------------------")

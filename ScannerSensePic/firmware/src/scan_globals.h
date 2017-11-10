@@ -4,7 +4,8 @@
 // action to be taken by sensing unit
 #define INFO    0
 #define ADC     1
-#define TMR     2
+#define I2C     2
+#define TMR     3
 
 // data inside scanners incoming queue
 struct scanQueueData
@@ -12,8 +13,8 @@ struct scanQueueData
     char type;
     unsigned int action;
     unsigned int zone;
-    unsigned int color;
     unsigned int dist;
+    unsigned int x;
 };
 
 // incoming scan queue

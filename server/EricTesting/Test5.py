@@ -45,53 +45,60 @@ def main():
 	print("Connected to wifly at %s:%s" % (s.client_addr[0], s.client_addr[1]))
 	print()
 
+	first = True
 	while time.clock() <= runtime:
+		if first:
+			msg = '{ "SEQ": 1, "ZONE": 1, "ACTION": 1, "XPOS": 0 }!' 
+			print("Sending Message: %s" % msg)
+			s.sendmsg(msg)
+			first = False
+		else:
+			# Receive messages from client
+			buf = ""
+			while '!' not in buf:
+				buf += s.recvmsg()
+				if "*HELLO*" in buf:
+					buf = ""
 
-		# Receive messages from client
-		buf = ""
-		while '!' not in buf:
-			buf += s.recvmsg()
-			if "*HELLO*" in buf:
-				buf = ""
+			buf = buf[:-1]
+			print("-----------------------------------------------------------------------------")
+			print("Received Message: %s" % buf)
+			print()
+			# Determine current color
+			json_obj = json.loads(buf)
+			seq = json_obj['SEQ']
+			red = json_obj['SCAN_SENSE']['RED']
+			green = json_obj['SCAN_SENSE']['GREEN']
+			blue = json_obj['SCAN_SENSE']['BLUE']
+			zone = json_obj['SCAN_SENSE']['ZONE']
+			msgtype = json_obj['SCAN_SENSE']['MSGTYPE']
 
-		buf = buf[:-1]
-		print("-----------------------------------------------------------------------------")
-		print("Received Message: %s" % buf)
-		print()
+			if msgtype == "FINISHED ZONE":
+				zones_actual[zone - 1][0] = red
+				zones_actual[zone - 1][1] = green
+				zones_actual[zone - 1][2] = blue
 		
-		# Determine current color
-		json_obj = json.loads(buf)
-		seq = json_obj['SEQ']
-		red = json_obj['SCAN_SENSE']['RED']
-		green = json_obj['SCAN_SENSE']['GREEN']
-		blue = json_obj['SCAN_SENSE']['BLUE']
-		zone = json_obj['SCAN_SENSE']['ZONE']
-		
-		if red == 1 and green == 0 and blue == 0:
-			zones_actual[zone - 1][0] += 1
-		elif red == 0 and green == 1 and blue == 0:
-			zones_actual[zone - 1][1] += 1
-		elif red == 0 and green == 0 and blue == 1:
-			zones_actual[zone - 1][2] += 1
-	
-		if seq < 10:
-			zone = 1
-			msg = '{ "SEQ": ' + str(seq+1) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 2 }!'
-		elif seq < 20 and seq >= 10:
-			zone = 2
-			msg = '{ "SEQ": ' + str(seq+1) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 2 }!'
-		elif seq >= 20 and seq < 30:
-			zone = 3
-			msg = '{ "SEQ": ' + str(seq+1) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 2 }!'
-		elif seq >= 30:
-			zone = 3
-			msg = '{ "SEQ": ' + str(seq+1) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 0 }!'
+			if seq < 10:
+				zone = 1
+				msg = '{ "SEQ": ' + str(seq+2) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 2, "XPOS:" ' + str(seq+1) + ' }!'
+			elif seq < 20 and seq >= 10:
+				zone = 2
+				msg = '{ "SEQ": ' + str(seq+2) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 2, "XPOS:" ' + str(seq+1) + ' }!'
+			elif seq >= 20 and seq < 30:
+				zone = 3
+				msg = '{ "SEQ": ' + str(seq+2) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 2, "XPOS:" ' + str(seq+1) + ' }!'
+			elif seq >= 30:
+				zone = 2
+				msg = '{ "SEQ": ' + str(seq+2) +  ', "ZONE": ' + str(zone) +  ', "ACTION": 0, "XPOS:" ' + str(seq+1) + ' }!'
+				
+			print("Sending Message: %s" % msg)
+			s.sendmsg(msg)
 
-		print("Sending Message: %s" % msg)
-		s.sendmsg(msg)
+			print("-----------------------------------------------------------------------------")
+			print()
 
-		print("-----------------------------------------------------------------------------")
-		print()
+			if seq == 31:
+				break 
 
 	zone1_err_count = [zone1_quota[0] - zone1_actual[0], zone1_quota[1] - zone1_actual[1], zone1_quota[2] - zone1_actual[2]] 
 	zone2_err_count = [zone2_quota[0] - zone2_actual[0], zone2_quota[1] - zone2_actual[1], zone2_quota[2] - zone2_actual[2]]
