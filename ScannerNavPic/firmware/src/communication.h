@@ -28,10 +28,8 @@ typedef enum
     COMM_ACK_SERVER
 } COMMUNICATION_STATES;
 
-
 typedef struct
 {
-    /* The application's current state */
     COMMUNICATION_STATES state;
     int recvd;
     int data;
@@ -42,33 +40,30 @@ void COMMUNICATION_Initialize ( void );
 void COMMUNICATION_Tasks( void );
 
 // UART message queues
-// comms thread reads from this Q
 QueueHandle_t comm_incoming_q;
-// UART ISR reads from this Q, we write to it
 QueueHandle_t uart_outgoing_q;
 
-//RX functions
+// RX functions
 int sendMsgToCommQFromISR(unsigned int msg);
 void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]);
 void readUartReceived();
 
-//TX functions
+// TX functions
 bool checkIfSendQueueIsEmpty();
 void uartReceiveFromOutQueueInISR(unsigned char *msg);
 void uartWriteMsg(char writeBuff);
 
-// Used to parse incoming
+// Used to parse incoming messages
 char commBuffer[UART_RX_QUEUE_SIZE];
 unsigned int commBufferIdx = 0;
 
-// used to check messages
+// Used to check messages
 int prev_inc_seq = 0;
 
-//JSMN functions
+// JSMN functions
 static const char *JSON_STRING;
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s);
 struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE]);
 int getIntFromKey(jsmntok_t key); 
-
 
 #endif /* _COMMUNICATION_H */

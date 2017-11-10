@@ -59,7 +59,7 @@ void generateActionItems(struct motorQueueData data, struct pwmQueueData * left,
 
 void initMotors()
 {
-    // default directions to forward
+    // Default directions to forward
     // Motor 1 direction 0x4000
     TRISCCLR = MOTOR_RIGHT_DIR_PIN;
     ODCCCLR  = MOTOR_RIGHT_DIR_PIN;
@@ -91,16 +91,12 @@ void initMotors()
 
 void setMotorR_DC(unsigned int dc)
 {
-    // float f_dc = (float)dc / 100.0;
-    // short int new_ocrs = TMR2_PERIOD * f_dc;
     OC1RS = dc;
     motor_controlData.dcR = dc;
 }
 
 void setMotorL_DC(unsigned int dc)
 {
-    // float f_dc = (float)dc / 100.0;
-    // short int new_ocrs = TMR2_PERIOD * f_dc;
     OC2RS = dc;
     motor_controlData.dcL = dc;
 }
@@ -205,7 +201,7 @@ void readFromQandSetPins(unsigned char motor)
     {
     case LEFT:
         motorL_recvQInISR(&data);
-        // set motor motion stuff
+        // Set motor motion stuff
         setMotorL_DC(data.dc);
         motor_controlData.action = data.action;
         goalL = data.dist;
@@ -233,14 +229,14 @@ void MOTOR_CONTROL_Initialize ( void )
 {
     motor_controlData.state = MOTOR_CONTROL_STATE_INIT;
     motor_controlData.action = STOP;
-    // incoming queue
+    // Incoming queue
     motor_q = xQueueCreate(32, sizeof (struct motorQueueData));
     right_q = xQueueCreate(32, sizeof (struct pwmQueueData));
     left_q  = xQueueCreate(32, sizeof (struct pwmQueueData));
-    // initialize the OCs and Timer2
+    // Initialize the OCs and Timer2
     initMotors();
 
-    // start the encoder counters
+    // Start the encoder counters
     DRV_TMR0_Start();
     DRV_TMR1_Start();
     DRV_TMR2_Start();
@@ -254,7 +250,7 @@ void updateLocation(unsigned int cm, unsigned char action)
         {
             float delta_x = cm;
 
-            posX += delta_x;
+            posX += delta_x*2;
             break;
         }
         case REVERSE:
@@ -311,6 +307,21 @@ void handleIncomingMsg(struct motorQueueData data)
         case POS_UPDATE:
         {
             updateLocation(data.dist, data.action);
+            break;
+        }
+        case SENSOR:
+        {
+            struct motorQueueData out_m;
+            out_m.action = data.action;
+            out_m.dist   = data.dist;
+            out_m.speed  = data.speed;
+         
+            struct pwmQueueData left, right;
+
+            generateActionItems(out_m, &left, &right);
+
+            sendMsgToMotor_L(left);
+            sendMsgToMotor_R(right);
             break;
         }
         default:

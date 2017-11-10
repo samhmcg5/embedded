@@ -16,11 +16,11 @@
 
 // MOTOR 2 === motor on the left when youre facing the USB plugs
 
-// incoming motor queue
+// Incoming motor queue
 QueueHandle_t motor_q;
-// action queue for right motor
+// Action queue for right motor
 QueueHandle_t right_q;
-// action queue for left motor
+// Action queue for left motor
 QueueHandle_t left_q;
 
 typedef enum
@@ -68,7 +68,5 @@ void readFromQandSetPins(unsigned char motor);
 
 void updateLocation(unsigned int cm, unsigned char action);
 void handleIncomingMsg(struct motorQueueData data);
-
-// unsigned char getDCFromSpeed(unsigned char speed);
 
 #endif /* _MOTOR_CONTROL_H */

@@ -23,7 +23,13 @@ unsigned int sumArrayLen10(unsigned int * arr)
 
 void IntHandlerDrvI2CInstance0(void)
 {
-    DRV_I2C_Tasks(sysObj.drvI2C0);
+	DRV_I2C0_Tasks();
+ 
+}
+
+void IntHandlerDrvI2CInstance1(void)
+{
+	DRV_I2C1_Tasks();
  
 }
 
@@ -193,19 +199,33 @@ void IntHandlerDrvTmrInstance2(void)
         else
             setMotorR_DC(0);
     }
-
-    /* If we are moving, try to correct the motion */
-    if ( getMotorL_DC() != 0 )
+ 
+    /* If we are moving forward, try to correct the motion */
+    if ( getMotorR_DC() != 0 && (getMotorR_Dir() == 0) && (getMotorL_Dir() == 0) )
     {
         // int offset = ( ticksL - ticksR ) * kp - 5;
-        int error = ( ticksL - ticksR );
+        int error = ( ticksR - ticksL );
         integral  = integral + error;
-        unsigned int new_dc = getMotorR_DC() + (error * KP) + (integral * KI) - (getMotorR_DC() / 75);
+        unsigned int new_dc = getMotorL_DC() + (error * KP) + (integral * KI) - (getMotorL_DC() / 85);
 
-        if (new_dc > getMotorL_DC())
-            new_dc = getMotorL_DC();
-        setMotorR_DC( new_dc );
+        if (new_dc > getMotorR_DC())
+            new_dc = getMotorR_DC();
+        setMotorL_DC( new_dc );
     }
+    
+    /* If we are moving backward, try to correct the motion */
+    if ( getMotorR_DC() != 0 && (getMotorR_Dir() == 1) && (getMotorL_Dir() == 1) )
+    {
+        // int offset = ( ticksL - ticksR ) * kp - 5;
+        int error = ( ticksR - ticksL );
+        integral  = integral + error;
+        unsigned int new_dc = getMotorL_DC() + (error * KP) + (integral * KI) - (getMotorL_DC() / 70);
+
+        if (new_dc > getMotorR_DC())
+            new_dc = getMotorR_DC();
+        setMotorL_DC( new_dc );
+    }
+    
 
     if (isr_count % 10 == 0)
     {
@@ -223,29 +243,12 @@ void IntHandlerDrvTmrInstance2(void)
     // Sensor reading 
     struct sensorQueueData s_data;
     
-    if(isr_count1 % 10 == 0)
+    if(isr_count1 % 2 == 0)
     {
-        // TODO
-        if(sensor_enable) {
-            s_data.front_sensor = front_threshold;
-            s_data.rear_sensor = rear_threshold;
-            sendMsgToSensorQFromISR(s_data);
-            if(front_threshold < 80) {
-                front_threshold+=1;
-            }
-            else {
-                front_threshold-=10;
-            }
-
-            if(rear_threshold < 80) {
-                rear_threshold+=2;
-            }
-            else {
-                rear_threshold-=30;
-            }
-            }
-
+        s_data.x = '1';
         
+
+        sendMsgToSensorQFromISR(s_data);
         isr_count1 = 0;
     }
     

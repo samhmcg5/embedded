@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=ScannerNavPic.X
+PROJECTNAME=ScannerNavPic_v2.X
 
 # Active Configuration
 DEFAULTCONF=default

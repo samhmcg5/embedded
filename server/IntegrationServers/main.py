@@ -8,9 +8,9 @@ from system_gui         import SystemGui
 from PyQt5.QtWidgets import QApplication
 import sys
 
-# IP_ADDR = 'localhost'
-IP_ADDR = '192.168.1.123'
-print("INITIALIZING TEAM14 SERVER @ 192.168.1.123")
+IP_ADDR = 'localhost'
+# IP_ADDR = '192.168.1.123'
+print("INITIALIZING TEAM14 SERVER @ %s" % IP_ADDR)
 
 if __name__ == '__main__':
     status = StatusThread()

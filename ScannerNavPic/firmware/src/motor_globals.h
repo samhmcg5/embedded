@@ -1,7 +1,7 @@
 #ifndef MOTOR_GLOBALS_H
 #define	MOTOR_GLOBALS_H
 
-// PIN DIRECTIONS FOR MOTORS
+// Pin direction for motors
 #define FORWARD     0
 #define REVERSE     1
 #define TURN_LEFT   2
@@ -12,6 +12,7 @@
 #define TP_DEGREE_L         7.25
 #define TP_DEGREE_R         7.27
 
+// Motor speeds
 #define SPEED_0         0
 #define SPEED_1         470
 #define SPEED_2         625
@@ -21,16 +22,16 @@
 
 unsigned int speeds[] = {SPEED_0, SPEED_1, SPEED_2, SPEED_3, SPEED_4, SPEED_5};
 
-// for motor selection
+// For motor selection
 #define LEFT  0
 #define RIGHT 1
 
-// for error correction
+// For error correction
 #define KP   5
 #define KI   20
 int integral = 0;
 
-// for motion control
+// For motion control
 unsigned int distR = 0; // measured in ticks
 unsigned int distL = 0;
 unsigned int goalL = 0;
@@ -39,12 +40,13 @@ unsigned int total_ticksL = 0;
 unsigned int total_ticksR = 0;
 unsigned int prev_cm = 0;
 
-// type definitions
+// Type definitions
 #define ACTION      0
 #define POSITION    1
 #define POS_UPDATE  2
+#define SENSOR      3
 
-// data inside incoming queue
+// Data inside incoming queue
 struct motorQueueData
 {
     char type;
@@ -74,9 +76,9 @@ unsigned char getMotorR_Dir();
 unsigned char getMotorL_Dir();
 unsigned char getMotorAction();
 
+// X distance from origin
 float posX = 0;
+// Used to know if active or idle
 char prev_dist = 0;
-int front_threshold = 50;  
-int rear_threshold = 70;  
 
 #endif	/* MOTOR_GLOBALS_H */

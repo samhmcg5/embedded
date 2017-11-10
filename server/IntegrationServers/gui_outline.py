@@ -4,72 +4,18 @@ import PyQt5.QtCore as qtc
 from PyQt5.QtGui import QFont
 import sys
 
-from server import *
-from database_fields import GuiFields as GF
 from styles import stylesheet
 
 ###############################
 ### TOP LEVEL GUI COMPONENT ###
 ###############################
 FONT_SIZE = 18
-class SystemGui(QWidget):
+class TopLevelUI(QWidget):
     statusSig = qtc.pyqtSignal(str,str)
-    def __init__(self, status, dnt, dst, snt, sst):
+    def __init__(self):
         super().__init__()
-        self.name = "GUI"
-        self.threads = {"Status"    : status,
-                        "DelivNav"  : dnt,
-                        "DelivSense": dst,
-                        "ScanNav"   : snt,
-                        "ScanSense" : sst
-                       }
         self.initUI()
         self.setStyleSheet(stylesheet)
-        self.connectSignals()
-        self.sendToStatus("Gui Initialized ...")
-        self.show()
-        self.initDB()
-
-    def connectSignals(self):
-        # OUTGOING signal to status thread
-        self.statusSig.connect(self.threads["Status"].receiveMsg)
-        # INCOMING signals from DELIV_NAV thread
-        self.threads["DelivNav"].positionSig.connect(self.delivstats.posGrid.setCurrentPos)
-        self.threads["DelivNav"].taskStatusSig.connect(self.delivstats.execStatus.setStatus)
-        self.threads["DelivNav"].roverStateSig.connect(self.handleDelivRoverState)
-        # OUTGOING signals to DELIV_NAV thread
-        self.delivstats.posCorrectSig.connect(self.threads["DelivNav"].transmitPosUpdate)
-        # connect button CLICKED to DB STORE
-        self.quotaframe.sendButton.clicked.connect(self.storeQuotaInDB)
-        # INCOMING signal from SCAN_SENSE
-        self.threads["ScanSense"].zoneNumbersSignal.connect(self.currentnums.updateZone)
-    
-    def initDB(self):
-        # we just need the server to expose the database calls
-        # I'm gonna pretend that the server is actually a DB...
-        self.db  = Server(self, '', 0)
-        self.db.db_init()
-
-    def sendToStatus(self, msg):
-        self.statusSig.emit(self.name, msg)
-
-    def storeQuotaInDB(self):
-        # gather the data from the spin boxes
-        zoneA = {GF.crit_zone_a : self.quotaframe.zoneA.getValues()}
-        zoneB = {GF.crit_zone_b : self.quotaframe.zoneB.getValues()}
-        zoneC = {GF.crit_zone_c : self.quotaframe.zoneC.getValues()}
-        # store the data
-        self.db.store({GF.crit_zone_a : {"$exists":True}}, zoneA, GF.col_name)
-        self.db.store({GF.crit_zone_b : {"$exists":True}}, zoneB, GF.col_name)
-        self.db.store({GF.crit_zone_c : {"$exists":True}}, zoneC, GF.col_name)
-
-
-    def handleDelivRoverState(self, state):
-        if state in [1,3,4,6]:
-            self.delivstats.setPosCorrectionLocked(True)
-        else:
-            self.delivstats.setPosCorrectionLocked(False)
-    
     def initUI(self): 
         f = QFont()
         f.setPointSize(FONT_SIZE)
@@ -78,12 +24,13 @@ class SystemGui(QWidget):
         self.currentnums = CurrentNumbersFrame()
         self.delivstats  = DelivNavStatusFrame()
         vbox = qtw.QVBoxLayout()
-        vbox.addWidget(self.currentnums)
         vbox.addWidget(self.quotaframe)
+        vbox.addWidget(self.currentnums)
         vbox.addWidget(self.delivstats)
         self.setLayout(vbox)
         self.setGeometry(300, 300, 800, 500)
         self.setWindowTitle('Server Control')
+        self.show()
 
 ######################
 ### SET THE QUOTAS ###
@@ -120,11 +67,6 @@ class QuotaRow(QWidget):
         hbox.addWidget(self.green)
         hbox.addWidget(self.blue)
         self.setLayout(hbox)
-    def getValues(self):
-        ret_dict = {"R": self.red.value(),
-                    "G": self.green.value(),
-                    "B": self.blue.value()}
-        return ret_dict
 
 class SpinBoxQuota(qtw.QSpinBox):
     def __init__(self, pre, maxim):
@@ -149,13 +91,6 @@ class CurrentNumbersFrame(QWidget):
         vbox.addWidget(self.zoneB)
         vbox.addWidget(self.zoneC)
         self.setLayout(vbox)
-    def updateZone(self, zone, vals):
-        if zone == 0:
-            self.zoneA.setNums(vals["R"],vals["G"],vals["B"])
-        if zone == 1:
-            self.zoneB.setNums(vals["R"],vals["G"],vals["B"])
-        if zone == 2:
-            self.zoneC.setNums(vals["R"],vals["G"],vals["B"])
 
 class NumsRow(QWidget):
     def __init__(self, name):
@@ -163,9 +98,9 @@ class NumsRow(QWidget):
         self.name = name
         self.initUI()
     def initUI(self):
-        self.red = qtw.QLabel("Red = ...")
-        self.green = qtw.QLabel("Green = ...")
-        self.blue = qtw.QLabel("Blue = ...")
+        self.red = qtw.QLabel("Red = 0")
+        self.green = qtw.QLabel("Green = 0")
+        self.blue = qtw.QLabel("Blue = 0")
         hbox = qtw.QHBoxLayout()
         hbox.addWidget(qtw.QLabel(self.name + ":\t"))
         hbox.addWidget(self.red)
@@ -181,32 +116,9 @@ class NumsRow(QWidget):
 ### DELIVERY NAVIG STATUS ###
 #############################
 class DelivNavStatusFrame(QWidget):
-    posCorrectSig = qtc.pyqtSignal(int, int, int)
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.connectSignals()
-
-    def connectSignals(self):
-        self.posGrid.sendButton.clicked.connect(self.handleSendPos)
-
-    def handleSendPos(self):
-        # gather data
-        x   = self.posGrid.nx.value()
-        y   = self.posGrid.ny.value()
-        ori = self.posGrid.nori.value()
-        # emit new signal
-        self.posCorrectSig.emit(x,y,ori)
-
-    def setPosCorrectionLocked(self,lock):
-        self.posGrid.locked = lock
-        self.posGrid.nx.setReadOnly(lock)
-        self.posGrid.ny.setReadOnly(lock)
-        self.posGrid.nori.setReadOnly(lock)
-        self.posGrid.sendButton.setEnabled(~lock)
-        # this is a fucken hack, fix this in the stylesheet
-        self.posGrid.sendButton.setText("" if lock else "Send")
-
     def initUI(self):
         vbox = qtw.QVBoxLayout()
         self.execStatus = ExecStatus()
@@ -219,37 +131,26 @@ class DelivNavStatusFrame(QWidget):
 class ExecStatus(QWidget):
     def __init__(self):
         super().__init__()
-        self.status = qtw.QLabel("...waiting for connection...")
+        self.status = qtw.QLabel("IDLE")
         hbox = qtw.QHBoxLayout()
         hbox.addWidget(qtw.QLabel("Currently: "))
         hbox.addWidget(self.status, alignment=qtc.Qt.AlignLeft, stretch=1)
         self.setLayout(hbox)
-    def setStatus(self, msg):
+    def setStatus(msg):
         self.status.setText(msg)
 
 class PositionGrid(QWidget):
     def __init__(self): 
         super().__init__()
-        self.locked = False
         self.initUI()
-
-    def setCurrentPos(self, pos):
-        self.x.setText("X: %i" % pos["X"])
-        self.y.setText("Y: %i" % pos["Y"])
-        self.ori.setText("OR: %i" % pos["OR"])
-        if self.locked:
-            self.nx.setValue(pos["X"])
-            self.ny.setValue(pos["Y"])
-            self.nori.setValue(pos["OR"])
-
     def initUI(self):
-        self.x    = qtw.QLabel("X: ...")
-        self.y    = qtw.QLabel("Y: ...")
-        self.ori  = qtw.QLabel("OR: ...")
+        self.x    = qtw.QLabel("X: 0")
+        self.y    = qtw.QLabel("Y: 20")
+        self.ori  = qtw.QLabel("OR: 0")
         self.nx   = SpinBoxQuota("X",90)
         self.ny   = SpinBoxQuota("Y",50)
         self.nori = SpinBoxQuota("OR",359)
-        self.sendButton = qtw.QPushButton("Send")
+        self.sendButton = qtw.QPushButton("Send Position")
         gbox = qtw.QGridLayout()
         gbox.addWidget(qtw.QLabel("Current:"), 0,0)
         gbox.addWidget(self.x,0,1)
@@ -263,4 +164,10 @@ class PositionGrid(QWidget):
         self.setLayout(gbox)
 
 
-
+########################
+### EXECUTE THE MAIN ###
+########################
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ex  = TopLevelUI()
+    sys.exit(app.exec_())

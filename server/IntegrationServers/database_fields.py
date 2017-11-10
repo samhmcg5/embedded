@@ -6,6 +6,7 @@ deliv_nav   = 'deliv_nav'
 deliv_sense = 'deliv_sense'
 scan_nav    = 'scan_nav'
 scan_sense  = 'scan_sense'
+gui         = 'gui'
 
 # Database initialization messages
 INFO_DB_CONN_ATT            = 'Attempting to connect to database.' 
@@ -29,21 +30,42 @@ ERROR_DB_RETR               = 'ERROR: Database could not retrieve data from %s'
 ERROR_DB_JSON               = 'ERROR: Data being stored is not a JSON object!'
 
 
+class GuiFields:
+    col_name = gui
+    # criteria
+    crit_zone_a = 'zone_a'
+    crit_zone_b = 'zone_b'
+    crit_zone_c = 'zone_c'
+
 class DelivNavFields:
-    col_name    = 'deliv_nav'
+    """
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ERROR\":1,\"MSG\":\"Missing sequence num, expected %u got %u\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ERROR\":2,\"MSG\":\"Bad JSON message format\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{ \"X\":%u, \"Y\":%u, \"OR\":%u }}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"RIGHT_DIR\":%i,\"LEFT_DIR\":%i,\"RIGHT_SPEED\":%u,\"LEFT_SPEED\":%u}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":0,\"MSG\":\"Rover is IDLE, requesting task\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":0,\"MSG\":\"Task EXECUTING\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"TASK\":\"RECIEVED\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ACTION\":\"RECIEVED\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"SET_MAGNET\":%u, \"IR_DATA\":%u}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATE\":%u, \"IR\":%u, \"MAG\":%u}}!"
+    """
+    col_name    = deliv_nav
     # master token for incoming JSON
     token       = "DELIV_NAV"
     # tokens to find which message type
     tok_pos     = "X"
     tok_status  = "STATUS"
     tok_mag     = "SET_MAGNET"
+    tok_state   = "STATE"
     # search criteria dicts
     crit_pos    = "POS"
     crit_status = "STATUS"
     crit_mag    = 'SET_MAG'
+    crit_state  = "STATE"
 
 class DelivSenseFields:
-    col_name    = 'deliv_sense'
+    col_name    = deliv_sense
     # master token for incoming JSON
     token       = "DELIV_SENSE"
     # tokens to find which message type
@@ -52,16 +74,22 @@ class DelivSenseFields:
     # TODO
 
 class ScanNavFields:
-    col_name    = 'scan_nav'
+    """
+    "{\"SEQ\":%i,\"SCAN_NAV\":{\"STATUS\":1,\"MSG\":\"Missing sequence number, expected %u got %u\"}}!"
+    "{\"SEQ\":%i,\"SCAN_NAV\":{\"STATUS\":1,\"MSG\":\"Bad JSON message format\"}}!"
+    "{\"SEQ\":%i,\"SCAN_NAV\": { \"DIST\": %u, \"STATE\": \"%s\" }}!"
+    """
+    col_name    = scan_nav
     # master token for incoming JSON
     token       = "SCAN_NAV"
     # tokens to find which message type
-    # TODO    
+    tok_dist    = "DIST"
     # search criteria dicts
-    # TODO
+    crit_dist   = "DIST"
+    crit_state  = "STATE"
 
 class ScanSenseFields:
-    col_name    = 'scan_sense'
+    col_name    = scan_sense
     # master token for incoming JSON
     token       = "SCAN_SENSE"
     # tokens to find which message type

@@ -2,26 +2,25 @@
 #include "communication.h"
 #include "communication_globals.h"
 #include "queue.h"
-//#include "motor_control.h"
 #include "motor_globals.h"
 
-// communication's state
+// Communication's state
 COMMUNICATION_DATA communicationData;
 
-//send into commtask from isr
+// Send into comms task from ISR
 void commSendMsgFromISR(unsigned char msg[UART_RX_QUEUE_SIZE]) 
 {
-    //send to comms task from isr
+    // Send to comms task from ISR
     xQueueSendToBackFromISR(comm_incoming_q, msg, NULL);
 }
 
-//send each byte of message into uart out queue
+// Send each byte of message into UART out queue
 void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE]) 
 {
     int i;
     for(i = 0; i< strlen(msg); i++)
     {
-        //each byte of message is sent into uart queue
+        // Each byte of message is sent into UART queue
         xQueueSendToBack(uart_outgoing_q, &msg[i], portMAX_DELAY);
     }
     outgoing_seq++;
@@ -30,7 +29,7 @@ void commSendMsgToUartQueue(unsigned char msg[UART_TX_QUEUE_SIZE])
 
 void uartReceiveFromOutQueueInISR(unsigned char* msg) 
 {
-    //read from uart queue to transmit
+    // Read from UART queue to transmit
     xQueueReceiveFromISR(uart_outgoing_q, msg, NULL);
 }
 
@@ -39,7 +38,7 @@ bool checkIfSendQueueIsEmpty()
     return xQueueIsQueueEmptyFromISR(uart_outgoing_q);
 }
 
-// JSMN
+// JSMN functions
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) 
 {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
@@ -85,18 +84,18 @@ struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     {
         out.action = getIntFromKey(t[4]);
         out.dist = getIntFromKey(t[6]);
-        //out.speed = getIntFromKey(t[8]); // FIXME
+        //out.speed = getIntFromKey(t[8]); // FIXME - WON'T PARSE SPEED
         out.speed = 5;
     }
     
-    // Sensor reading enable
+    // Sensor reading enable - DEBUG - NOT USED
     if(r == 5) {
         sensor_enable = 1;
     }
   
     else // ERROR
     {
-        // send message back to server something is wrong
+        // Send message back to server something is wrong
         char buf[128];
         sprintf(buf, STR_JSON_ERROR, outgoing_seq);
         commSendMsgToUartQueue(buf);
@@ -104,18 +103,18 @@ struct motorQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
     return out;
 }
 
-// called from the ISR
+// Called from the ISR
 void readUartReceived() 
 {
     unsigned char recv = PLIB_USART_ReceiverByteReceive(USART_ID_1);
-    // get the start delimeter
+    // Get the start delimeter
     if (recv == '{')
     {
         commBufferIdx = 0;
         commBuffer[commBufferIdx] = recv;
         commBufferIdx++;
     }
-    // end token, add to the queue and exit
+    // End token, add to the queue and exit
     else if (recv == '}')
     {
         commBuffer[commBufferIdx] = recv;
@@ -132,15 +131,15 @@ void readUartReceived()
 
 void uartWriteMsg(char writeBuff) 
 {
-    PLIB_USART_TransmitterByteSend(USART_ID_1, writeBuff); //write a byte
+    PLIB_USART_TransmitterByteSend(USART_ID_1, writeBuff); // Write a byte
 }
 
 void COMMUNICATION_Initialize(void) 
 {
     communicationData.state = COMMUNICATION_STATE_INIT;
     communicationData.data = 5000;
-    // create the q handle
-    comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE]));//general purpose for all incoming
+    // Create the q handle
+    comm_incoming_q = xQueueCreate(16, sizeof (unsigned char[UART_RX_QUEUE_SIZE])); // General purpose for all incoming
     uart_outgoing_q = xQueueCreate(UART_TX_QUEUE_SIZE, sizeof (unsigned char));
 
     DRV_TMR0_Start();
