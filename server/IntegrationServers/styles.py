@@ -20,7 +20,7 @@ QLabel {
 
 QDialog, QListView {
     background-color: #263238;
-    color: #546E7A;
+    color: #f5f5f5;
     outline: 0;
     border: 2px solid transparent;
 }
@@ -49,7 +49,7 @@ QTabBar::tab {
     background: transparent;
     border: 0px solid transparent;
     border-bottom: 2px solid transparent;
-    color: #546E7A;
+    color: #f5f5f5;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 3px;
@@ -91,7 +91,7 @@ QGroupBox::title {
 }
 
 QComboBox {
-    color: #546E7A;
+    color: #f5f5f5;
     background-color: transparent;
     selection-background-color: transparent;
     outline: 0;
@@ -140,7 +140,7 @@ QCheckBox::indicator::checked:disabled, QRadioButton::indicator::checked:disable
 
 QTreeView {
     background-color: transparent;
-    color: #546E7A;
+    color: #f5f5f5;
     outline: 0;
     border: 0;
 }
@@ -247,8 +247,8 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {  /* Hides the sli
 
 QPushButton {
     background-color: transparent;
-    color: #546E7A;
-    border: 1px solid #546E7A;
+    color: #f5f5f5;
+    border: 1px solid #f5f5f5;
     padding: 4px 22px;
 }
 
@@ -268,13 +268,13 @@ QPushButton:!enabled {
 QLineEdit {
     background: transparent;
     border: 1px solid transparent;
-    color: #546E7A;
+    color: #f5f5f5;
 }
 
 QSpinBox {
     background: transparent;
-    border: 1px solid #546E7A;
-    color: #546E7A;
+    border: 1px solid #f5f5f5;
+    color: #f5f5f5;
 }
 
 /*****************************************************************************
@@ -286,7 +286,7 @@ QTreeView {
 
 QMenu {
     background-color: #263238;      /* File Menu Background color */
-    color: #546E7A;
+    color: #f5f5f5;
 }
 
 QMenu::item:selected {
@@ -299,7 +299,7 @@ QMenu::item:pressed {
 
 QMenu::separator {
     height: 1px;
-    background: transparent;            /* Could change this to #546E7A and reduce the margin top and bottom to 1px */
+    background: transparent;            /* Could change this to #f5f5f5 and reduce the margin top and bottom to 1px */
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 5px;
@@ -309,7 +309,7 @@ QMenu::separator {
 /* === QMenuBar === */
 QMenuBar {
     background-color: #263238;
-    color: #546E7A;
+    color: #f5f5f5;
 }
 
 QMenuBar::item {
@@ -362,11 +362,11 @@ QStatusBar {
 }
 
 QLabel {
-    color: #546E7A;     /* Text at the bottom right corner of the screen */
+    color: #f5f5f5;     /* Text at the bottom right corner of the screen */
 }
 
 QToolButton {   /* I don't like how the items depress */
-    color: #546E7A;
+    color: #f5f5f5;
 }
 
 QToolButton:hover, QToolButton:pressed, QToolButton:checked {
@@ -410,7 +410,7 @@ QToolButton::menu-button:hover {
 }
 
 QStatusBar::item {
-    color: #546E7A;
+    color: #f5f5f5;
     background-color: #263238;
 }
 

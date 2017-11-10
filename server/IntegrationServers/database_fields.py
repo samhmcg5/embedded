@@ -38,6 +38,18 @@ class GuiFields:
     crit_zone_c = 'zone_c'
 
 class DelivNavFields:
+    """
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ERROR\":1,\"MSG\":\"Missing sequence num, expected %u got %u\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ERROR\":2,\"MSG\":\"Bad JSON message format\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{ \"X\":%u, \"Y\":%u, \"OR\":%u }}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"RIGHT_DIR\":%i,\"LEFT_DIR\":%i,\"RIGHT_SPEED\":%u,\"LEFT_SPEED\":%u}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":0,\"MSG\":\"Rover is IDLE, requesting task\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":0,\"MSG\":\"Task EXECUTING\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"TASK\":\"RECIEVED\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ACTION\":\"RECIEVED\"}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"SET_MAGNET\":%u, \"IR_DATA\":%u}}!"
+    "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATE\":%u, \"IR\":%u, \"MAG\":%u}}!"
+    """
     col_name    = deliv_nav
     # master token for incoming JSON
     token       = "DELIV_NAV"
@@ -62,13 +74,19 @@ class DelivSenseFields:
     # TODO
 
 class ScanNavFields:
+    """
+    "{\"SEQ\":%i,\"SCAN_NAV\":{\"STATUS\":1,\"MSG\":\"Missing sequence number, expected %u got %u\"}}!"
+    "{\"SEQ\":%i,\"SCAN_NAV\":{\"STATUS\":1,\"MSG\":\"Bad JSON message format\"}}!"
+    "{\"SEQ\":%i,\"SCAN_NAV\": { \"DIST\": %u, \"STATE\": \"%s\" }}!"
+    """
     col_name    = scan_nav
     # master token for incoming JSON
     token       = "SCAN_NAV"
     # tokens to find which message type
-    # TODO    
+    tok_dist    = "DIST"
     # search criteria dicts
-    # TODO
+    crit_dist   = "DIST"
+    crit_state  = "STATE"
 
 class ScanSenseFields:
     col_name    = scan_sense
