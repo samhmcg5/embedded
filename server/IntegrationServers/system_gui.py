@@ -82,7 +82,7 @@ class SystemGui(QWidget):
         vbox.addWidget(self.quotaframe)
         vbox.addWidget(self.delivstats)
         self.setLayout(vbox)
-        self.setGeometry(300, 300, 800, 500)
+        self.setGeometry(600, 100, 800, 500)
         self.setWindowTitle('Server Control')
 
 ######################
@@ -151,11 +151,11 @@ class CurrentNumbersFrame(QWidget):
         self.setLayout(vbox)
     def updateZone(self, zone, vals):
         if zone == 0:
-            self.zoneA.setNums(vals["R"],vals["G"],vals["B"])
+            self.zoneA.setNums(vals["RED"],vals["GREEN"],vals["BLUE"])
         if zone == 1:
-            self.zoneB.setNums(vals["R"],vals["G"],vals["B"])
+            self.zoneB.setNums(vals["RED"],vals["GREEN"],vals["BLUE"])
         if zone == 2:
-            self.zoneC.setNums(vals["R"],vals["G"],vals["B"])
+            self.zoneC.setNums(vals["RED"],vals["GREEN"],vals["BLUE"])
 
 class NumsRow(QWidget):
     def __init__(self, name):

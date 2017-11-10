@@ -8,8 +8,8 @@ class ScanNavThread(ServerBaseThread):
 
     # store the distance and state into Mongo
     def handleDIST(self, scannav):
-        json_dist  = {SNF.crit_dist : scannav["DIST"]}
-        json_state = {SNF.crit_dist : scannav["STATE"]}
+        json_dist  = {SNF.crit_dist : scannav[SNF.tok_dist]}
+        json_state = {SNF.crit_state : scannav[SNF.tok_state]}
         self.srv.store({SNF.crit_dist : {"$exists":True}}, json_dist, SNF.col_name)
         self.srv.store({SNF.crit_state : {"$exists":True}}, json_state, SNF.col_name)
 

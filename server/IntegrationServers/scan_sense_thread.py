@@ -12,17 +12,34 @@ class ScanSenseThread(ServerBaseThread):
         ServerBaseThread.__init__(self, ip, port, status_thread)
         self.name = "ScanSense"
         
+    def handleZONE(self, scansense):
+        criteria = ""
+        if scansense[SSF.tok_zone] == 0:
+            criteria = SSF.crit_zone_a
+        elif scansense[SSF.tok_zone] == 1:
+            criteria = SSF.crit_zone_b
+        elif scansense[SSF.tok_zone] == 2:
+            criteria = SSF.crit_zone_c
+        else:
+            return
+        del scansense[SSF.tok_zone]
+        json_obj  = {criteria : scansense}
+        self.srv.store({criteria : {"$exists":True}}, json_obj, SSF.col_name)
+        self.zoneNumbersSignal.emit(scansense[SSF.tok_zone], json_obj)
+
+
     def handleJSON(self, json_obj):
         if not SSF.token in json_obj:
            return
-        scansense = json_obj['SCAN_SENSE']
+
+        if self.recv_seq+1 != json_obj["SEQ"]:
+            self.sendToStatus("ERROR: Unexpected sequence number")
+        self.recv_seq = json_obj["SEQ"]
+
+        scansense = json_obj[SCAN_SENSE]
         # now take an action based on the data ...
-<<<<<<< HEAD
-        self.sendToStatus(str(scansense))
-||||||| merged common ancestors
-        # self.sendToStatus(str(scansense))
-=======
-        # self.sendToStatus(str(scansense))
+        
+        if SSF.tok_zone in scansense:
+            self.handleZONE(scansense)
 
         
->>>>>>> 806986304084990966314b43163c0655025df1ad

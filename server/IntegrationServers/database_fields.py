@@ -39,12 +39,8 @@ class GuiFields:
 
 class DelivNavFields:
     """
-    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ERROR\":1,\"MSG\":\"Missing sequence num, expected %u got %u\"}}!"
-    "{\"SEQ\":%i,\"DELIV_NAV\":{\"ERROR\":2,\"MSG\":\"Bad JSON message format\"}}!"
     "{\"SEQ\":%i,\"DELIV_NAV\":{ \"X\":%u, \"Y\":%u, \"OR\":%u }}!"
-    "{\"SEQ\":%i,\"DELIV_NAV\":{\"RIGHT_DIR\":%i,\"LEFT_DIR\":%i,\"RIGHT_SPEED\":%u,\"LEFT_SPEED\":%u}}!"
     "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":0,\"MSG\":\"Rover is IDLE, requesting task\"}}!"
-    "{\"SEQ\":%i,\"DELIV_NAV\":{\"STATUS\":0,\"MSG\":\"Task EXECUTING\"}}!"
     "{\"SEQ\":%i,\"DELIV_NAV\":{\"TASK\":\"RECIEVED\"}}!"
     "{\"SEQ\":%i,\"DELIV_NAV\":{\"ACTION\":\"RECIEVED\"}}!"
     "{\"SEQ\":%i,\"DELIV_NAV\":{\"SET_MAGNET\":%u, \"IR_DATA\":%u}}!"
@@ -65,13 +61,21 @@ class DelivNavFields:
     crit_state  = "STATE"
 
 class DelivSenseFields:
+    """
+    "{\"SEQ\":%i,\"DELIV_SENSE\": { \"MAGNET\":%i}}!"
+    "{\"SEQ\":%i,\"DELIV_SENSE\":{\"IRDIST\":%i,\"OBJ\":%i}}!"
+    """
     col_name    = deliv_sense
     # master token for incoming JSON
     token       = "DELIV_SENSE"
     # tokens to find which message type
-    # TODO
+    tok_mag     = "MAGNET"
+    tok_ir      = "IRDIST"
+    tok_obj     = "OBJ"
     # search criteria dicts
-    # TODO
+    crit_mag     = "MAGNET"
+    crit_ir      = "IRDIST"
+    crit_obj     = "OBJ"
 
 class ScanNavFields:
     """
@@ -84,15 +88,25 @@ class ScanNavFields:
     token       = "SCAN_NAV"
     # tokens to find which message type
     tok_dist    = "DIST"
+    tok_state   = "STATE"
     # search criteria dicts
     crit_dist   = "DIST"
     crit_state  = "STATE"
 
 class ScanSenseFields:
+    """
+    "{\"SEQ\":%i,\"SCAN_SENSE\":{\"ZONE\":%i,\"RED\":%i,\"GREEN\":%i,\"BLUE\":%i,\"MSGTYPE\":\"%s\"}}!"
+    """
     col_name    = scan_sense
     # master token for incoming JSON
     token       = "SCAN_SENSE"
     # tokens to find which message type
-    # TODO    
+    tok_zone    = "ZONE"
+    tok_r       = "RED"
+    tok_g       = "GREEN"
+    tok_b       = "BLUE"
+    top_type    = "MSGTYPE"
     # search criteria dicts
-    # TODO
+    crit_zone_a = 'zone_a'
+    crit_zone_b = 'zone_b'
+    crit_zone_c = 'zone_c'
