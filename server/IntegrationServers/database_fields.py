@@ -29,14 +29,6 @@ ERROR_DB_STORE              = 'ERROR: Database could not store data in %s'
 ERROR_DB_RETR               = 'ERROR: Database could not retrieve data from %s'
 ERROR_DB_JSON               = 'ERROR: Data being stored is not a JSON object!'
 
-
-class GuiFields:
-    col_name = gui
-    # criteria
-    crit_zone_a = 'zone_a'
-    crit_zone_b = 'zone_b'
-    crit_zone_c = 'zone_c'
-
 class DelivNavFields:
     """
     "{\"SEQ\":%i,\"DELIV_NAV\":{ \"X\":%u, \"Y\":%u, \"OR\":%u }}!"
@@ -110,3 +102,10 @@ class ScanSenseFields:
     crit_zone_a = 'zone_a'
     crit_zone_b = 'zone_b'
     crit_zone_c = 'zone_c'
+
+class GuiFields:
+    col_name = gui
+    # criteria
+    crit_zone_a = ScanSenseFields.crit_zone_a
+    crit_zone_b = ScanSenseFields.crit_zone_b
+    crit_zone_c = ScanSenseFields.crit_zone_c

@@ -105,5 +105,5 @@ class Database():
             del doc['_id']
             self.sendToStatus(db.INFO_DB_RETR_SUC % colName)
         else:
-            raise sendToStatus(db.ERROR_DB_RETR % colName)
+            self.sendToStatus(db.ERROR_DB_RETR % colName)
         return doc
