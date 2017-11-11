@@ -83,5 +83,5 @@ class ServerBaseThread(QThread):
                         self.sendToStatus("ERROR: Received bad JSON")
                 except ConnectionError as err:
                         self.srv.reset()
-                        self.srv.db.clean()
+                        # self.srv.db.clean()
                         break

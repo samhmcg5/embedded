@@ -21,6 +21,7 @@ class ScanSenseThread(ServerBaseThread):
         elif scansense[SSF.tok_zone] == 2:
             criteria = SSF.crit_zone_c
         else:
+            self.sendToStatus("ERROR: Bad zone data")
             return
         json_obj  = {criteria : scansense}
         self.srv.store({criteria : {"$exists":True}}, json_obj, SSF.col_name)

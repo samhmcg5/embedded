@@ -80,30 +80,30 @@ class Database():
     # Stores a JSON formatted object in the database
     # Return TRUE on successful store
     def store(self, criteria, json_obj, colName):
-        self.sendToStatus(db.INFO_DB_STORE_ATT % colName)
+        # self.sendToStatus(db.INFO_DB_STORE_ATT % colName)
         # Replace database field with given criteria with new json_obj data
         col = self.database[colName]
         res = col.replace_one(criteria, json_obj)
         # Criteria does not match database field in a given collection
         if res.matched_count == 0:
             res = col.insert_one(json_obj)
-            if res.acknowledged == True:
-                self.sendToStatus("New entry %s in %s" % (str(json_obj),colName))
-            else:
-                raise RuntimeError(db.ERROR_DB_STORE % colName)
+            # if res.acknowledged == True:
+                # self.sendToStatus("New entry %s in %s" % (str(json_obj),colName))
+            # else:
+                # raise RuntimeError(db.ERROR_DB_STORE % colName)
         else:
             self.sendToStatus(db.INFO_DB_STORE_SUC % (str(json_obj),colName))
         return True
 
     # Gets action message to respective pic
     def retrieve(self, criteria, colName):
-        self.sendToStatus(db.INFO_DB_RETR_ATT % colName)
+        # self.sendToStatus(db.INFO_DB_RETR_ATT % colName)
         # Find data in given collection matching specified criteria
         col = self.database[colName]
         doc = col.find_one(criteria)
         if doc:
             del doc['_id']
-            self.sendToStatus(db.INFO_DB_RETR_SUC % colName)
+            # self.sendToStatus(db.INFO_DB_RETR_SUC % colName)
         else:
             self.sendToStatus(db.ERROR_DB_RETR % colName)
         return doc

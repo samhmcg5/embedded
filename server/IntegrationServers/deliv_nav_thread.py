@@ -50,11 +50,12 @@ class DelivNavThread(ServerBaseThread):
             self.taskStatusSig.emit("Rover is IDLE")
             try:
                 task = self.generateNextTask()
-                self.srv.sendmsg(DelivNavMsgs.task % (self.seq_num,task[0],task[1]))
-                self.seq_num += 1
-                self.prev_zone = task[0]
-                self.prev_task = DelivNavMsgs.prev_task_str % (task[0],task[1])
-            except LookupError as err:
+                if task is not None:
+                    self.srv.sendmsg(DelivNavMsgs.task % (self.seq_num, task[0], task[1]))
+                    self.seq_num += 1
+                    self.prev_zone = task[0]
+                    self.prev_task = DelivNavMsgs.prev_task_str % (task[0],task[1])
+            except RuntimeError as err:
                 self.sendToStatus("ERROR: %s" % str(err))
         elif delivnav[DNF.tok_status] == 1: # TASK
             self.taskStatusSig.emit("Executing TASK: %s" % self.prev_task)
@@ -98,10 +99,11 @@ class DelivNavThread(ServerBaseThread):
         diffs.append( self.getDifference(SSF.crit_zone_c) )
         # iterate to find next task, start with a new zone...
         prev = self.prev_zone
+        zone = prev+1 if prev<2 else 0
         for i in range(3):
-            zone = prev+1 if prev<2 else 0
-            for color in diffs[next_zone].keys():
-                if diffs[next_zone][color] < 0:
+            for color in diffs[zone].keys():
+                print(zone, color, diffs[zone][color])
+                if diffs[zone][color] < 0:
                     if color == "RED":
                         color = 0
                     elif color == "BLUE":
@@ -109,13 +111,16 @@ class DelivNavThread(ServerBaseThread):
                     else:
                         color = 2
                     return (zone, color)
-        
+            zone = zone+1 if zone<2 else 0
+
     # helper function
     def getDifference(self, crit):
         data  = self.srv.retrieve({crit : {"$exists":True}}, self.srv.db.scan_sense)
         quota = self.srv.retrieve({crit : {"$exists":True}}, self.srv.db.gui)
         if not data or not quota:
-            raise LookupError("Zone data unavailable")
+            raise RuntimeError("Zone data unavailable")
+        data  = data[crit]
+        quota = quota[crit]
         diff  = {"RED"  : data[SSF.tok_r] - quota[SSF.tok_r],
                  "GREEN": data[SSF.tok_g] - quota[SSF.tok_g],
                  "BLUE" : data[SSF.tok_b] - quota[SSF.tok_b]}

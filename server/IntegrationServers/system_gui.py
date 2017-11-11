@@ -49,6 +49,13 @@ class SystemGui(QWidget):
         # I'm gonna pretend that the server is actually a DB...
         self.db  = Server(self, '', 0)
         self.db.db_init()
+        # init zones to 0
+        zoneA = {GF.crit_zone_a : {"RED":0, "GREEN":0, "BLUE":0}}
+        zoneB = {GF.crit_zone_b : {"RED":0, "GREEN":0, "BLUE":0}}
+        zoneC = {GF.crit_zone_c : {"RED":0, "GREEN":0, "BLUE":0}}
+        self.db.store({GF.crit_zone_a : {"$exists":True}}, zoneA, GF.col_name)
+        self.db.store({GF.crit_zone_b : {"$exists":True}}, zoneB, GF.col_name)
+        self.db.store({GF.crit_zone_c : {"$exists":True}}, zoneC, GF.col_name)
 
     def sendToStatus(self, msg):
         self.statusSig.emit(self.name, msg)
@@ -121,9 +128,9 @@ class QuotaRow(QWidget):
         hbox.addWidget(self.blue)
         self.setLayout(hbox)
     def getValues(self):
-        ret_dict = {"R": self.red.value(),
-                    "G": self.green.value(),
-                    "B": self.blue.value()}
+        ret_dict = {"RED"  : self.red.value(),
+                    "GREEN": self.green.value(),
+                    "BLUE" : self.blue.value()}
         return ret_dict
 
 class SpinBoxQuota(qtw.QSpinBox):
