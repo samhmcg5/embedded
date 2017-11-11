@@ -22,10 +22,9 @@ class ScanSenseThread(ServerBaseThread):
             criteria = SSF.crit_zone_c
         else:
             return
-        del scansense[SSF.tok_zone]
         json_obj  = {criteria : scansense}
         self.srv.store({criteria : {"$exists":True}}, json_obj, SSF.col_name)
-        self.zoneNumbersSignal.emit(scansense[SSF.tok_zone], json_obj)
+        self.zoneNumbersSignal.emit(scansense[SSF.tok_zone], scansense)
 
 
     def handleJSON(self, json_obj):
@@ -36,7 +35,7 @@ class ScanSenseThread(ServerBaseThread):
             self.sendToStatus("ERROR: Unexpected sequence number")
         self.recv_seq = json_obj["SEQ"]
 
-        scansense = json_obj[SCAN_SENSE]
+        scansense = json_obj[SSF.token]
         # now take an action based on the data ...
         
         if SSF.tok_zone in scansense:
