@@ -6,7 +6,7 @@ class ScanNavThread(ServerBaseThread):
         ServerBaseThread.__init__(self, ip, port, status_thread, vrb)
         self.name = "ScanNav"
 
-    def sendStartMsg():
+    def sendStartMsg(self):
         try:
             msg = "START MESSAGE..."
             self.srv.sendmsg(msg)
