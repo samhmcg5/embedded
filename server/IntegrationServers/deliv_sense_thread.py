@@ -3,8 +3,8 @@ from database_fields import DelivSenseFields as DSF
 
 
 class DelivSenseThread(ServerBaseThread):
-    def __init__(self, ip, port, status_thread):
-        ServerBaseThread.__init__(self, ip, port, status_thread)
+    def __init__(self, ip, port, status_thread, vrb):
+        ServerBaseThread.__init__(self, ip, port, status_thread, vrb)
         self.name = "DelivSense"
 
     def handleMAG(self, delivsense):
@@ -21,7 +21,7 @@ class DelivSenseThread(ServerBaseThread):
         if not DSF.token in json_obj:
            return #error
         if self.recv_seq+1 != json_obj["SEQ"]:
-            self.sendToStatus("ERROR: Unexpected sequence number")
+            self.sendToStatus("ERROR: Unexpected sequence number", 4)
         self.recv_seq = json_obj["SEQ"]
         
         delivsense = json_obj[DELIV_SENSE]

@@ -14,7 +14,7 @@ from styles import stylesheet
 FONT_SIZE = 18
 class SystemGui(QWidget):
     statusSig = qtc.pyqtSignal(str,str)
-    def __init__(self, status, dnt, dst, snt, sst):
+    def __init__(self, status, dnt, dst, snt, sst, vrb):
         super().__init__()
         self.name = "GUI"
         self.threads = {"Status"    : status,
@@ -23,10 +23,11 @@ class SystemGui(QWidget):
                         "ScanNav"   : snt,
                         "ScanSense" : sst
                        }
+        self.vrb = vrb
         self.initUI()
         self.setStyleSheet(stylesheet)
         self.connectSignals()
-        self.sendToStatus("Gui Initialized ...")
+        self.sendToStatus("Gui Initialized ...", 5)
         self.show()
         self.initDB()
 
@@ -43,6 +44,9 @@ class SystemGui(QWidget):
         self.quotaframe.sendButton.clicked.connect(self.storeQuotaInDB)
         # INCOMING signal from SCAN_SENSE
         self.threads["ScanSense"].zoneNumbersSignal.connect(self.currentnums.updateZone)
+        # OUTGOING to scan threads
+        self.start.clicked.connect(self.threads['ScanSense'].sendStartMsg)
+        self.start.clicked.connect(self.threads['ScanNav'].sendStartMsg)
     
     def initDB(self):
         # we just need the server to expose the database calls
@@ -57,8 +61,9 @@ class SystemGui(QWidget):
         self.db.store({GF.crit_zone_b : {"$exists":True}}, zoneB, GF.col_name)
         self.db.store({GF.crit_zone_c : {"$exists":True}}, zoneC, GF.col_name)
 
-    def sendToStatus(self, msg):
-        self.statusSig.emit(self.name, msg)
+    def sendToStatus(self, msg, importance):
+        if importance > self.vrb:
+            self.statusSig.emit(self.name, msg)
 
     def storeQuotaInDB(self):
         # gather the data from the spin boxes
@@ -81,10 +86,12 @@ class SystemGui(QWidget):
         f = QFont()
         f.setPointSize(FONT_SIZE)
         self.setFont(f)
+        self.start       = qtw.QPushButton("START")
         self.quotaframe  = SetQuotaFrame()
         self.currentnums = CurrentNumbersFrame()
         self.delivstats  = DelivNavStatusFrame()
         vbox = qtw.QVBoxLayout()
+        vbox.addWidget(self.start, alignment=qtc.Qt.AlignRight)
         vbox.addWidget(self.currentnums)
         vbox.addWidget(self.quotaframe)
         vbox.addWidget(self.delivstats)
