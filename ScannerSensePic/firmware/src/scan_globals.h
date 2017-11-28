@@ -15,6 +15,13 @@ struct scanQueueData
     unsigned int zone;
     unsigned int dist;
     unsigned int x;
+    unsigned int sync;
+    unsigned int checksum;
+    unsigned int signature;
+    unsigned int xPos;
+    unsigned int yPos;
+    unsigned int width;
+    unsigned int height;
 };
 
 // incoming scan queue

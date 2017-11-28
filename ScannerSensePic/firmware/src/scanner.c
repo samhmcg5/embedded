@@ -2,7 +2,6 @@
 #include "communication_globals.h"
 
 SCANNER_DATA scannerData;
-PIXY_STATES pixyState;
 unsigned int flag;
 
 void sendMsgToScanQ(struct scanQueueData msg)
@@ -33,7 +32,6 @@ void SCANNER_Initialize ( void )
     prevEdge = 0;
     currXPos = 0;
     flag = 1;
-    pixyState = I2C_WAIT_FOR_OPEN;
     scan_q = xQueueCreate(32, sizeof (struct scanQueueData));
 }
 
@@ -47,8 +45,8 @@ void SCANNER_Tasks ( void )
             if (appInitialized)
             {
                 scannerData.i2c_handle = DRV_I2C_Open(DRV_I2C_INDEX_0, DRV_IO_INTENT_READWRITE);
-                scannerData.state = SCANNER_STATE_SCANNING;
-                //scannerData.state = SCANNER_READ_WRITE;
+                //scannerData.state = SCANNER_STATE_SCANNING;
+                scannerData.state = SCANNER_READ_WRITE;
             }
             break;
         }
@@ -115,6 +113,11 @@ void SCANNER_Tasks ( void )
                     else if (rec.type == I2C)
                     {
                         // count colors 
+                        char buf[64];
+                        sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, rec.sync, rec.checksum, rec.signature, rec.xPos, "SCANNING ZONE");
+                        commSendMsgToUartQueue(buf);
+                        sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, rec.yPos, rec.width, rec.height, 69, "SCANNING ZONE");
+                        commSendMsgToUartQueue(buf);
                     }
                     else if (rec.type == TMR)
                     {
@@ -125,12 +128,13 @@ void SCANNER_Tasks ( void )
                     }
                 }
             }
+            break;
         }
         // Read color data over I2C
         case SCANNER_READ_WRITE:
         {
             // FAKE SENSOR DATA FOR TESTING
-            prevEdge = currXPos;
+            /*prevEdge = currXPos;
             if (zone == 1) {
                 red += 1;
             }
@@ -141,17 +145,10 @@ void SCANNER_Tasks ( void )
                 blue += 1;
             }
             DRV_ADC_Stop();
-            
-            scannerData.state = SCANNER_STATE_SCANNING;
-            
+            */
             // COLOR SENSING
-            /*pixyState = DRV_PIXY_HandleColors(scannerData.i2c_handle, pixyState);
-            
-            if (pixyState == I2C_SENT_MSG_TO_SCAN_QUEUE) {
-                
-                scannerData.state = SCANNER_STATE_SCANNING;
-                pixyState = I2C_WAIT_FOR_OPEN;
-            }*/
+            DRV_PIXY_HandleColors(scannerData.i2c_handle);
+            // scannerData.state = SCANNER_STATE_SCANNING;
             break;
         }
         default:

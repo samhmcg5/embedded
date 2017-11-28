@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"re",
+				"login_required"
+			],
+			[
+				"user",
+				"username"
+			],
+			[
+				"json",
+				"jsonify"
+			],
+			[
 				"scanner",
 				"scannerData"
 			],
@@ -158,10 +170,6 @@
 			[
 				"expected",
 				"expected_zone"
-			],
-			[
-				"json",
-				"json_obj"
 			],
 			[
 				"msg",
@@ -456,39 +464,30 @@
 	"buffers":
 	[
 		{
-			"file": "EricTesting/Test4.py",
+			"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Project/camera_rest.py",
 			"settings":
 			{
-				"buffer_size": 3366,
+				"buffer_size": 286,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "# Camera REST API"
+			}
+		},
+		{
+			"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Project/templates/test.html",
+			"settings":
+			{
+				"buffer_size": 316,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "EricTesting/Test5.py",
+			"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/ECE-4564-Project-3/services.py",
 			"settings":
 			{
-				"buffer_size": 3760,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "EricTesting/Test2.py",
-			"settings":
-			{
-				"buffer_size": 2309,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "EricTesting/test.py",
-			"settings":
-			{
-				"buffer_size": 1007,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"buffer_size": 2978,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -524,11 +523,39 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting"
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/ECE-4564-Project-3",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/ECE-4564-Project-3/__pycache__",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Project",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Project/templates"
 	],
 	"file_history":
 	[
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Project/html/test.html",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/ECE-4564-Project-3/services.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/ECE-4564-Project-3/services_test.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/ECE-4564-Project-3/services_fields.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/MATH4175/HW/HW10/results.txt",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/MATH4175/HW/HW10/MATH4175_EricSimpson_DavidDonaldson_NickVu_SourceCode/main4.java",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/MATH4175/HW/HW10/MATH4175_EricSimpson_DavidDonaldson_NickVu_SourceCode/main2.java",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/MATH4175/HW/HW10/MATH4175_EricSimpson_DavidDonaldson_NickVu_SourceCode/SPN.java",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/MATH4175/HW/HW10/main.java",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/test/services_fields.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/test/services.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/test/services_test.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database.py",
+		"/C/Users/Eric/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/flask_discoverer.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/MATH4175/HW/HW10/SPN.java",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/SPNtemp",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/maintemp",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/r.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/mygeoip.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/c.sh",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/test.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test5.py",
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test4.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/i2c.h",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/i2c.c",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/scanner.c",
@@ -549,8 +576,6 @@
 		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/system_config/pic32mx795_pim_e16_freertos/framework/system/ports/src/sys_ports_static.c",
 		"/C/microchip/harmony/v2_04/apps/examples/peripheral/i2c/i2c_interrupt/firmware/src/main.c",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test5Client.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test5.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test4.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test4Client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2Client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/client.py",
@@ -574,7 +599,6 @@
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/testphone.py",
 		"/C/Users/Eric/Documents/MobaXterm/slash/RemoteFiles/854072_2_1/database.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/project2_4564/database.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/EricTesting/Test2.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/communication_globals.h",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerSensePic/firmware/src/system_config/default/system_interrupt.c",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_threads.py",
@@ -593,7 +617,6 @@
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/debug.h",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/DeliverySensorPic/firmware/src/communication_globals.h",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/status_viewer.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/database.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/Testing/server_threads.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/ScannerNavPic/firmware/src/line_sensor.c",
@@ -636,10 +659,7 @@
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/tcp_echo_client.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/embedded/embedded/server/server_test.py",
 		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/MilestoneTwo/mongodb_connection.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Notes/echo_client_exception.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Notes/udp_echo_client.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Notes/tcp_echo_client.py",
-		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4534/Project/MilestoneTwo/echo_server_exception.py"
+		"/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Notes/echo_client_exception.py"
 	],
 	"find":
 	{
@@ -676,88 +696,30 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "EricTesting/Test4.py",
+					"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Project/camera_rest.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3366,
+						"buffer_size": 286,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3282,
-								3282
+								242,
+								242
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3771.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "EricTesting/Test5.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3760,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2693,
-								2693
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2718.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "EricTesting/Test2.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2309,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								971,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"auto_name": "# Camera REST API",
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -767,20 +729,48 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "EricTesting/test.py",
+					"buffer": 1,
+					"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/Project/templates/test.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1007,
+						"buffer_size": 316,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								928,
-								928
+								262,
+								262
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/Eric/OneDrive/2017/FALL2017/ECE4564/HW/ECE-4564-Project-3/services.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2978,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2978,
+								2930
 							]
 						],
 						"settings":
@@ -789,10 +779,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 808.0,
+						"translation.y": 2289.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -875,7 +865,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 525.0,
+	"side_bar_width": 625.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
