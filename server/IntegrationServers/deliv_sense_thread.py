@@ -23,12 +23,20 @@ class DelivSenseThread(ServerBaseThread):
         if self.recv_seq+1 != json_obj["SEQ"]:
             self.sendToStatus("ERROR: Unexpected sequence number", 4)
         self.recv_seq = json_obj["SEQ"]
-        
+		
         delivsense = json_obj[DELIV_SENSE]
-        # now take an action based on the data ...
-
+		# now take an action based on the data ...
+		
+		if DSF.tok_ir in delivsense.keys():
+            self.handleIR(delivsense)
+		#receiving current magnet state, and ir distance. Need to send message in format of 
         if DSF.tok_mag in delivsense.keys():
             self.handleMAG(delivsense)
-        elif DSF.tok_ir in delivsense.keys():
-            self.handleIT(delivsense)
+		json_mag = {DSF.crit_mag : delivsense[tok_mag]}
+		mag = self.srv.retrieve({DNF.crit_mag : {"$exists":True}}, self.srv.db.deliv_nav)
+		if((int(mag)) is not((int)json_mag)):
+			if((int)json_mag) is 1)
+				self.srv.sendmsg('{"SEQ": 0, "ACTION": 1}!')
+			else
+				self.srv.sendmsg('{"SEQ": 0, "ACTION": 0}!')
 

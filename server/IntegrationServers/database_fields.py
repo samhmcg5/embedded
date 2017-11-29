@@ -56,6 +56,7 @@ class DelivSenseFields:
     """
     "{\"SEQ\":%i,\"DELIV_SENSE\": { \"MAGNET\":%i}}!"
     "{\"SEQ\":%i,\"DELIV_SENSE\":{\"IRDIST\":%i,\"OBJ\":%i}}!"
+	"{\"SEQ\":%i,\"DELIV_SENSE\":{\"IRDIST\":%i,\"OBJ\":%i}}!"
     """
     col_name    = deliv_sense
     # master token for incoming JSON

@@ -100,7 +100,7 @@ void PERIPHERALS_Tasks(void) {
                         Nop();
                         if (objDist != 0) {
                             char buf[55];
-                            sprintf(buf, STR_IR_DISTANCE, outgoing_seq, objDist, objHeld);
+                            sprintf(buf, STR_IR_DISTANCE, outgoing_seq, objDist, magnet_state);
                             commSendMsgToUartQueue(buf);
                         }
                     } else {

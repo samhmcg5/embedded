@@ -37,7 +37,6 @@ typedef struct
 void PERIPHERALS_Initialize ( void );
 void PERIPHERALS_Tasks( void );
 
-int magnet_state;
 bool adc_state;
 int objDist;
 bool objHeld;
