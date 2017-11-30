@@ -29,8 +29,8 @@ class DelivNavThread(ServerBaseThread):
     positionSig   = pyqtSignal(dict)
     taskStatusSig = pyqtSignal(str)
     roverStateSig = pyqtSignal(int)
-    def __init__(self, ip, port, status_thread, vrb):
-        ServerBaseThread.__init__(self, ip, port, status_thread, vrb)
+    def __init__(self, ip, port, status_thread):
+        ServerBaseThread.__init__(self, ip, port, status_thread)
         self.name = "DelivNav"
         self.prev_task = "..."
         self.prev_zone = 2 # initialize to 2 so we start with zone 0
@@ -60,7 +60,7 @@ class DelivNavThread(ServerBaseThread):
                     # start the timer
                     self.send_time = time.time()
             except RuntimeError as err:
-                self.sendToStatus("ERROR: %s" % str(err), 3)
+                self.sendToStatus("ERROR: %s" % str(err))
         elif delivnav[DNF.tok_status] == 1: # TASK
             self.taskStatusSig.emit("Executing TASK: %s" % self.prev_task)
         elif delivnav[DNF.tok_status] == 2: # ACTION
@@ -74,7 +74,7 @@ class DelivNavThread(ServerBaseThread):
         mag = self.srv.retrieve({DSF.crit_mag : {"$exists":True}}, self.srv.db.deliv_sense)
         ir  = self.srv.retrieve({DSF.crit_ir : {"$exists":True}}, self.srv.db.deliv_sense)
         if mag and ir:
-            self.srv.sendmsg(DelivNavMsgs.data % (self.seq_num,mag,ir))
+            self.srv.sendmsg(DelivNavMsgs.data % (self.seq_num,mag['MAGNET'],ir['IRDIST']))
             self.seq_num += 1
 
     # INCOMING message handler
@@ -92,7 +92,7 @@ class DelivNavThread(ServerBaseThread):
             self.srv.sendmsg(msg)
             self.seq_num += 1
         except ConnectionError as err:
-            self.sendToStatus("ERROR: %s" % str(err), 5)
+            self.sendToStatus("ERROR: %s" % str(err))
 
     # helper function
     def generateNextTask(self):
@@ -135,7 +135,7 @@ class DelivNavThread(ServerBaseThread):
         if not DNF.token in json_obj:
            return
         if self.recv_seq+1 != json_obj["SEQ"]:
-            self.sendToStatus("ERROR: Unexpected sequence number", 3)
+            self.sendToStatus("ERROR: Unexpected sequence number")
         self.recv_seq = json_obj["SEQ"]
         # get the data out of it
         delivnav = json_obj[DNF.token]

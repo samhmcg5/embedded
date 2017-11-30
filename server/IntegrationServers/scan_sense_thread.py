@@ -8,8 +8,8 @@ class ScanSenseThread(ServerBaseThread):
     #           - second arg is a dict with the numbers .. {"R":0, "G":0, "B":0}
     # emit this signal when you finish scanning a zone ?
     zoneNumbersSignal = pyqtSignal(int, dict)
-    def __init__(self, ip, port, status_thread, vrb):
-        ServerBaseThread.__init__(self, ip, port, status_thread, vrb)
+    def __init__(self, ip, port, status_thread):
+        ServerBaseThread.__init__(self, ip, port, status_thread)
         self.name = "ScanSense"
         
     def sendStartMsg(self):
@@ -18,7 +18,7 @@ class ScanSenseThread(ServerBaseThread):
             self.srv.sendmsg(msg)
             self.seq_num += 1
         except ConnectionError as err:
-            self.sendToStatus("ERROR: %s" % str(err), 5)
+            self.sendToStatus("ERROR: %s" % str(err))
 
     def handleZONE(self, scansense):
         criteria = ""
@@ -29,7 +29,7 @@ class ScanSenseThread(ServerBaseThread):
         elif scansense[SSF.tok_zone] == 2:
             criteria = SSF.crit_zone_c
         else:
-            self.sendToStatus("ERROR: Bad zone data", 5)
+            self.sendToStatus("ERROR: Bad zone data")
             return
         json_obj  = {criteria : scansense}
         self.srv.store({criteria : {"$exists":True}}, json_obj, SSF.col_name)
@@ -40,7 +40,7 @@ class ScanSenseThread(ServerBaseThread):
            return
 
         if self.recv_seq+1 != json_obj["SEQ"]:
-            self.sendToStatus("ERROR: Unexpected sequence number", 3)
+            self.sendToStatus("ERROR: Unexpected sequence number")
         self.recv_seq = json_obj["SEQ"]
 
         scansense = json_obj[SSF.token]

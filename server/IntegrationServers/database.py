@@ -23,8 +23,8 @@ class Database():
         self.database = self.mongoclient[db.dbname]
         self.col_init()
 
-    def sendToStatus(self, msg, importance):
-        self.parent.sendToStatus(msg, importance)
+    def sendToStatus(self, msg):
+        self.parent.sendToStatus(msg)
 
     # Initialize collections with default storage fields
     def col_init(self):
@@ -45,7 +45,7 @@ class Database():
 
     # Connect to database
     def connect(self):
-        self.sendToStatus(db.INFO_DB_CONN_ATT, 1)
+        self.sendToStatus(db.INFO_DB_CONN_ATT)
         self.mongoclient = MongoClient(db.host, db.port, serverSelectionTimeoutMS=3000)
         try: 
             result = self.mongoclient.admin.command("ismaster")
@@ -53,7 +53,7 @@ class Database():
             self.dbonline = False
             raise ConnectionError(db.ERROR_DB_CONN)
         self.dbonline = True
-        self.sendToStatus(db.INFO_DB_CONN_SUC%(db.host,db.port), 3)
+        self.sendToStatus(db.INFO_DB_CONN_SUC%(db.host,db.port))
 
     # Disconnect from database
     def disconnect(self):
@@ -80,7 +80,7 @@ class Database():
     # Stores a JSON formatted object in the database
     # Return TRUE on successful store
     def store(self, criteria, json_obj, colName):
-        self.sendToStatus(db.INFO_DB_STORE_ATT % colName, 1)
+        self.sendToStatus(db.INFO_DB_STORE_ATT % colName)
         # Replace database field with given criteria with new json_obj data
         col = self.database[colName]
         res = col.replace_one(criteria, json_obj)
@@ -88,22 +88,22 @@ class Database():
         if res.matched_count == 0:
             res = col.insert_one(json_obj)
             if res.acknowledged == True:
-                self.sendToStatus("New entry %s in %s" % (str(json_obj),colName), 1)
+                self.sendToStatus("New entry %s in %s" % (str(json_obj),colName))
             else:
                 raise RuntimeError(db.ERROR_DB_STORE % colName, 4)
         else:
-            self.sendToStatus(db.INFO_DB_STORE_SUC % (str(json_obj),colName), 2)
+            self.sendToStatus(db.INFO_DB_STORE_SUC % (str(json_obj),colName))
         return True
 
     # Gets action message to respective pic
     def retrieve(self, criteria, colName):
-        self.sendToStatus(db.INFO_DB_RETR_ATT % colName, 1)
+        self.sendToStatus(db.INFO_DB_RETR_ATT % colName)
         # Find data in given collection matching specified criteria
         col = self.database[colName]
         doc = col.find_one(criteria)
         if doc:
             del doc['_id']
-            self.sendToStatus(db.INFO_DB_RETR_SUC % colName, 2)
+            self.sendToStatus(db.INFO_DB_RETR_SUC % colName)
         else:
-            self.sendToStatus(db.ERROR_DB_RETR % colName, 4)
+            self.sendToStatus(db.ERROR_DB_RETR % colName)
         return doc

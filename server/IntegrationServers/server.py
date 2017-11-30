@@ -22,8 +22,8 @@ class Server():
         self.srvonline      = False
         # Initialize message constants
 
-    def sendToStatus(self, msg, importance):
-        self.parent.sendToStatus(msg, importance)
+    def sendToStatus(self, msg):
+        self.parent.sendToStatus(msg)
 
     # DATABASE METHODS
     #--------------------------------------------------------------------
@@ -33,7 +33,7 @@ class Server():
             try:
                 self.db.connect()
             except ConnectionError as err:
-                self.sendToStatus(str(err), 4)
+                self.sendToStatus(str(err))
         self.db.db_init()
 
     # Close and reset database
@@ -63,7 +63,7 @@ class Server():
     def start(self):
         self.socket.bind((self.addr, self.port))
         self.socket.listen(self.backlog)
-        self.sendToStatus("Server is listening on %s:%s" % (self.addr, self.port), 5)
+        self.sendToStatus("Server is listening on %s:%s" % (self.addr, self.port))
 
     # Is server online
     def isSRVOnline(self):
@@ -71,21 +71,21 @@ class Server():
 
     # Connect to client
     def connect(self):
-        self.sendToStatus("Waiting for client connection ...", 5)
+        self.sendToStatus("Waiting for client connection ...")
         if self.isSRVOnline():
             raise ConnectionError("Server is already online")
         else:
             (self.client, self.client_addr) = self.socket.accept()
             self.srvonline = True   
-        self.sendToStatus("Client connected on %s:%s" % (self.addr, self.port), 5)
+        self.sendToStatus("Client connected on %s:%s" % (self.addr, self.port))
     
     # Disconnect from client
     def disconnect(self):
         if self.isSRVOnline():
-            self.sendToStatus("Attempting to disconnect ...", 3)
+            self.sendToStatus("Attempting to disconnect ...")
             self.socket.close()
             self.srvonline = False
-            self.sendToStatus("Disconnected ...", 5)
+            self.sendToStatus("Disconnected ...")
         else:
             raise ConnectionError("Server is offline")
 
@@ -101,10 +101,10 @@ class Server():
         if self.isSRVOnline():
             try:
                 ret = self.client.send( msg.encode() )
-                self.sendToStatus("Sent Message: %s" % msg, 2)
+                self.sendToStatus("Sent Message: %s" % msg)
             except ConnectionError:
                 self.srvonline = False
-                raise ConnectionError("Socket is disconnected!", 4)
+                raise ConnectionError("Socket is disconnected!")
         else:
             raise ConnectionError("Server is offline")
         return True

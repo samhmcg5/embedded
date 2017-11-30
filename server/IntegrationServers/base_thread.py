@@ -19,8 +19,7 @@ data such as storing it, doing some calculation, or sending data back to the pic
 
 class ServerBaseThread(QThread):
     statusSig = pyqtSignal(str,str)
-    def __init__(self, ip, port, status_thread, vrb):
-        self.vrb = vrb
+    def __init__(self, ip, port, status_thread):
         QThread.__init__(self)
         self.name = "BaseThread"
         self.srv  = Server(self, ip, port)
@@ -35,9 +34,8 @@ class ServerBaseThread(QThread):
     def connectSignals(self):
         self.statusSig.connect(self.status_thread.receiveMsg)
 
-    def sendToStatus(self, msg, importance):
-        if importance < self.vrb:
-            self.statusSig.emit(self.name, msg)
+    def sendToStatus(self, msg):
+        self.statusSig.emit(self.name, msg)
 
     # start the connection to the client
     def initClient(self):
@@ -61,11 +59,11 @@ class ServerBaseThread(QThread):
             if "*HELLO*" in buf:
                 buf = re.sub("\*HELLO\*","" , buf)
         buf = buf[:-1]
-        self.sendToStatus(str("Received: " + buf), 3)
+        self.sendToStatus(str("Received: " + buf))
         return buf
 
     def run(self):
-        self.sendToStatus("Thread Starting ...", 4)
+        self.sendToStatus("Thread Starting ...")
         # initialize the database connection
         self.srv.db_init()
         # Main processing loop :
@@ -82,7 +80,7 @@ class ServerBaseThread(QThread):
                         # handle the valid JSON object
                         self.handleJSON(json_obj)
                     else:
-                        self.sendToStatus("ERROR: Received bad JSON", 5)
+                        self.sendToStatus("ERROR: Received bad JSON")
                 except ConnectionError as err:
                         self.srv.reset()
                         # self.srv.db.clean()

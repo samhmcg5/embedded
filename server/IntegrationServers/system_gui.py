@@ -14,7 +14,7 @@ from styles import stylesheet
 FONT_SIZE = 18
 class SystemGui(QWidget):
     statusSig = qtc.pyqtSignal(str,str)
-    def __init__(self, status, dnt, dst, snt, sst, vrb):
+    def __init__(self, status, dnt, dst, snt, sst):
         super().__init__()
         self.name = "GUI"
         self.threads = {"Status"    : status,
@@ -23,11 +23,10 @@ class SystemGui(QWidget):
                         "ScanNav"   : snt,
                         "ScanSense" : sst
                        }
-        self.vrb = vrb
         self.initUI()
         self.setStyleSheet(stylesheet)
         self.connectSignals()
-        self.sendToStatus("Gui Initialized ...", 5)
+        self.sendToStatus("Gui Initialized ...")
         self.show()
         self.initDB()
 
@@ -61,8 +60,7 @@ class SystemGui(QWidget):
         self.db.store({GF.crit_zone_b : {"$exists":True}}, zoneB, GF.col_name)
         self.db.store({GF.crit_zone_c : {"$exists":True}}, zoneC, GF.col_name)
 
-    def sendToStatus(self, msg, importance):
-        if importance > self.vrb:
+    def sendToStatus(self, msg):
             self.statusSig.emit(self.name, msg)
 
     def storeQuotaInDB(self):

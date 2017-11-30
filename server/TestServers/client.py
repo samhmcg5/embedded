@@ -7,20 +7,20 @@ A simple echo client
 import socket
 
 host = '192.168.1.123'
-port = 2000
+port = 2003
 size = 1024
-filename = "client_log.txt"
-file = open(filename, 'w')
+# filename = "client_log.txt"
+# file = open(filename, 'w')
 count = 0;
 
-ZONE1_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
-ZONE1_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
+ZONE1_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
+ZONE1_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
 
-ZONE2_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
-ZONE2_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
+ZONE2_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
+ZONE2_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
 
-ZONE3_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 3, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
-ZONE3_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 3, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
+ZONE3_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
+ZONE3_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
 
 DELIV_NAV_STATUS_1 = '{ "SEQ": 0, "DELIV_NAV": { "STATUS": 0 } }!'
 DELIV_NAV_STATUS_2 = '{ "SEQ": 0, "DELIV_NAV": { "STATUS": 1 } }!'
@@ -37,7 +37,7 @@ msg_list = [ZONE1_DEFAULT_1, ZONE1_DEFAULT_2, ZONE2_DEFAULT_1, ZONE2_DEFAULT_2, 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((host,port))
 
-file.write("Connected to server: \n")
+print("Connected to server: \n")
 
 count = 1
 for msg in msg_list:
@@ -46,10 +46,10 @@ for msg in msg_list:
 
 while True:
 	msg_num = int(input("Message to send to server: "))
-	msg_num = msg_num - 1
+	#msg_num = msg_num - 1
 	json_str = msg_list[msg_num]
-	file.write("Sending to server: \n")
+	#file.write("Sending to server: \n")
 	s.send(json_str.encode())
-	data = s.recv(40)
-	print("Message received from server: ", data)
-file.close()
+	#data = s.recv(1024)
+	#print("Message received from server: ", data)
+# file.close()
