@@ -16,7 +16,7 @@ class DelivSenseThread(ServerBaseThread):
  
         mag = self.srv.retrieve({DNF.crit_mag : {"$exists":True}}, self.srv.db.deliv_nav)
         if mag:
-            print ("--> ", mag, json_mag)
+            # print ("--> ", mag, json_mag)
             self.srv.sendmsg('{"SEQ": 0, "ACTION": %i}!' % mag['SET_MAG'])
  
 

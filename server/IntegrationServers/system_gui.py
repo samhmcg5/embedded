@@ -43,6 +43,7 @@ class SystemGui(QWidget):
         self.quotaframe.sendButton.clicked.connect(self.storeQuotaInDB)
         # INCOMING signal from SCAN_SENSE
         self.threads["ScanSense"].zoneNumbersSignal.connect(self.currentnums.updateZone)
+        self.threads["DelivNav"].zoneNumbersSignal.connect(self.currentnums.updateZone)
         # OUTGOING to scan threads
         self.start.clicked.connect(self.threads['ScanSense'].sendStartMsg)
         self.start.clicked.connect(self.threads['ScanNav'].sendStartMsg)

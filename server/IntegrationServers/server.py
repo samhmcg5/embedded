@@ -11,7 +11,7 @@ class Server():
         self.addr           = addr
         self.port           = port
         self.size           = 1
-        self.backlog        = 1
+        self.backlog        = 5
         # Initialize database configuration settings
         self.db             = Database(self.parent)
         # Initialize client configuration settings
@@ -81,45 +81,47 @@ class Server():
     
     # Disconnect from client
     def disconnect(self):
-        if self.isSRVOnline():
-            self.sendToStatus("Attempting to disconnect ...")
-            self.socket.close()
-            self.srvonline = False
-            self.sendToStatus("Disconnected ...")
-        else:
-            raise ConnectionError("Server is offline")
+        # if self.isSRVOnline():
+        self.sendToStatus("Attempting to disconnect ...")
+        self.socket.close()
+        self.srvonline = False
+        self.sendToStatus("Disconnected ...")
+        # else:
+            # raise ConnectionError("Server is offline")
 
     # Reset server to inital settings
     def reset(self):
-        self.socket      = None
+        self.socket.close()
         self.client      = None
         self.client_addr = None
         self.srvonline   = False
 
     # Send message to client, returns true if successfully sent
     def sendmsg(self, msg):
-        if self.isSRVOnline():
+        # if self.isSRVOnline():
+        if self.client is not None:
             try:
                 ret = self.client.send( msg.encode() )
                 self.sendToStatus("Sent Message: %s" % msg)
             except ConnectionError:
                 self.srvonline = False
-                raise ConnectionError("Socket is disconnected!")
-        else:
-            raise ConnectionError("Server is offline")
+                raise ConnectionError("Socket is disconnected (send)!")
+        # else:
+        #     raise ConnectionError("Server is offline")
         return True
 
     # Receive message from client
     def recvmsg(self):
         data = None
-        if self.isSRVOnline():
+        # if self.isSRVOnline():
+        if self.client is not None:
             try:
                 data = self.client.recv(self.size).decode()
             except ConnectionError:
                 self.srvonline = False
-                raise ConnectionError("socket is disconnected!")
-        else:
-            raise ConnectionError("Server is offline")
+                raise ConnectionError("socket is disconnected (recv)!")
+        # else:
+        #     raise ConnectionError("Server is offline")
         return data 
 
     #--------------------------------------------------------------------

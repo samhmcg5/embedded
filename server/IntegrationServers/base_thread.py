@@ -29,6 +29,7 @@ class ServerBaseThread(QThread):
         self.connectSignals()
 
     def __del__(self):
+        print("--> DESTRUCTOR FOR ", self.name)
         self.wait()
 
     def connectSignals(self):
@@ -65,10 +66,12 @@ class ServerBaseThread(QThread):
     def run(self):
         self.sendToStatus("Thread Starting ...")
         # initialize the database connection
-        self.srv.db_init()
         # Main processing loop :
+        self.srv.db_init()
         while True:
+            print("--> WAITING FOR CLIENT CONNECTION", self.name)
             self.initClient()
+            print("--> CONNECTED", self.name)
             while True:
                 try:
                     # blocking read call
@@ -82,6 +85,7 @@ class ServerBaseThread(QThread):
                     else:
                         self.sendToStatus("ERROR: Received bad JSON")
                 except ConnectionError as err:
-                        self.srv.reset()
-                        # self.srv.db.clean()
-                        break
+                    print("--> RESETTING THE SOCKET", str(err), self.name)
+                    self.srv.reset()
+                    # self.srv.db.clean()
+                    break

@@ -1,4 +1,5 @@
 import socket
+from time import sleep
 
 host = '192.168.1.123'
 port = 2000
@@ -15,6 +16,10 @@ B = '{ "SEQ": 0, "DELIV_NAV": { "SET_MAGNET":1, "IR_DATA":1 } }!'
 MSGS = [A, B]
 
 while True:
-    msg_num = int(input("Message to send to server: "))
-    json_str = MSGS[msg_num]
-    s.send(json_str.encode())
+    #msg_num = int(input("Message to send to server: "))
+    #json_str = MSGS[msg_num]
+    #s.send(json_str.encode())
+    s.send(A.encode())
+    s.send(A.encode())
+    sleep(0.2)
+    

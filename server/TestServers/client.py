@@ -5,6 +5,7 @@ A simple echo client
 """
 
 import socket
+import time
 
 host = '192.168.1.123'
 port = 2003
@@ -52,4 +53,6 @@ while True:
 	s.send(json_str.encode())
 	#data = s.recv(1024)
 	#print("Message received from server: ", data)
+        #s.send(ZONE1_DEFAULT_1.encode())
+        #time.sleep(0.3)
 # file.close()

@@ -29,12 +29,14 @@ class DelivNavThread(ServerBaseThread):
     positionSig   = pyqtSignal(dict)
     taskStatusSig = pyqtSignal(str)
     roverStateSig = pyqtSignal(int)
+    zoneNumbersSignal = pyqtSignal(int, dict)
     def __init__(self, ip, port, status_thread):
         ServerBaseThread.__init__(self, ip, port, status_thread)
         self.name = "DelivNav"
         self.prev_task = "..."
         self.prev_zone = 2 # initialize to 2 so we start with zone 0
         self.send_time = 0
+        self.prev_set = None
 
 
     # INCOMING message handler
@@ -52,6 +54,7 @@ class DelivNavThread(ServerBaseThread):
             self.taskStatusSig.emit("Rover is IDLE")
             try:
                 task = self.generateNextTask()
+                self.prev_set = task
                 if task is not None:
                     self.srv.sendmsg(DelivNavMsgs.task % (self.seq_num, task[0], task[1]))
                     self.seq_num += 1
@@ -84,6 +87,37 @@ class DelivNavThread(ServerBaseThread):
         self.srv.store({DNF.crit_state : {"$exists":True}}, json_store, DNF.col_name)
         # tell the GUI what my state is
         self.roverStateSig.emit(delivnav[DNF.tok_state])
+        # update the database with new numbers
+        if delivnav[DNF.tok_state] in [5,6] and self.prev_set is not None:
+            print ("--> ", self.prev_set)
+            self.updateZoneData(self.prev_set[0], self.prev_set[1])
+            self.prev_set = None
+
+    def updateZoneData(self, color, zone):
+        criteria = ""
+        if zone == 0:
+            criteria = SSF.crit_zone_a
+        elif zone == 1:
+            criteria = SSF.crit_zone_b
+        elif zone == 2:
+            criteria = SSF.crit_zone_c
+        else:
+            return
+        data  = self.srv.retrieve({criteria : {"$exists":True}}, self.srv.db.scan_sense)
+        print ("--> ", zone, color, data)
+        if not data:
+            print ("--> ERROR")
+            return
+        if color == 0:
+            data[criteria]['RED'] += 1
+        elif color == 1:
+            data[criteria]['GREEN'] += 1
+        elif color == 2:
+            data[criteria]['BLUE'] += 1
+        self.srv.store({criteria : {"$exists":True}}, data, SSF.col_name)
+        self.zoneNumbersSignal.emit(zone, data[criteria])
+        print("--> ", data)
+
 
     # QT SLOT
     def transmitPosUpdate(self, x, y, ori):
@@ -106,11 +140,11 @@ class DelivNavThread(ServerBaseThread):
         zone = prev+1 if prev<2 else 0
         for i in range(3):
             for color in diffs[zone].keys():
-                print(zone, color, diffs[zone][color])
+                # print(zone, color, diffs[zone][color])
                 if diffs[zone][color] < 0:
                     if color == "RED":
                         color = 0
-                    elif color == "BLUE":
+                    elif color == "GREEN":
                         color = 1
                     else:
                         color = 2
