@@ -1,5 +1,6 @@
 from base_thread import ServerBaseThread
 from database_fields import ScanSenseFields as SSF
+from database_fields import ScanNavFields as SNF
 from PyQt5.QtCore import pyqtSignal
 import time
 
@@ -12,14 +13,6 @@ class ScanSenseThread(ServerBaseThread):
         ServerBaseThread.__init__(self, ip, port, status_thread)
         self.name = "ScanSense"
         
-    def sendStartMsg(self):
-        try:
-            msg = "START MESSAGE..."
-            self.srv.sendmsg(msg)
-            self.seq_num += 1
-        except ConnectionError as err:
-            self.sendToStatus("ERROR: %s" % str(err))
-
     def handleZONE(self, scansense):
         criteria = ""
         if scansense[SSF.tok_zone] == 0:
@@ -35,6 +28,7 @@ class ScanSenseThread(ServerBaseThread):
         self.srv.store({criteria : {"$exists":True}}, json_obj, SSF.col_name)
         self.zoneNumbersSignal.emit(scansense[SSF.tok_zone], scansense)
 
+
     def handleJSON(self, json_obj):
         if not SSF.token in json_obj:
            return
@@ -46,7 +40,23 @@ class ScanSenseThread(ServerBaseThread):
         scansense = json_obj[SSF.token]
         # now take an action based on the data ...
         
-        if SSF.tok_zone in scansense:
-            self.handleZONE(scansense)
+        if SSF.tok_zone and SSF.tok_type in scansense:
+            if SSF.tok_type == "FINISHED ZONE":
+                self.handleZONE(scansense)
+            else:
+                action = 2 # continue scanning
+                xpos = self.srv.retrieve({SNF.crit_dist, {"$exists":True}}, self.srv.db.scan_nav)
+                zone = 0
+                if xpos:
+                    if xpos < 40:
+                        zone = 1
+                    elif xpos >= 40 and xpos < 80:
+                        zone = 2
+                    elif xpos >= 80 and < 120:
+                        zone = 3 
+                if zone != 0 and action == 2:
+                    self.srv.sendmsg(ScanSenseMsgs.updated_pos % (self.seq_num, zone, action, xpos))
+                    self.seq_num += 1
 
-        
+class ScanSenseMsgs:
+    updated_pos = "{\"seq\":%i, \"ZONE\":%i, \"ACTION\":%i, \"XPOS\":%i}"  
