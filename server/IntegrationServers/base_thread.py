@@ -69,9 +69,9 @@ class ServerBaseThread(QThread):
         # Main processing loop :
         self.srv.db_init()
         while True:
-            print("--> WAITING FOR CLIENT CONNECTION", self.name)
+            # print("--> WAITING FOR CLIENT CONNECTION", self.name)
             self.initClient()
-            print("--> CONNECTED", self.name)
+            # print("--> CONNECTED", self.name)
             while True:
                 try:
                     # blocking read call
@@ -85,7 +85,7 @@ class ServerBaseThread(QThread):
                     else:
                         self.sendToStatus("ERROR: Received bad JSON")
                 except ConnectionError as err:
-                    print("--> RESETTING THE SOCKET", str(err), self.name)
+                    # print("--> RESETTING THE SOCKET", str(err), self.name)
                     self.srv.reset()
                     # self.srv.db.clean()
                     break

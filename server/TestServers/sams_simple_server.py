@@ -20,12 +20,12 @@ client, address = s.accept()
 print("Connected to WiFly:")
 
 while True:
-    for line in f:
-        if not '#' in line:
-           client.send(line.encode())
+    #for line in f:
+    #    if not '#' in line:
+    #       client.send(line.encode())
 
-#    msg = input("Enter Message: ")
-#    client.send(msg.encode())
+    msg = input("Enter Message: ")
+    client.send(str(msg).encode())
 
     while data != '!':
         data = client.recv(size).decode()

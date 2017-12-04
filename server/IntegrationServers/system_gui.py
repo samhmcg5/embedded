@@ -73,6 +73,7 @@ class SystemGui(QWidget):
         self.db.store({GF.crit_zone_a : {"$exists":True}}, zoneA, GF.col_name)
         self.db.store({GF.crit_zone_b : {"$exists":True}}, zoneB, GF.col_name)
         self.db.store({GF.crit_zone_c : {"$exists":True}}, zoneC, GF.col_name)
+        # self.threads['DelivNav'].generateNextTask()
 
 
     def handleDelivRoverState(self, state):

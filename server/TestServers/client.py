@@ -8,6 +8,8 @@ import socket
 import time
 
 host = '192.168.1.123'
+#host = 'localhost'
+
 port = 2003
 size = 1024
 # filename = "client_log.txt"

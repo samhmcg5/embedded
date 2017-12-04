@@ -25,6 +25,9 @@ All outgoing data is taken care of in the handleX() functions...
 
 """
 
+COLORS = ["RED", "GREEN", "BLUE"]
+ZONES  = ["ONE", "TWO", "THREE"]
+
 class DelivNavThread(ServerBaseThread):
     positionSig   = pyqtSignal(dict)
     taskStatusSig = pyqtSignal(str)
@@ -56,10 +59,10 @@ class DelivNavThread(ServerBaseThread):
                 task = self.generateNextTask()
                 self.prev_set = task
                 if task is not None:
-                    self.srv.sendmsg(DelivNavMsgs.task % (self.seq_num, task[0], task[1]))
+                    self.srv.sendmsg(DelivNavMsgs.task % (self.seq_num, task[1], task[0]))
                     self.seq_num += 1
                     self.prev_zone = task[0]
-                    self.prev_task = DelivNavMsgs.prev_task_str % (task[0],task[1])
+                    self.prev_task = DelivNavMsgs.prev_task_str % (COLORS[task[1]],ZONES[task[0]])
                     # start the timer
                     self.send_time = time.time()
             except RuntimeError as err:
@@ -89,8 +92,8 @@ class DelivNavThread(ServerBaseThread):
         self.roverStateSig.emit(delivnav[DNF.tok_state])
         # update the database with new numbers
         if delivnav[DNF.tok_state] in [5,6] and self.prev_set is not None:
-            print ("--> ", self.prev_set)
-            self.updateZoneData(self.prev_set[0], self.prev_set[1])
+            # print ("--> ", self.prev_set)
+            self.updateZoneData(self.prev_set[1], self.prev_set[0])
             self.prev_set = None
 
     def updateZoneData(self, color, zone):
@@ -104,9 +107,9 @@ class DelivNavThread(ServerBaseThread):
         else:
             return
         data  = self.srv.retrieve({criteria : {"$exists":True}}, self.srv.db.scan_sense)
-        print ("--> ", zone, color, data)
+        # print ("--> ", zone, color, data)
         if not data:
-            print ("--> ERROR")
+            # print ("--> ERROR")
             return
         if color == 0:
             data[criteria]['RED'] += 1
@@ -116,7 +119,7 @@ class DelivNavThread(ServerBaseThread):
             data[criteria]['BLUE'] += 1
         self.srv.store({criteria : {"$exists":True}}, data, SSF.col_name)
         self.zoneNumbersSignal.emit(zone, data[criteria])
-        print("--> ", data)
+        # print("--> ", data)
 
 
     # QT SLOT
@@ -140,7 +143,7 @@ class DelivNavThread(ServerBaseThread):
         zone = prev+1 if prev<2 else 0
         for i in range(3):
             for color in diffs[zone].keys():
-                # print(zone, color, diffs[zone][color])
+                # print("-->", zone, color, diffs[zone][color])
                 if diffs[zone][color] < 0:
                     if color == "RED":
                         color = 0
