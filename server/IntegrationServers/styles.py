@@ -1,3 +1,5 @@
+# Adapted from:
+# https://github.com/martinrotter/qt-material-stylesheet/blob/master/stylesheets/material-blue.qss
 stylesheet = """
 QWidget:window {                    /* Borders around the code editor and debug window */
     border: 0px solid #263238;
