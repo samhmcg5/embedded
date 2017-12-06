@@ -2,9 +2,17 @@ from base_thread import ServerBaseThread
 from database_fields import ScanNavFields as SNF
 
 class ScanNavThread(ServerBaseThread):
-    def __init__(self, ip, port, status_thread):
-        ServerBaseThread.__init__(self, ip, port, status_thread)
+    def __init__(self, ip, port, status_thread, vrb):
+        ServerBaseThread.__init__(self, ip, port, status_thread, vrb)
         self.name = "ScanNav"
+
+    def sendStartMsg(self):
+        try:
+            msg = "START MESSAGE..."
+            self.srv.sendmsg(msg)
+            self.seq_num += 1
+        except ConnectionError as err:
+            self.sendToStatus("ERROR: %s" % str(err), 5)
 
     # store the distance and state into Mongo
     def handleDIST(self, scannav):
@@ -18,7 +26,7 @@ class ScanNavThread(ServerBaseThread):
            return
 
         if self.recv_seq+1 != json_obj["SEQ"]:
-            self.sendToStatus("ERROR: Unexpected sequence number")
+            self.sendToStatus("ERROR: Unexpected sequence number", 3)
         self.recv_seq = json_obj["SEQ"]
 
         scannav = json_obj[SCAN_NAV]
