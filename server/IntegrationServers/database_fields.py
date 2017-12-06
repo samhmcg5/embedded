@@ -97,7 +97,7 @@ class ScanSenseFields:
     tok_r       = "RED"
     tok_g       = "GREEN"
     tok_b       = "BLUE"
-    top_type    = "MSGTYPE"
+    tok_type    = "MSGTYPE"
     # search criteria dicts
     crit_zone_a = 'zone_a'
     crit_zone_b = 'zone_b'

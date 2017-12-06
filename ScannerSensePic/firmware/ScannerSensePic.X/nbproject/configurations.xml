@@ -14,7 +14,7 @@
         <logicalFolder name="f3" displayName="scan" projectFiles="true">
           <itemPath>../src/scan_globals.h</itemPath>
           <itemPath>../src/scanner.h</itemPath>
-          <itemPath>../src/i2c.h</itemPath>
+          <itemPath>../src/pixy.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="system_config" projectFiles="true">
           <logicalFolder name="f1" displayName="default" projectFiles="true">
@@ -50,17 +50,7 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">
-          <logicalFolder name="f1" displayName="i2c" projectFiles="true">
-            <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_local.h</itemPath>
-              <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_variant_mapping.h</itemPath>
-            </logicalFolder>
-            <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c.h</itemPath>
-            <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_device_pic32m.h</itemPath>
-            <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_compatibility.h</itemPath>
-            <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_mapping.h</itemPath>
-          </logicalFolder>
-          <logicalFolder name="f2" displayName="tmr" projectFiles="true">
+          <logicalFolder name="f1" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
@@ -69,7 +59,7 @@
             <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
             <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f3" displayName="usart" projectFiles="true">
+          <logicalFolder name="f2" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
             </logicalFolder>
@@ -158,7 +148,7 @@
         </logicalFolder>
         <logicalFolder name="f4" displayName="scan" projectFiles="true">
           <itemPath>../src/scanner.c</itemPath>
-          <itemPath>../src/i2c.c</itemPath>
+          <itemPath>../src/pixy.c</itemPath>
         </logicalFolder>
         <logicalFolder name="f1" displayName="system_config" projectFiles="true">
           <logicalFolder name="f1" displayName="default" projectFiles="true">
@@ -213,21 +203,12 @@
         <itemPath>../src/main.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
-        <logicalFolder name="f1" displayName="driver" projectFiles="true">
-          <logicalFolder name="f1" displayName="i2c" projectFiles="true">
-            <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <logicalFolder name="f1" displayName="dynamic" projectFiles="true">
-                <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/driver/i2c/src/dynamic/drv_i2c.c</itemPath>
-              </logicalFolder>
-            </logicalFolder>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="f2" displayName="osal" projectFiles="true">
+        <logicalFolder name="f1" displayName="osal" projectFiles="true">
           <logicalFolder name="f1" displayName="src" projectFiles="true">
             <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/osal/src/osal_freertos.c</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <logicalFolder name="f3" displayName="system" projectFiles="true">
+        <logicalFolder name="f2" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="int" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../../../../../../../microchip/harmony/v2_04/framework/system/int/src/sys_int_pic32.c</itemPath>

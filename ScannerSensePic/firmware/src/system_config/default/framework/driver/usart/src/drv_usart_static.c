@@ -418,6 +418,368 @@ DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART0_LineControlSet(DRV_USART_LINE_CONTR
     return(DRV_USART_LINE_CONTROL_SET_SUCCESS);
 }
 
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Global Data
+// *****************************************************************************
+// *****************************************************************************
+
+/* This is the driver static object . */
+DRV_USART_OBJ  gDrvUSART1Obj ;
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Instance 1 static driver functions
+// *****************************************************************************
+// *****************************************************************************
+
+SYS_MODULE_OBJ DRV_USART1_Initialize(void)
+{
+    uint32_t clockSource;
+
+    DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
+    dObj = &gDrvUSART1Obj;
+
+    /* Disable the USART module to configure it*/
+    PLIB_USART_Disable (USART_ID_2);
+
+    /* Create the hardware instance mutex. */
+    if(OSAL_MUTEX_Create(&(dObj->mutexDriverInstance)) != OSAL_RESULT_TRUE)
+    {
+        return SYS_MODULE_OBJ_INVALID;
+    }
+
+    /* Initialize the USART based on configuration settings */
+    PLIB_USART_InitializeModeGeneral(USART_ID_2,
+            false,  /*Auto baud*/
+            false,  /*LoopBack mode*/
+            false,  /*Auto wakeup on start*/
+            false,  /*IRDA mode*/
+            false);  /*Stop In Idle mode*/
+
+    /* Set the line control mode */
+    PLIB_USART_LineControlModeSelect(USART_ID_2, DRV_USART_LINE_CONTROL_8NONE1);
+
+    /* We set the receive interrupt mode to receive an interrupt whenever FIFO
+       is not empty */
+    PLIB_USART_InitializeOperation(USART_ID_2,
+            USART_RECEIVE_FIFO_ONE_CHAR,
+            USART_TRANSMIT_FIFO_IDLE,
+            USART_ENABLE_TX_RX_USED);
+
+    /* Get the USART clock source value*/
+    clockSource = SYS_CLK_PeripheralFrequencyGet ( CLK_BUS_PERIPHERAL_1 );
+
+    /* Set the baud rate and enable the USART */
+    PLIB_USART_BaudSetAndEnable(USART_ID_2,
+            clockSource,
+            19200);  /*Desired Baud rate value*/
+
+    /* Clear the interrupts to be on the safer side*/
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_TRANSMIT);
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_RECEIVE);
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_ERROR);
+
+    /* Enable the error interrupt source */
+    SYS_INT_SourceEnable(INT_SOURCE_USART_2_ERROR);
+
+    /* Enable the Receive interrupt source */
+    SYS_INT_SourceEnable(INT_SOURCE_USART_2_RECEIVE);
+
+    /* Return the driver instance value*/
+    return (SYS_MODULE_OBJ)DRV_USART_INDEX_1;
+}
+
+void  DRV_USART1_Deinitialize(void)
+{
+    bool status;
+    DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
+
+    dObj = &gDrvUSART1Obj;
+
+    /* Deallocate all mutexes */
+    if(OSAL_MUTEX_Delete(&(dObj->mutexDriverInstance)) != OSAL_RESULT_TRUE)
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Mutex Delete Failed");
+        return;
+    }
+
+    /* Disable the interrupts */
+    status = SYS_INT_SourceDisable(INT_SOURCE_USART_2_TRANSMIT) ;
+    status = SYS_INT_SourceDisable(INT_SOURCE_USART_2_RECEIVE) ;
+    status = SYS_INT_SourceDisable(INT_SOURCE_USART_2_ERROR);
+    /* Ignore the warning */
+    (void)status;
+
+    /* Disable USART module */
+    PLIB_USART_Disable (USART_ID_2);
+
+}
+
+
+SYS_STATUS DRV_USART1_Status(void)
+{
+    /* Return the status as ready always */
+    return SYS_STATUS_READY;
+}
+
+
+void DRV_USART1_TasksTransmit(void)
+{
+    /* This is the USART Driver Transmit tasks routine.
+       In this function, the driver checks if a transmit
+       interrupt is active and performs respective action*/
+
+    /* Reading the transmit interrupt flag */
+    if(SYS_INT_SourceStatusGet(INT_SOURCE_USART_2_TRANSMIT))
+    {
+        /* Disable the interrupt, to avoid calling ISR continuously*/
+        SYS_INT_SourceDisable(INT_SOURCE_USART_2_TRANSMIT);
+
+        /* Clear up the interrupt flag */
+        SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_TRANSMIT);
+    }
+}
+
+void DRV_USART1_TasksReceive(void)
+{
+    /* This is the USART Driver Receive tasks routine. If the receive
+       interrupt flag is set, the tasks routines are executed.
+     */
+
+    /* Reading the receive interrupt flag */
+    if(SYS_INT_SourceStatusGet(INT_SOURCE_USART_2_RECEIVE))
+    {
+
+        /* Clear up the interrupt flag */
+        SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_RECEIVE);
+    }
+}
+
+
+void DRV_USART1_TasksError(void)
+{
+    /* This is the USART Driver Error tasks routine. In this function, the
+     * driver checks if an error interrupt has occurred. If so the error
+     * condition is cleared.  */
+
+    /* Reading the error interrupt flag */
+    if(SYS_INT_SourceStatusGet(INT_SOURCE_USART_2_ERROR))
+    {
+        /* This means an error has occurred */
+        /* Clear up the error interrupt flag */
+        SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_ERROR);
+    }
+}
+
+DRV_HANDLE DRV_USART1_Open(const SYS_MODULE_INDEX index, const DRV_IO_INTENT ioIntent)
+{
+
+    /* Return the driver instance value*/
+    return ((DRV_HANDLE)DRV_USART_INDEX_1 );
+}
+
+void DRV_USART1_Close(void)
+{
+    return;
+}
+
+DRV_USART_CLIENT_STATUS DRV_USART1_ClientStatus(void)
+{
+    /* Return the status as ready always*/
+    return DRV_USART_CLIENT_STATUS_READY;
+}
+
+DRV_USART_TRANSFER_STATUS DRV_USART1_TransferStatus( void )
+{
+    DRV_USART_TRANSFER_STATUS result = 0;
+
+    /* Check if RX data available */
+    if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_2))
+    {
+        result|= DRV_USART_TRANSFER_STATUS_RECEIVER_DATA_PRESENT;
+    }
+    else
+    {
+        result|= DRV_USART_TRANSFER_STATUS_RECEIVER_EMPTY;
+    }
+
+    /* Check if TX Buffer is empty */
+    if(PLIB_USART_TransmitterIsEmpty(USART_ID_2))
+    {
+        result|= DRV_USART_TRANSFER_STATUS_TRANSMIT_EMPTY;
+    }
+
+    /* Check if the TX buffer is full */
+    if(PLIB_USART_TransmitterBufferIsFull(USART_ID_2))
+    {
+        result|= DRV_USART_TRANSFER_STATUS_TRANSMIT_FULL;
+    }
+
+    return(result);
+}
+
+DRV_USART_ERROR DRV_USART1_ErrorGet(void)
+{
+    DRV_USART_ERROR error;
+    error = gDrvUSART1Obj.error;
+
+    /* Clear the error before returning */
+    gDrvUSART1Obj.error = DRV_USART_ERROR_NONE;
+
+    /* Return the error*/
+    return(error);
+}
+
+
+void _DRV_USART1_ErrorConditionClear()
+{
+    uint8_t dummyData = 0u;
+    /* RX length = (FIFO level + RX register) */
+    uint8_t RXlength = _DRV_USART_RX_DEPTH;
+
+    /* If it's a overrun error then clear it to flush FIFO */
+    if(USART_ERROR_RECEIVER_OVERRUN & PLIB_USART_ErrorsGet(USART_ID_2))
+    {
+        PLIB_USART_ReceiverOverrunErrorClear(USART_ID_2);
+    }
+
+    /* Read existing error bytes from FIFO to clear parity and framing error flags*/
+    while( (USART_ERROR_PARITY | USART_ERROR_FRAMING) & PLIB_USART_ErrorsGet(USART_ID_2) )
+    {
+        dummyData = PLIB_USART_ReceiverByteReceive(USART_ID_2);
+        RXlength--;
+
+        /* Try to flush error bytes for one full FIFO and exit instead of
+         * blocking here if more error bytes are received*/
+        if(0u == RXlength)
+        {
+            break;
+        }
+    }
+
+    /* Ignore the warning */
+    (void)dummyData;
+
+    /* Clear error interrupt flag */
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_ERROR);
+
+    /* Clear up the receive interrupt flag so that RX interrupt is not
+     * triggered for error bytes*/
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_2_RECEIVE);
+}
+
+
+
+DRV_USART_BAUD_SET_RESULT DRV_USART1_BaudSet(uint32_t baud)
+{
+    uint32_t clockSource;
+    int32_t brgValueLow=0;
+    int32_t brgValueHigh=0;
+    DRV_USART_BAUD_SET_RESULT retVal = DRV_USART_BAUD_SET_SUCCESS;
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+    bool isEnabled = false;
+#endif
+
+    /* Making this function thread safe */
+    if(OSAL_MUTEX_Lock(&(gDrvUSART1Obj.mutexDriverInstance), OSAL_WAIT_FOREVER) == OSAL_RESULT_TRUE)
+    {
+        /* We were able to take the mutex */
+    }
+    else
+    {
+        /* The mutex timed out */
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Hardware instance mutex time out in DRV_USART_BaudSet() function");
+        return(DRV_USART_BAUD_SET_ERROR);
+    }
+
+    /* Get the USART clock source value*/
+    clockSource = SYS_CLK_PeripheralFrequencyGet ( CLK_BUS_PERIPHERAL_1 );
+
+    /* Calculate low and high baud values */
+    brgValueLow  = ( (clockSource/baud) >> 4 ) - 1;
+    brgValueHigh = ( (clockSource/baud) >> 2 ) - 1;
+
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+        isEnabled = PLIB_USART_ModuleIsBusy (USART_ID_2);
+        if (isEnabled)
+        {
+            PLIB_USART_Disable (USART_ID_2);
+            while (PLIB_USART_ModuleIsBusy (USART_ID_2));
+        }
+#endif
+
+    /* Check if the baud value can be set with high baud settings */
+    if ((brgValueHigh >= 0) && (brgValueHigh <= UINT16_MAX))
+    {
+        PLIB_USART_BaudRateHighEnable(USART_ID_2);
+        PLIB_USART_BaudRateHighSet(USART_ID_2,clockSource,baud);
+    }
+
+    /* Check if the baud value can be set with low baud settings */
+    else if ((brgValueLow >= 0) && (brgValueLow <= UINT16_MAX))
+    {
+        PLIB_USART_BaudRateHighDisable(USART_ID_2);
+        PLIB_USART_BaudRateSet(USART_ID_2, clockSource, baud);
+    }
+    else
+    {
+            retVal = DRV_USART_BAUD_SET_ERROR;
+    }
+
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+    if (isEnabled)
+    {
+        PLIB_USART_Enable (USART_ID_2);
+    }
+#endif
+    /* Unlock Mutex */
+    OSAL_MUTEX_Unlock(&(gDrvUSART1Obj.mutexDriverInstance));
+
+    return retVal;
+}
+
+
+DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART1_LineControlSet(DRV_USART_LINE_CONTROL lineControlMode)
+{
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+    bool isEnabled = false;
+#endif
+    /* Making this function thread safe */
+    if(OSAL_MUTEX_Lock(&(gDrvUSART1Obj.mutexDriverInstance), OSAL_WAIT_FOREVER) == OSAL_RESULT_TRUE)
+    {
+        /* We were able to take the mutex */
+    }
+    else
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "\r\nUSART Driver: Hardware Instance Mutex time out in DRV_USART_LineControlSet() function");
+        return DRV_USART_LINE_CONTROL_SET_ERROR;
+    }
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+        isEnabled = PLIB_USART_ModuleIsBusy (USART_ID_2);
+        if (isEnabled)
+        {
+            PLIB_USART_Disable (USART_ID_2);
+            while (PLIB_USART_ModuleIsBusy (USART_ID_2));
+        }
+#endif
+
+    /* Set the Line Control Mode */
+    PLIB_USART_LineControlModeSelect(USART_ID_2, lineControlMode);
+
+#if defined (PLIB_USART_ExistsModuleBusyStatus)
+        if (isEnabled)
+        {
+            PLIB_USART_Enable (USART_ID_2);
+        }
+#endif
+    OSAL_MUTEX_Unlock(&(gDrvUSART1Obj.mutexDriverInstance));
+
+    /* Return success */
+    return(DRV_USART_LINE_CONTROL_SET_SUCCESS);
+}
+
 /*******************************************************************************
  End of File
 */

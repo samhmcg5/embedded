@@ -45,6 +45,7 @@ def main():
 		# Receive messages from client
 		buf = ""
 		while '!' not in buf:
+			#print(buf)
 			buf += s.recvmsg()
 			if "*HELLO*" in buf:
 				buf = ""

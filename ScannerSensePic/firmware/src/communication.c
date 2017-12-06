@@ -82,10 +82,10 @@ struct scanQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
 
     if(r == 9) // incoming message is correct length 
     {
-        out.type = INFO;
-        out.action = getIntFromKey(t[6]);
+        out.type = COMM;
         out.zone = getIntFromKey(t[4]);
-        out.x = getIntFromKey(t[8]);
+        out.action = getIntFromKey(t[6]);
+        out.xPos = getIntFromKey(t[8]);
     }
     else // ERROR
     {

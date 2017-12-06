@@ -12,7 +12,7 @@ DRV_I2C_BUFFER_EVENT DRV_PIXY_CheckTransferStatus(DRV_HANDLE i2c_handle, DRV_I2C
 // Return block data of Pixy Cam 
 DRV_I2C_BUFFER_HANDLE DRV_PIXY_GetBlocks(DRV_HANDLE i2c_handle, unsigned char data[14])
 {
-    DRV_I2C_BUFFER_HANDLE buffer_handle = DRV_I2C_TransmitThenReceive(i2c_handle, PIXY_SLAVE_ADDRESS << 1, PIXY_SLAVE_ADDRESS << 1, 1, data, PIXY_NUM_OF_BYTES, NULL);
+    DRV_I2C_BUFFER_HANDLE buffer_handle = DRV_I2C_TransmitThenReceive(i2c_handle, PIXY_SLAVE_ADDRESS, PIXY_SLAVE_ADDRESS, 1, data, PIXY_NUM_OF_BYTES, NULL);
     return buffer_handle;
 }
 
@@ -37,7 +37,6 @@ int DRV_PIXY_HandleColors(DRV_HANDLE i2c_handle)
         }
         case I2C_SEND_READ_COLOR_DATA:
         {
-            Nop();
             DRV_I2C_BUFFER_EVENT status;
             if (buffer_handle != NULL)
             {
@@ -53,20 +52,30 @@ int DRV_PIXY_HandleColors(DRV_HANDLE i2c_handle)
         }
         case I2C_WAIT_FOR_TRANSFER_TO_COMPLETE:
         {
-            Nop();
             DRV_I2C_BUFFER_EVENT status = DRV_PIXY_CheckTransferStatus(i2c_handle, buffer_handle);   
             if(status == DRV_I2C_BUFFER_EVENT_COMPLETE || status == DRV_I2C_BUFFER_EVENT_ERROR)
             {
+                Nop();
                 // Continue to next state if transfer is complete
                 state = I2C_FINISH_READ_COLOR_DATA;
             }
+            if (status == DRV_I2C_BUFFER_EVENT_PENDING)
+            {
+                Nop();
+            }
+            
             break;
         }
         case I2C_FINISH_READ_COLOR_DATA:
         {
+            Nop();
             DRV_I2C_BUFFER_EVENT status = DRV_PIXY_CheckTransferStatus(i2c_handle, buffer_handle);
+            char buf[64];
+            sprintf(buf, STR_UPDATE_ZONE_QUOTAS, 0, 0, 0, 0, 0, "SCANNING ZONE");
+            commSendMsgToUartQueue(buf);    
             if(status == DRV_I2C_BUFFER_EVENT_COMPLETE || status == DRV_I2C_BUFFER_EVENT_ERROR)
             {
+                
                 unsigned int sync = Block[0] | (Block[1] << 8);
                 unsigned int checksum = Block[2] | (Block[3] << 8);
                 unsigned int signature = Block[4] | (Block[5] << 8);
@@ -75,7 +84,6 @@ int DRV_PIXY_HandleColors(DRV_HANDLE i2c_handle)
                 unsigned int width = Block[10] | (Block[11] << 8);
                 unsigned int height = Block[12] | (Block[13] << 8);
                 
-                char buf[64];
                 sprintf(buf, STR_UPDATE_ZONE_QUOTAS, sync, checksum, signature, x, 70, "SCANNING ZONE");
                 commSendMsgToUartQueue(buf);
                 sprintf(buf, STR_UPDATE_ZONE_QUOTAS, y, width, height, x, 70, "SCANNING ZONE");
@@ -92,10 +100,8 @@ int DRV_PIXY_HandleColors(DRV_HANDLE i2c_handle)
                 msg.height = height;*/
                 //sendMsgToScanQ(msg);
                 state = I2C_WAIT_FOR_OPEN;
-                return 1;
             }
             break;
         }
-        return -1;
     }
 }
