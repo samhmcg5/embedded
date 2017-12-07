@@ -2,10 +2,14 @@
 #define	SCAN_GLOBALS_H
 
 // action to be taken by sensing unit
-#define INFO    0
+#define COMM    0
 #define ADC     1
-#define I2C     2
-#define TMR     3
+#define TMR     2
+#define UART    3
+
+// distance threshold of colored blocks
+#define OBJ_DISTANCE 10.0
+#define OBJ_WIDTH    12
 
 // data inside scanners incoming queue
 struct scanQueueData
@@ -13,8 +17,15 @@ struct scanQueueData
     char type;
     unsigned int action;
     unsigned int zone;
-    unsigned int dist;
-    unsigned int x;
+    unsigned int xPos;
+    double dist;
+    unsigned int sync;
+    unsigned int checksum;
+    unsigned int signature;
+    unsigned int objX;
+    unsigned int objY;
+    unsigned int objWidth;
+    unsigned int objHeight;
 };
 
 // incoming scan queue
@@ -24,6 +35,7 @@ void sendMsgToScanQ(struct scanQueueData msg);
 
 void sendMsgToScanQFromISR(struct scanQueueData msg);
 
+// for use in ADC ISR
 double voltsToCm(double volts);
 
 #endif	/* SCAN_GLOBALS_H */

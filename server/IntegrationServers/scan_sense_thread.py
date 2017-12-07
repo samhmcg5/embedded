@@ -15,18 +15,18 @@ class ScanSenseThread(ServerBaseThread):
         
     def handleZONE(self, scansense):
         criteria = ""
-        if scansense[SSF.tok_zone] == 0:
+        if scansense[SSF.tok_zone]-1 == 0:
             criteria = SSF.crit_zone_a
-        elif scansense[SSF.tok_zone] == 1:
+        elif scansense[SSF.tok_zone]-1 == 1:
             criteria = SSF.crit_zone_b
-        elif scansense[SSF.tok_zone] == 2:
+        elif scansense[SSF.tok_zone]-1 == 2:
             criteria = SSF.crit_zone_c
         else:
             self.sendToStatus("ERROR: Bad zone data")
             return
         json_obj  = {criteria : scansense}
         self.srv.store({criteria : {"$exists":True}}, json_obj, SSF.col_name)
-        self.zoneNumbersSignal.emit(scansense[SSF.tok_zone], scansense)
+        self.zoneNumbersSignal.emit(scansense[SSF.tok_zone]-1, scansense)
 
 
     def handleJSON(self, json_obj):
@@ -41,18 +41,20 @@ class ScanSenseThread(ServerBaseThread):
         # now take an action based on the data ...
         
         if SSF.tok_zone and SSF.tok_type in scansense:
-            if SSF.tok_type == "FINISHED ZONE":
+            if scansense[SSF.tok_type] == "FINISHED ZONE":
                 self.handleZONE(scansense)
             else:
                 action = 2 # continue scanning
-                xpos = self.srv.retrieve({SNF.crit_dist, {"$exists":True}}, self.srv.db.scan_nav)
+                xpos = self.srv.retrieve({SNF.crit_dist : {"$exists":True}}, self.srv.db.scan_nav)
+                if xpos:
+                    xpos = xpos['DIST']
                 zone = 0
                 if xpos:
                     if xpos < 40:
                         zone = 1
                     elif xpos >= 40 and xpos < 80:
                         zone = 2
-                    elif xpos >= 80 and < 120:
+                    elif xpos >= 80:
                         zone = 3 
                 if zone != 0 and action == 2:
                     self.srv.sendmsg(ScanSenseMsgs.updated_pos % (self.seq_num, zone, action, xpos))

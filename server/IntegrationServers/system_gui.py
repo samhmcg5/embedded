@@ -45,7 +45,7 @@ class SystemGui(QWidget):
         self.threads["ScanSense"].zoneNumbersSignal.connect(self.currentnums.updateZone)
         self.threads["DelivNav"].zoneNumbersSignal.connect(self.currentnums.updateZone)
         # OUTGOING to scan threads
-        self.start.clicked.connect(self.threads['ScanSense'].sendStartMsg)
+        #self.start.clicked.connect(self.threads['ScanSense'].sendStartMsg)
         self.start.clicked.connect(self.threads['ScanNav'].sendStartMsg)
     
     def initDB(self):
