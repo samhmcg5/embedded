@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"ir",
+				"ir_dist"
+			],
+			[
+				"out",
+				"out_m"
+			],
+			[
+				"goo",
+				"good_to_go"
+			],
+			[
+				"ir_",
+				"ir_trav"
+			],
+			[
+				"ma",
+				"magnet_on"
+			],
+			[
 				"gener",
 				"generated"
 			],
@@ -36,10 +56,6 @@
 				"dX"
 			],
 			[
-				"ma",
-				"magnet_off"
-			],
-			[
 				"re",
 				"RED_X"
 			],
@@ -50,10 +66,6 @@
 			[
 				"key",
 				"keyString"
-			],
-			[
-				"ir",
-				"ir_dist"
 			],
 			[
 				"righ",
@@ -126,10 +138,6 @@
 			[
 				"navigati",
 				"navigationData"
-			],
-			[
-				"out",
-				"outgoing_seq"
 			],
 			[
 				"t",
@@ -268,27 +276,10 @@
 	"buffers":
 	[
 		{
-			"file": "firmware/src/system_config/default/system_interrupt.c",
-			"settings":
-			{
-				"buffer_size": 5237,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "firmware/src/motor_control.c",
-			"settings":
-			{
-				"buffer_size": 7239,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "firmware/src/navigation.c",
 			"settings":
 			{
-				"buffer_size": 12489,
+				"buffer_size": 14986,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -297,25 +288,26 @@
 			"file": "firmware/src/navigation.h",
 			"settings":
 			{
-				"buffer_size": 1824,
+				"buffer_size": 1933,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "firmware/src/communication_globals.h",
+			"file": "firmware/src/nav_globals.h",
 			"settings":
 			{
-				"buffer_size": 1252,
+				"buffer_size": 936,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "firmware/src/motor_globals.h",
+			"file": "firmware/src/communication.c",
 			"settings":
 			{
-				"buffer_size": 1468,
+				"buffer_size": 5542,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		}
@@ -384,10 +376,12 @@
 	],
 	"file_history":
 	[
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_globals.h",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/nav_globals.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/system_config/default/system_interrupt.c",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication_globals.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_globals.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/motor_control.c",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.h",
+		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/nav_globals.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.c",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.c",
 		"/C/Users/Samuel McGhee/Desktop/mail_ip.py",
@@ -396,9 +390,7 @@
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/communication.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/TODO.txt",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/jsmn.h",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/navigation.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/system_config/default/configuration.xml",
-		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/system_config/default/system_interrupt.c",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/debug.h",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/debug.c",
 		"/C/cygwin64/home/sam/embedded/DeliveryNavPic/firmware/src/sam.c",
@@ -515,7 +507,7 @@
 	],
 	"find":
 	{
-		"height": 32.0
+		"height": 30.0
 	},
 	"find_in_files":
 	{
@@ -530,6 +522,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"DROP_ZONES",
+			"updateLocation",
+			"status",
+			"ack_ac",
+			"ir_trav",
+			"posX",
+			"ir_dist",
 			"ir_used",
 			"task_done",
 			"setOrientation",
@@ -566,24 +565,24 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "firmware/src/system_config/default/system_interrupt.c",
+					"file": "firmware/src/navigation.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5237,
+						"buffer_size": 14986,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3325,
-								3325
+								10477,
+								10477
 							]
 						],
 						"settings":
@@ -593,7 +592,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1800.0,
+						"translation.y": 2322.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -601,79 +600,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "firmware/src/motor_control.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7239,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5873,
-								5873
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3960.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "firmware/src/navigation.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12489,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6915,
-								6915
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2800.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "firmware/src/navigation.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1824,
+						"buffer_size": 1933,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								921,
-								921
+								350,
+								350
 							]
 						],
 						"settings":
@@ -683,66 +622,68 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 440.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "firmware/src/nav_globals.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 936,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								825,
+								825
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "firmware/src/communication_globals.h",
+					"buffer": 3,
+					"file": "firmware/src/communication.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1252,
+						"buffer_size": 5542,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1114,
-								1114
+								3166,
+								3166
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1746.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "firmware/src/motor_globals.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1468,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -750,7 +691,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 32.0
+		"height": 30.0
 	},
 	"input":
 	{
@@ -791,7 +732,7 @@
 	"project": "DelivNav.sublime-project",
 	"replace":
 	{
-		"height": 59.0
+		"height": 55.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -829,7 +770,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 187.0,
+	"side_bar_width": 253.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

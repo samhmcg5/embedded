@@ -16,14 +16,14 @@ size = 1024
 # file = open(filename, 'w')
 count = 0;
 
-ZONE1_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
-ZONE1_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 0, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
+ZONE1_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 0, "GREEN": 0, "BLUE": 0, "MSGTYPE":"FINISHED ZONE" } }!'
+ZONE1_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 1, "GREEN": 1, "BLUE": 1, "MSGTYPE":"FINISHED ZONE" } }!'
 
-ZONE2_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
-ZONE2_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 1, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
+ZONE2_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 0, "GREEN": 0, "BLUE": 0, "MSGTYPE":"FINISHED ZONE" } }!'
+ZONE2_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
 
-ZONE3_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 0, "GREEN": 0, "BLUE": 0 } }!'
-ZONE3_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 2, "RED": 1, "GREEN": 1, "BLUE": 1 } }!'
+ZONE3_DEFAULT_1 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 3, "RED": 0, "GREEN": 0, "BLUE": 0, "MSGTYPE":"FINISHED ZONE" } }!'
+ZONE3_DEFAULT_2 = '{ "SEQ": 0, "SCAN_SENSE": { "ZONE": 3, "RED": 1, "GREEN": 1, "BLUE": 1 , "MSGTYPE":"FINISHED ZONE"} }!'
 
 DELIV_NAV_STATUS_1 = '{ "SEQ": 0, "DELIV_NAV": { "STATUS": 0 } }!'
 DELIV_NAV_STATUS_2 = '{ "SEQ": 0, "DELIV_NAV": { "STATUS": 1 } }!'

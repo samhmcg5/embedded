@@ -47,6 +47,8 @@ class SystemGui(QWidget):
         # OUTGOING to scan threads
         #self.start.clicked.connect(self.threads['ScanSense'].sendStartMsg)
         self.start.clicked.connect(self.threads['ScanNav'].sendStartMsg)
+        # INCOMING from deliv sense
+        self.threads["DelivSense"].setIRSignal.connect(self.delivstats.execStatus.setIRDist)
     
     def initDB(self):
         # we just need the server to expose the database calls
@@ -234,12 +236,16 @@ class ExecStatus(QWidget):
     def __init__(self):
         super().__init__()
         self.status = qtw.QLabel("...waiting for connection...")
+        self.ir = qtw.QLabel("IR Dist: ...")
         hbox = qtw.QHBoxLayout()
         hbox.addWidget(qtw.QLabel("Currently: "))
         hbox.addWidget(self.status, alignment=qtc.Qt.AlignLeft, stretch=1)
+        hbox.addWidget(self.ir, alignment=qtc.Qt.AlignRight, stretch=1)
         self.setLayout(hbox)
     def setStatus(self, msg):
         self.status.setText(msg)
+    def setIRDist(self, dist):
+        self.ir.setText("IR Dist: %i" % dist)
 
 class PositionGrid(QWidget):
     def __init__(self): 

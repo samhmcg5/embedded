@@ -13,20 +13,20 @@
 #include "queue.h"
 
 /* LOCATION DEFINITIONS */
-#define RED_X   20
-#define GREEN_X 40
-#define BLUE_X  60
+#define RED_X   30
+#define GREEN_X 60
+#define BLUE_X  95
 const unsigned int PICKUP_ZONES[] = {RED_X, GREEN_X, BLUE_X};
-#define PROD_Y  8
+#define PROD_Y  40
 
-#define ALPHA_X 10
-#define BETA_X  30
-#define GAMMA_X 50
+#define ALPHA_X 36
+#define BETA_X  76
+#define GAMMA_X 110
 const unsigned int DROP_ZONES[] = {ALPHA_X, BETA_X, GAMMA_X};
-#define DELIV_Y 32
+#define DELIV_Y 25
 
-#define CRASH_MARGIN_L 15
-#define CRASH_MARGIN_H 27
+// #define CRASH_MARGIN_L 15
+// #define CRASH_MARGIN_H 27
 
 /* MAGNET STATES */
 #define OFF 0
@@ -53,6 +53,7 @@ typedef enum
     delivery  =4,
     magnet_off=5,
     reverse2  =6,
+    sweep     =7,
 } STATUS;
 
 typedef struct
@@ -69,7 +70,9 @@ typedef struct
 } NAVIGATION_DATA;
 
 bool generated = false;
+bool good_to_go = false;
 unsigned int ir_trav = 0;
+unsigned int beg_orient = 0;
 
 void NAVIGATION_Initialize ( void );
 

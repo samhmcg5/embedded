@@ -119,7 +119,8 @@ void setOrientation(unsigned int goal, unsigned int current, unsigned char speed
 
     out.action = (turn < 0) ? TURN_RIGHT : TURN_LEFT;
     out.dist   = abs(turn);
-    out.speed  = speed;
+    // out.speed  = speed;
+    out.speed  = 4;
     sendMsgToMotorQ(out);
 }
 
@@ -135,6 +136,7 @@ void beginTask(unsigned int task)
     // if (posY < CRASH_MARGIN_L || posY > CRASH_MARGIN_H)
     //     getOutOfCrashZone(posX, posY, orientation, &future_x, &future_y, &future_o);
     // TWO : Adjust delta X
+    
     int dX = PICKUP_ZONES[task] - (int)posX;
     if (dX != 0)
     {
@@ -158,9 +160,15 @@ void beginTask(unsigned int task)
         future_y += dY;
         out.action = FORWARD;
         out.dist   = abs(dY);
-        out.speed  = 4;
+        out.speed  = 5;
         sendMsgToMotorQ(out);
     }
+    //==
+    // out.action = FORWARD;
+    // out.dist = 3;
+    // out.speed = 3;
+    // sendMsgToMotorQ(out);
+    //==
     out.action = STOP;
     sendMsgToMotorQ(out);
 }
@@ -172,7 +180,9 @@ void generateDeliveryDirs(unsigned int zone)
     int future_o = orientation;
 
     struct motorQueueData out;
-    int dX = DROP_ZONES[zone] - posX;
+    // Deliver to the number passed in instead
+    // int dX = DROP_ZONES[zone] - posX;
+    int dX = zone - posX;
     if (dX != 0)
     {
         (dX < 0) ? setOrientation(180,future_o,3) : setOrientation(0,future_o,3);
@@ -226,7 +236,8 @@ void handleIncomingMsg(struct navQueueData data)
         {
             if (navigationData.status == idle)
             {
-                if (data.a > 2 || data.b > 2)
+                // if (data.a > 2 || data.b > 2)
+                if (data.a > 2)
                     return; // bad incoming data
                 navigationData.from = data.a;
                 navigationData.to   = data.b;
@@ -278,19 +289,21 @@ void handleIncomingMsg(struct navQueueData data)
             // update the magnet state
             navigationData.magnet_is = data.a;
             // make sure this shit makes sense...
-            if (data.b > 0 && data.b < 10)
+            if (data.b > 0 && data.b < 50)
                 navigationData.ir_dist = data.b;
             break;
         }
         case CORRECTED_POS:
         {
-            if (navigationData.status == idle      || 
-                navigationData.status == magnet_on || 
+            if (navigationData.status == idle      ||
+                navigationData.status == magnet_on ||
+                navigationData.status == sweep     ||
                 navigationData.status == magnet_off)
             {
                 posX = data.a;
                 posY = data.b;
                 orientation = data.c;
+                beg_orient  = data.c;
             }
         }
         default:
@@ -313,26 +326,58 @@ void handleTaskState()
         }
         case pickup:
         {
-            // use the IR data...
-            if (navigationData.stopped && !navigationData.ir_used && motorQueuesAreEmpty())
-            {
-                struct motorQueueData out;
-                out.action = FORWARD;
-                out.dist   = navigationData.ir_dist;
-                ir_trav = navigationData.ir_dist;
-                out.speed  = 2;
-                sendMsgToMotorQ(out);
-                out.action = STOP;
-                sendMsgToMotorQ(out);
-                navigationData.ir_used = true;
-            }
-
+            // GO to sweep state instead
             // check for done conditions
-            if (navigationData.stopped && navigationData.ir_used && motorQueuesAreEmpty())
+            if (navigationData.stopped && motorQueuesAreEmpty())
+            {
+                navigationData.status = sweep;
+                beg_orient = orientation;
+                ir_trav = 12;
+            }
+            break;
+        }
+        case sweep:
+        {
+            if (navigationData.ir_dist <= 2)
             {
                 navigationData.status = magnet_on;
-                navigationData.ir_used = false;
+                break;
             }
+            
+            // if good, go forward
+            struct motorQueueData out_m;
+            if (navigationData.stopped && motorQueuesAreEmpty() && navigationData.ir_dist <= ir_trav)
+            {
+                char buf[128];
+                sprintf(buf, "{\"SEQ\":%i,\"DELIV_NAV\":{\"TEST\":\"FORWARD by %i\"}}!",outgoing_seq, ((navigationData.ir_dist * 3)/4));
+                commSendMsgToUartQueue(buf);
+             
+                out_m.action = FORWARD;
+                out_m.dist   = (navigationData.ir_dist == 3) ? 1 : ((navigationData.ir_dist * 3) / 4);
+                // out_m.dist   = navigationData.ir_dist-2;
+                out_m.speed  = 3;
+                sendMsgToMotorQ(out_m);
+                if (navigationData.ir_dist > 3)
+                {
+                    out_m.action = STOP;
+                    sendMsgToMotorQ(out_m);
+                }
+                ir_trav = (ir_trav >= 6) ? ((ir_trav * 3) / 4) : 6;
+
+            }
+            else if (navigationData.stopped && motorQueuesAreEmpty()) // else sweep
+            {
+                if (beg_orient > 90)
+                    out_m.action = TURN_RIGHT;
+                else
+                    out_m.action = TURN_LEFT;
+                out_m.dist   = 2;
+                out_m.speed  = 3;
+                sendMsgToMotorQ(out_m);
+                out_m.action = STOP;
+                sendMsgToMotorQ(out_m);
+            }
+
             break;
         }
         case magnet_on:
@@ -353,16 +398,27 @@ void handleTaskState()
                 generated = true;
                 struct motorQueueData out_m;
                 out_m.action = REVERSE;
-                out_m.dist   = 7 + ir_trav;
-                out_m.speed  = 3;
+                out_m.dist   = 10;
+                out_m.speed  = 5;
                 sendMsgToMotorQ(out_m);
                 out_m.action = STOP;
                 sendMsgToMotorQ(out_m);
             }
+            
+            // if data not within 5 cm, return to sweep state
             if (navigationData.stopped && motorQueuesAreEmpty())
             {
-                navigationData.status = delivery;
-                generated = false;
+                if (navigationData.ir_dist <= 2 )
+                    {
+                        navigationData.status = delivery;
+                        generated = false;
+                    }
+                else
+                {
+                    navigationData.status = sweep;
+                    generated = false;
+                    ir_trav = 12;
+                }
             }
             break;
         }
@@ -399,7 +455,7 @@ void handleTaskState()
                 struct motorQueueData out_m;
                 out_m.action = REVERSE;
                 out_m.dist   = 10;
-                out_m.speed  = 4;
+                out_m.speed  = 5;
                 sendMsgToMotorQ(out_m);
                 out_m.action = STOP;
                 sendMsgToMotorQ(out_m);

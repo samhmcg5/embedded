@@ -112,7 +112,7 @@ void IntHandlerDrvTmrInstance2(void)
     }
 
     // reset the integral after a certain distance
-    if (distL >= 17*TICKS_PER_CM)
+    if (distL >= 15*TICKS_PER_CM)
         integral = 0;
 
     /* If we have reached the goal of ticks to travel ...  for either motor */
@@ -153,7 +153,7 @@ void IntHandlerDrvTmrInstance2(void)
     }
 
 
-    if (isr_count % 2 == 0)
+    if (isr_count % 3 == 0)
     {
         // position to server
         data.type = POSITION;
@@ -163,7 +163,7 @@ void IntHandlerDrvTmrInstance2(void)
         sendMsgToNavQFromISR(data);
     }
     // magnet stuff, rate = 2 Hz
-    if (isr_count % 5 == 0)
+    if (isr_count % 3 == 0)
     {
         // tell server what the current magnet state should be 
         data.type = DATA_REQ;

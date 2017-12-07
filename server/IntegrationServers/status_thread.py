@@ -9,7 +9,9 @@ class StatusThread(QThread):
 
     def receiveMsg(self,name,msg):
         fmt = '[{0:10}] {1:}'.format(name,msg)
-        print(fmt)
+        if "IR" in fmt or "TEST" in fmt:
+            if not "DelivNav" in fmt:
+                print(fmt)
 
     def run(self):
-        return
+        return 

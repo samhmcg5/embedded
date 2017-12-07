@@ -27,7 +27,7 @@ All outgoing data is taken care of in the handleX() functions...
 
 COLORS = ["RED", "GREEN", "BLUE"]
 ZONES  = ["ONE", "TWO", "THREE"]
-LOCS   = [36, 76, 110]
+LOCS   = [38, 78, 110]
 
 class DelivNavThread(ServerBaseThread):
     positionSig   = pyqtSignal(dict)
@@ -61,7 +61,9 @@ class DelivNavThread(ServerBaseThread):
                 self.prev_set = task
                 if task is not None:
                     # calculate where to put the block
-                    dist = LOCS[task[0]] - 7*getNumInZone(task[0], task[1])
+                    dist = LOCS[task[0]] - 9*self.getNumInZone(task[0])
+                    # print("-->", dist)
+                    # im still gonna Send it 
                     self.srv.sendmsg(DelivNavMsgs.task % (self.seq_num, task[1], dist))
                     self.seq_num += 1
                     self.prev_zone = task[0]
@@ -99,19 +101,14 @@ class DelivNavThread(ServerBaseThread):
             self.updateZoneData(self.prev_set[1], self.prev_set[0])
             self.prev_set = None
 
-    def getNumInZone(zone, color):
-        criteria = getCriteria(zone)
+    def getNumInZone(self, zone):
+        criteria = self.getCriteria(zone)
         if not criteria: return
         data  = self.srv.retrieve({criteria : {"$exists":True}}, self.srv.db.scan_sense)
         if not data: return
-        if color == 0:
-            return data[criteria]['RED']
-        elif color == 1:
-            return data[criteria]['GREEN']
-        elif color == 2:
-            return data[criteria]['BLUE']
+        return (data[criteria]['RED'] + data[criteria]['GREEN'] + data[criteria]['BLUE'])
 
-    def getCriteria(zone):
+    def getCriteria(self, zone):
         criteria = ""
         if zone == 0:
             criteria = SSF.crit_zone_a
@@ -124,7 +121,7 @@ class DelivNavThread(ServerBaseThread):
         return criteria  
 
     def updateZoneData(self, color, zone):
-        criteria = getCriteria(zone)
+        criteria = self.getCriteria(zone)
         if not criteria: 
             return
         data  = self.srv.retrieve({criteria : {"$exists":True}}, self.srv.db.scan_sense)
@@ -210,7 +207,7 @@ class DelivNavThread(ServerBaseThread):
         # HANDLE THE STATE OF THE ROVER
         elif DNF.tok_state in delivnav.keys():
             self.handleSTATE(delivnav)
-        #elif 'TEST' in delivnav.keys():
+        # elif 'TEST' in delivnav.keys():
         #    print("-->", delivnav['TEST'])
 
 class DelivNavMsgs:

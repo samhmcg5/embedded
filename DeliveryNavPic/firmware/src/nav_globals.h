@@ -34,7 +34,7 @@ void sendMsgToNavQFromISR(struct navQueueData msg);
 // POS pos;
 
 float posX = 0;
-float posY = 20;
+float posY = 30;
 int orientation = 0;
 unsigned char prev_action = 0xFF;
 bool task_done = false;

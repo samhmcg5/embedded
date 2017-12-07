@@ -113,7 +113,8 @@ struct navQueueData parseJSON (unsigned char rec[UART_RX_QUEUE_SIZE])
             out.type = TASK;
             out.a = getIntFromKey(t[4]);
             out.b = getIntFromKey(t[6]);
-            if (out.a > 2 || out.b > 2)
+            // if (out.a > 2 || out.b > 2)
+            if (out.a > 2)
                 out.type = 0xFF; // invalid, ignore this input
         }
         else if (getFirstCharOfKey(t[3]) == 'M') // data

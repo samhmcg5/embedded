@@ -1,9 +1,11 @@
 from base_thread import ServerBaseThread
 from database_fields import DelivSenseFields as DSF
 from database_fields import DelivNavFields as DNF
+from PyQt5.QtCore import pyqtSignal
 
 
 class DelivSenseThread(ServerBaseThread):
+    setIRSignal = pyqtSignal(int)
     def __init__(self, ip, port, status_thread):
         ServerBaseThread.__init__(self, ip, port, status_thread)
         self.name = "DelivSense"
@@ -13,7 +15,7 @@ class DelivSenseThread(ServerBaseThread):
         json_ir = {DSF.crit_ir : delivsense[DSF.tok_ir]}
         self.srv.store({DSF.crit_mag : {"$exists":True}}, json_mag, DSF.col_name)
         self.srv.store({DSF.crit_ir : {"$exists":True}}, json_ir, DSF.col_name)
- 
+        self.setIRSignal.emit(delivsense[DSF.tok_ir])
         mag = self.srv.retrieve({DNF.crit_mag : {"$exists":True}}, self.srv.db.deliv_nav)
         if mag:
             # print ("--> ", mag, json_mag)
