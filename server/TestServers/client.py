@@ -47,12 +47,18 @@ for msg in msg_list:
 	print(msg + " : " + str(count))
 	count = count + 1
 
-while True:
-	msg_num = int(input("Message to send to server: "))
+for msg_num in [0,2,4]:
+        json_str = msg_list[msg_num]
+        s.send(json_str.encode())
+
+
+#while True:
+	#msg_num = int(input("Message to send to server: "))
 	#msg_num = msg_num - 1
-	json_str = msg_list[msg_num]
-	#file.write("Sending to server: \n")
-	s.send(json_str.encode())
+ #       for msg_num in [0,2,4]:
+  #              json_str = msg_list[msg_num]
+                #file.write("Sending to server: \n")
+   #             s.send(json_str.encode())
 	#data = s.recv(1024)
 	#print("Message received from server: ", data)
         #s.send(ZONE1_DEFAULT_1.encode())
