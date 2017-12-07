@@ -40,7 +40,7 @@ typedef struct
     // color has been detected for object
     bool colorFlag;
     bool objectDetected;
-    
+    bool forwardDir;
 } SCANNER_DATA;
 
 SCANNER_DATA scannerData;

@@ -40,6 +40,7 @@ void SCANNER_Initialize ( void )
     scannerData.signature = 0;
     scannerData.objectDetected = false;
     scannerData.colorFlag = false;
+    scannerData.forwardDir = true;
     DRV_ADC_Open();
     DRV_ADC_Start();
     DRV_TMR0_Start();
@@ -95,7 +96,34 @@ void SCANNER_Tasks ( void )
                             scannerData.green = 0;
                             scannerData.blue = 0;
                         }
-                        scannerData.prevZone = scannerData.currZone; // update previous zone 
+                        scannerData.prevZone = scannerData.currZone; // update previous zone
+                        
+                        // Special cases for reverse direction in ZONE 1 and ZONE 3
+                        if (scannerData.currZone == 3 && scannerData.currXPos >= 120) 
+                        {
+                            scannerData.forwardDir = false; // reverse direction
+                            // send msg indicating going other way now
+                            char buf[64];
+                            sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, scannerData.currZone, scannerData.red, scannerData.green, scannerData.blue, "FINISHED ZONE");
+                            commSendMsgToUartQueue(buf);
+                            // new zone, reset colors
+                            scannerData.red = 0;
+                            scannerData.green = 0;
+                            scannerData.blue = 0;
+                        }
+                        
+                        if (scannerData.currZone == 1 && scannerData.currXPos <= 2 && !scannerData.forwardDir)
+                        {
+                            scannerData.forwardDir = true; // forward direction
+                            // send msg indicating going other way now
+                            char buf[64];
+                            sprintf(buf, STR_UPDATE_ZONE_QUOTAS, outgoing_seq, scannerData.currZone, scannerData.red, scannerData.green, scannerData.blue, "FINISHED ZONE");
+                            commSendMsgToUartQueue(buf);
+                            // new zone, reset colors
+                            scannerData.red = 0;
+                            scannerData.green = 0;
+                            scannerData.blue = 0;
+                        }
                         
                         if (rec.action == 0) // STOP scan from server
                         {
