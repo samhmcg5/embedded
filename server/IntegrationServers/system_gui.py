@@ -14,6 +14,7 @@ from styles import stylesheet
 FONT_SIZE = 18
 class SystemGui(QWidget):
     statusSig = qtc.pyqtSignal(str,str)
+    taskSig   = qtc.pyqtSignal()
     def __init__(self, status, dnt, dst, snt, sst):
         super().__init__()
         self.name = "GUI"
@@ -39,6 +40,7 @@ class SystemGui(QWidget):
         self.threads["DelivNav"].roverStateSig.connect(self.handleDelivRoverState)
         # OUTGOING signals to DELIV_NAV thread
         self.delivstats.posCorrectSig.connect(self.threads["DelivNav"].transmitPosUpdate)
+        self.taskSig.connect(self.threads["DelivNav"].generateNextTask)
         # connect button CLICKED to DB STORE
         self.quotaframe.sendButton.clicked.connect(self.storeQuotaInDB)
         # INCOMING signal from SCAN_SENSE
@@ -76,6 +78,7 @@ class SystemGui(QWidget):
         self.db.store({GF.crit_zone_b : {"$exists":True}}, zoneB, GF.col_name)
         self.db.store({GF.crit_zone_c : {"$exists":True}}, zoneC, GF.col_name)
         # self.threads['DelivNav'].generateNextTask()
+        self.taskSig.emit()
 
 
     def handleDelivRoverState(self, state):

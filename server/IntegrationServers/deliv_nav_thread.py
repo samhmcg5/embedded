@@ -5,6 +5,7 @@ from database_fields import ScanSenseFields as SSF
 from database_fields import GuiFields as GUI
 from PyQt5.QtCore import pyqtSignal
 import time
+from collections import deque
 
 """
 
@@ -41,7 +42,7 @@ class DelivNavThread(ServerBaseThread):
         self.prev_zone = 2 # initialize to 2 so we start with zone 0
         self.send_time = 0
         self.prev_set = None
-
+        self.stack = deque()
 
     # INCOMING message handler
     def handlePOS(self, delivnav):
@@ -57,7 +58,8 @@ class DelivNavThread(ServerBaseThread):
         if delivnav[DNF.tok_status] == 0:
             self.taskStatusSig.emit("Rover is IDLE")
             try:
-                task = self.generateNextTask()
+                # task = self.generateNextTask()
+                task = self.stack.popleft()
                 self.prev_set = task
                 if task is not None:
                     # calculate where to put the block
@@ -68,10 +70,10 @@ class DelivNavThread(ServerBaseThread):
                     self.seq_num += 1
                     self.prev_zone = task[0]
                     self.prev_task = DelivNavMsgs.prev_task_str % (COLORS[task[1]],ZONES[task[0]])
-                    # start the timer
-                    self.send_time = time.time()
             except RuntimeError as err:
                 self.sendToStatus("ERROR: %s" % str(err))
+            except IndexError:
+                self.sendToStatus("ERROR: Unable to retrieve a task")
         elif delivnav[DNF.tok_status] == 1: # TASK
             self.taskStatusSig.emit("Executing TASK: %s" % self.prev_task)
         elif delivnav[DNF.tok_status] == 2: # ACTION
@@ -98,7 +100,7 @@ class DelivNavThread(ServerBaseThread):
         # update the database with new numbers
         if delivnav[DNF.tok_state] in [5,6] and self.prev_set is not None:
             # print ("--> ", self.prev_set)
-            self.updateZoneData(self.prev_set[1], self.prev_set[0])
+            # self.updateZoneData(self.prev_set[1], self.prev_set[0])
             self.prev_set = None
 
     def getNumInZone(self, zone):
@@ -151,26 +153,31 @@ class DelivNavThread(ServerBaseThread):
 
     # helper function
     def generateNextTask(self):
-        # Get the data
-        diffs = []
-        diffs.append( self.getDifference(SSF.crit_zone_a) )
-        diffs.append( self.getDifference(SSF.crit_zone_b) )
-        diffs.append( self.getDifference(SSF.crit_zone_c) )
-        # iterate to find next task, start with a new zone...
-        prev = self.prev_zone
-        zone = prev+1 if prev<2 else 0
-        for i in range(3):
-            for color in diffs[zone].keys():
-                # print("-->", zone, color, diffs[zone][color])
-                if diffs[zone][color] < 0:
-                    if color == "RED":
-                        color = 0
-                    elif color == "GREEN":
-                        color = 1
-                    else:
-                        color = 2
-                    return (zone, color)
-            zone = zone+1 if zone<2 else 0
+        try:
+            # Get the data
+            diffs = []
+            diffs.append( self.getDifference(SSF.crit_zone_a) )
+            diffs.append( self.getDifference(SSF.crit_zone_b) )
+            diffs.append( self.getDifference(SSF.crit_zone_c) )
+            # iterate to find next task, start with a new zone...
+            prev = self.prev_zone
+            zone = prev+1 if prev<2 else 0
+            for i in range(3):
+                for color in diffs[zone].keys():
+                    # print("-->", zone, color, diffs[zone][color])
+                    if diffs[zone][color] < 0:
+                        if color == "RED":
+                            color = 0
+                        elif color == "GREEN":
+                            color = 1
+                        else:
+                            color = 2
+                        # return (zone, color)
+                        self.stack.append((zone, color))
+                zone = zone+1 if zone<2 else 0
+        except RuntimeError as err:
+            self.sendToStatus("ERROR: %s" % str(err))
+            return
 
     # helper function
     def getDifference(self, crit):
